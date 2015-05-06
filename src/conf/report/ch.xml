@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<entry>
+		<id>chsjTable</id>
+		<title>出货实绩表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/应收账款/出货实绩查询表.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#b.CHRI_#至#b.CHRI__end#' as CHRI_
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select b.CHRI_, b.NAME_, a.DHNO_,a.LINE_,a.GGNO_,a.CDNM_,a.FUDW_,a.FUZM_,a.FUFM_,cast(a.HOUU_ as varchar(6)),cast(a.KUAN_ as varchar(8)),CASE WHEN a.CANG_  is NULL THEN 'COIL' ELSE CAST(a.CANG_ AS VARCHAR) END,
+				sum(a.CHSU_) ,sum(a.CHZL_)
+				from sino_zng1tp a left join SINO_ZXZS b on a.ZXZSTP_=b.ID_ where b.stat_='1' AND#1# group by b.CHRI_,b.USER_,b.NAME_,a.DHNO_,a.LINE_,a.GGNO_,a.CDNM_,a.FUDW_,a.FUZM_,a.FUFM_,a.HOUU_,a.KUAN_,a.CANG_ order by b.CHRI_ desc, b.USER_ desc,a.DHNO_ asc,a.LINE_ asc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>出货日期</name>
+				<column>b.CHRI_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+				<value>${date }</value>
+			</param>
+			<param>
+				<name>用户代码</name>
+				<column>b.USER_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>
+			<param>
+				<name></name>
+				<column></column>
+				<type></type>
+				<opt></opt>
+				<required></required>
+			</param>
+			<param>
+	   			<name>订货NO</name>
+				<column>a.DHNO_</column>
+				<type>String</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>7</length>
+				<jointChar>-</jointChar>
+				<jointColumn>a.LINE_</jointColumn>
+				<jointLength>2</jointLength>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>ch!chsjmx</id>
+		<title>出货实绩明细</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/出货/出货实绩明细.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#c.CHRI_#至#c.CHRI__end#' as CHRI_
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select * from (
+				SELECT c.ID_,c.CHRI_,a.DHNO_,a.LINE_, c.NAME_ , a.YUNY_, a.GGNO_ ,a.FUDW_, a.FUZM_,a.FUFM_,
+				CAST (a.HOUU_ AS VARCHAR) as HOUU_,CAST (a.KUAN_ AS VARCHAR) as KUAN_ ,CASE WHEN a.CANG_  is NULL THEN 'COIL' ELSE CAST(a.CANG_ AS VARCHAR) END AS CANG_,
+				(CASE WHEN b.PLQF_ IS NULL then '' else B.PLQF_ END)+b.ZZNO_+'-'+b.JBNO_ AS ZP_,b.ZPZL_,CONVERT(VARCHAR(10),b.ZZNY_,111) as ZZNY_,b.CPNO_,c.YSNM_,a.KHNO_
+				FROM SINO_ZNG2TP b left join SINO_ZNG1TP a on b.PID_=a.ID_ left join SINO_ZXZS c on a.ZXZSTP_=c.ID_ where c.stat_='1' AND#1#
+				union
+				SELECT null as ID_,c.CHRI_, a.DHNO_, a.LINE_, '装箱制品数' as NAME_, cast(COUNT(*) as varchar) as YUNY_, null as GGNO_, null as FUDW_, null as FUZM_, null as FUFM_,
+				null as  HOUU_, null as  KUAN_ , null as  CANG_,
+				'装箱重量计' as  ZP_,sum(b.ZPZL_) as ZPZL_, null as ZZNY_, null as CPNO_, null as YSNM_,null as KHNO_
+				FROM SINO_ZNG2TP b left join SINO_ZNG1TP a on b.PID_=a.ID_ left join SINO_ZXZS c on a.ZXZSTP_=c.ID_ where c.stat_='1' AND#1#
+				GROUP BY c.CHRI_,a.DHNO_,a.LINE_
+				union
+				SELECT null as ID_, null as CHRI_, null asDHNO_, null as LINE_, '制品数合计' as NAME_, cast(COUNT(*) as varchar) as YUNY_, null as GGNO_, null as FUDW_, null as FUZM_, null as FUFM_,
+				null as  HOUU_, null as  KUAN_ , null as  CANG_,
+				'重量合计' as  ZP_,sum(b.ZPZL_) as ZPZL_, null as ZZNY_, null as CPNO_, null as YSNM_,null as KHNO_
+				FROM SINO_ZNG2TP b left join SINO_ZNG1TP a on b.PID_=a.ID_ left join SINO_ZXZS c on a.ZXZSTP_=c.ID_ where c.stat_='1' AND#1#
+				) t order by CHRI_ desc, DHNO_ asc, LINE_ asc, ID_ asc, ZP_ asc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>出货期</name>
+				<column>c.CHRI_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+				<value>${date }</value>
+			</param>
+			<param>
+				<name>送货单号</name>
+				<column>c.ID_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>10</length>
+			</param>
+			<param>
+				<name>用户代码</name>
+				<column>c.USER_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>
+			<param>
+	   			<name>订货NO</name>
+				<column>a.DHNO_</column>
+				<type>String</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>7</length>
+				<jointChar>-</jointChar>
+				<jointColumn>a.LINE_</jointColumn>
+				<jointLength>2</jointLength>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>dh!ckzjb</id>
+		<title>制品出库集计表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/出货/制品出库集计表.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '' 题头,
+		'' 交货期
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select b.PZNO_, a.CHAN_, sum(a.ZPZL_) from SINO_ZNG2TP a
+				left join SINO_ZNG1TP b on a.PID_=b.ID_ left join SINO_ZXZS c on b.ZXZSTP_=c.ID_ where c.stat_='1' AND#1# group by b.PZNO_, a.CHAN_ 
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>出货期</name>
+				<column>c.CHRI_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>用户代码</name>
+				<column>c.USER_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>
+			<param>
+	   	<name>订货NO</name>
+				<column>B.DHNO_</column>
+				<type>String</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>7</length>
+				<jointChar>-</jointChar>
+				<jointColumn>B.LINE_</jointColumn>
+				<jointLength>2</jointLength>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>ch!thsjmx</id>
+		<title>退货实绩明细</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/出货/退货实绩明细.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '' 题头,
+		'' 交货期
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				SELECT b.DHNO_+'-'+b.LINE_ AS DHNOL, b.ABBR_ , b.YUNY_, b.GGNO_ , cast(b.SCZM_ as varchar),cast(b.SCFM_ as varchar) AS FZL_,
+				CAST (b.XPHO_ AS VARCHAR), CAST (b.XPKN_ AS VARCHAR),
+				CASE WHEN b.XPCN_  is NULL THEN 'COIL' ELSE CAST(b.XPCN_ AS VARCHAR) END AS ZPCC,CASE WHEN b.PLQF_ IS NULL THEN '' ELSE b.PLQF_ END +b.ZZNO_+'-'+b.JBNO_ AS ZP_,
+				b.ZPZL_,b.ZZNY_,b.CHRI_,CONVERT(VARCHAR(10),a.THRI_,120) as THRI_,b.CPNO_,b.YSNM_
+				FROM SINO_TH a left join SINO_TS b on a.tstp_=b.id_ where#1# order by a.THRI_ desc;
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>退货期</name>
+				<column>a.THRI_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>ch!chyfmx</id>
+		<title>出货运费明细</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/费用/出货运费明细.xls]]></excel>
+		<sheet-index>0,1,2,3,4,5,6</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '' 题头,
+		'' 交货期
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+			 select convert(varchar(10), a.CHRI_, 111),  a.NAME_, a.DHNO_ +a.LINE_,  a.ADDR_,a.CHZL_, 0,b.HTDJ_,b.YFEI_,(select c.VALUE_  from COCO_CODE_ITEM c WHERE c.CODE_='SINO_YSFS' and c.KEY_=b.YSFS_),
+			a.KHGLNM_, a.KHGLDJ_, ROUND(a.CHZL_ * a.KHGLDJ_,2) ,
+			a.ZDTLNM_, a.ZDTLDJ_, ROUND(a.CHZL_*a.ZDTLDJ_,2), a.KHTLNM_, a.KHTLDJ_,ROUND(a.CHZL_ * a.KHTLDJ_,2),
+			a.QGSHNM_, a.QGSHDJ_, ROUND(a.CHZL_*a.QGSHDJ_,2), a.KHSHNM_, a.KHSHDJ_, ROUND(a.CHZL_ * a.KHSHDJ_,2),
+			a.QGHHNM_,a.QGHHDJ_,ROUND(a.CHZL_*a.QGHHDJ_,2),a.DCHHNM_,a.DCHY_,a.DCHHDJ_,ROUND(a.DCHY_ * a.DCHHDJ_,2),
+			a.CYHHNM1_,a.CYHY1_,a.CYHHDJ1_,ROUND(a.CYHY1_ * a.CYHHDJ1_,2),a.CYHHNM_,a.CYHY_,a.CYHHDJ_,ROUND(a.CYHY_ * a.CYHHDJ_,2),
+			a.KHHHNM_,a.KHHHDJ_,ROUND(a.CHZL_ * a.KHHHDJ_,2),a.KHHHNM1_,a.KHHH1_,a.KHHHDJ1_,ROUND(a.KHHH1_ * a.KHHHDJ1_,2),
+			a.QGCKNM_, a.QGCKDJ_,ROUND(a.CHZL_*a.QGCKDJ_,2), a.DCCKNM_,a.DCCK_,a.DCCKDJ_,ROUND(a.DCCK_ * a.DCCKDJ_,2),
+			a.CYCKNM_,a.CYCK_,a.CYCKDJ_,ROUND(a.CYCK_ * a.CYCKDJ_,2),a.CYCKNM1_,a.CYCK1_,a.CYCKDJ1_,ROUND(a.CYCK1_ * a.CYCKDJ1_,2),
+			a.KHCKNM_,a.MDCK_,a.KHCKDJ_,ROUND(a.MDCK_ * a.KHCKDJ_,2),a.ZTDJ_,ROUND(a.ZTDJ_*a.CHZL_,2)
+			from SINO_KHYF a left join SINO_DHUOTP b on a.DHNO_=b.DHNO_ and a.LINE_=b.LINE_ where#1# order by a.CHRI_ asc,a.USER_ asc,a.ADDR_ asc
+				]]></sql>
+			</module>
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+			select convert(varchar(10), a.CHRI_, 111),  a.NAME_, a.DHNO_+a.LINE_,  a.ADDR_,a.CHZL_, 0,b.HTDJ_,b.YFEI_,(select c.VALUE_  from COCO_CODE_ITEM c WHERE c.CODE_='SINO_YSFS' and c.KEY_=b.YSFS_), a.KHGLNM_,
+   		    a.KHGLDJ_, ROUND(a.CHZL_ * a.KHGLDJ_,2) from SINO_KHYF a left join SINO_DHUOTP b on a.DHNO_=b.DHNO_ and a.LINE_=b.LINE_ where a.YSFS_ = '3' AND#1# order by a.CHRI_ asc,a.USER_ asc,a.ADDR_ asc
+				]]></sql>
+			</module>		
+			<module>
+				<name>C</name>
+				<sql><![CDATA[
+			select convert(varchar(10), a.CHRI_, 111),  a.NAME_, a.DHNO_+a.LINE_, a.ADDR_, a.CHZL_,  0,b.HTDJ_,b.YFEI_,(select c.VALUE_  from COCO_CODE_ITEM c WHERE c.CODE_='SINO_YSFS' and c.KEY_=b.YSFS_), a.ZDTLNM_, a.ZDTLDJ_, ROUND(a.CHZL_*a.ZDTLDJ_,2), a.KHTLNM_, a.KHTLDJ_,
+    		ROUND(a.CHZL_ * a.KHTLDJ_,2) from SINO_KHYF a left join SINO_DHUOTP b on a.DHNO_=b.DHNO_ and a.LINE_=b.LINE_ where a.YSFS_ = '4' AND#1# order by a.CHRI_ asc,a.USER_ asc,a.ADDR_ asc
+				]]></sql>
+			</module>	
+			<module>
+				<name>D</name>
+				<sql><![CDATA[
+			select convert(varchar(10), a.CHRI_, 111),  a.NAME_, a.DHNO_+a.LINE_, a.ADDR_, a.CHZL_,  0,b.HTDJ_,b.YFEI_,(select c.VALUE_  from COCO_CODE_ITEM c WHERE c.CODE_='SINO_YSFS' and c.KEY_=b.YSFS_), a.QGSHNM_, a.QGSHDJ_, ROUND(a.CHZL_*a.QGSHDJ_,2), a.KHSHNM_, a.KHSHDJ_,
+            ROUND(a.CHZL_ * a.KHSHDJ_,2) from SINO_KHYF a left join SINO_DHUOTP b on a.DHNO_=b.DHNO_ and a.LINE_=b.LINE_ where a.YSFS_ = '2' AND#1# order by a.CHRI_ asc,a.USER_ asc,a.ADDR_ asc
+				]]></sql>
+			</module>	
+			<module>
+				<name>E</name>
+				<sql><![CDATA[
+			select convert(varchar(10), a.CHRI_, 111), a.NAME_,a.DHNO_+a.LINE_,a.ADDR_,a.CHZL_,0,b.HTDJ_,b.YFEI_,(select c.VALUE_  from COCO_CODE_ITEM c WHERE c.CODE_='SINO_YSFS' and c.KEY_=b.YSFS_),
+			a.QGHHNM_,a.QGHHDJ_,ROUND(a.CHZL_*a.QGHHDJ_,2),a.DCHHNM_,a.DCHY_,a.DCHHDJ_,ROUND(a.DCHY_ * a.DCHHDJ_,2),
+			a.CYHHNM1_,a.CYHY1_,a.CYHHDJ1_,ROUND(a.CYHY1_ * a.CYHHDJ1_,2),a.CYHHNM_,a.CYHY_,a.CYHHDJ_,ROUND(a.CYHY_ * a.CYHHDJ_,2),
+			a.KHHHNM_,a.KHHHDJ_,ROUND(a.CHZL_ * a.KHHHDJ_,2),a.KHHHNM1_,a.KHHH1_,a.KHHHDJ1_,ROUND(a.KHHH1_ * a.KHHHDJ1_,2) 
+			from SINO_KHYF a left join SINO_DHUOTP b on a.DHNO_=b.DHNO_ and a.LINE_=b.LINE_ where a.YSFS_ = '1' AND#1# order by a.CHRI_ asc,a.USER_ asc,a.ADDR_ asc
+				]]></sql>
+			</module>		
+			<module>
+				<name>F</name>
+				<sql><![CDATA[
+			select convert(varchar(10), a.CHRI_, 111),a.NAME_, a.DHNO_+a.LINE_, a.ADDR_,a.CHZL_,0,b.HTDJ_,b.YFEI_,(select c.VALUE_  from COCO_CODE_ITEM c WHERE c.CODE_='SINO_YSFS' and c.KEY_=b.YSFS_), a.QGCKNM_, a.QGCKDJ_,ROUND(a.CHZL_*a.QGCKDJ_,2), a.DCCKNM_,a.DCCK_,
+            a.DCCKDJ_,ROUND(a.DCCK_ * a.DCCKDJ_,2),a.CYCKNM_,a.CYCK_,a.CYCKDJ_,ROUND(a.CYCK_ * a.CYCKDJ_,2),a.CYCKNM1_,a.CYCK1_,a.CYCKDJ1_,ROUND(a.CYCK1_ * a.CYCKDJ1_,2),a.KHCKNM_,
+            a.MDCK_,a.KHCKDJ_,ROUND(a.MDCK_ * a.KHCKDJ_,2) from SINO_KHYF a left join SINO_DHUOTP b on a.DHNO_=b.DHNO_ and a.LINE_=b.LINE_ where a.YSFS_ = '5' AND#1# order by a.CHRI_ asc,a.USER_ asc,a.ADDR_ asc
+				]]></sql>
+			</module>
+			<module>
+				<name>G</name>
+				<sql><![CDATA[
+			select convert(varchar(10), a.CHRI_, 111),  a.NAME_, a.DHNO_+a.LINE_,  a.ADDR_,a.CHZL_, 0,b.HTDJ_,b.YFEI_,(select c.VALUE_  from COCO_CODE_ITEM c WHERE c.CODE_='SINO_YSFS' and c.KEY_=b.YSFS_),
+   		    a.ZTDJ_, ROUND(a.CHZL_ * a.ZTDJ_,2) from SINO_KHYF a left join SINO_DHUOTP b on a.DHNO_=b.DHNO_ and a.LINE_=b.LINE_ where a.YSFS_ = '6' AND#1# order by a.CHRI_ asc,a.USER_ asc,a.ADDR_ asc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>出货期</name>
+				<column>a.CHRI_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>true</required>
+				<value>${date }</value>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>ch!chbxf</id>
+		<title>出货保险费</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/费用/出货保险费.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '' 题头,
+		'' 交货期
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select convert(varchar(10), a.CHRI_, 111), a.ABBR_, a.DHNO_,a.LINE_, a.KFZL_, a.KPDJ_, a.BXFL_, a.KFZL_*a.KPDJ_*a.BXFL_ from SINO_FKFP a where#1# order by a.CHRI_ desc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>出货期</name>
+				<column>a.CHRI_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>true</required>
+			</param>
+		</params>
+	</entry>
+</root>

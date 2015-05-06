@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<entry>
+		<id>etlsspzjlb</id>
+		<title>ETL实时品质记录表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/中控/ETL实时品质记录表.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select 				
+				CONVERT(VARCHAR(10), scsj_, 111),
+				CONVERT(VARCHAR(5), scsj_, 108),
+				pass_,
+				ban_+'班',
+				zu_,
+				zzsd_+'-'+jbno_,
+				fugm_,
+				sczm_+'/'+sczm_,
+				'F',
+				cast(xfzl_Smt_ as varchar)+'/'+cast(xfzl_Sat_ as varchar),
+				cast(xfzl_Cmt_ as varchar)+'/'+cast(xfzl_Cat_ as varchar),
+				cast(xfzl_Nmt_ as varchar)+'/'+cast(xfzl_Nat_ as varchar),
+				ytyp_+''+yqty_,
+				oiler_Bl_,
+				cast(tyl_St_ as varchar)+'/'+cast(tyl_Sb_ as varchar),
+				cast(tyl_Ct_ as varchar)+'/'+cast(tyl_Cb_ as varchar),
+				cast(tyl_Nt_ as varchar)+'/'+cast(tyl_Nb_ as varchar),
+				cast(che_Dlmdt_ as varchar)+'/'+cast(che_Dlmdb_ as varchar),
+				cast(cr_Ct_ as varchar)+'/'+cast(cr_Cb_ as varchar),
+				tj_,
+				tyjms_,
+				null,null,null,null,
+				null,null,null,null,
+				'B',
+				cast(xfzl_Smb_ as varchar)+'/'+ cast(xfzl_Sab_ as varchar),
+				cast(xfzl_Cmb_ as varchar)+'/'+cast(xfzl_Cab_ as varchar),
+				cast(xfzl_Nmb_ as varchar)+'/'+cast(xfzl_Nab_ as varchar)
+				from SINO_ETLPZGL where#1# order by scsj_ asc				
+				]]></sql>
+				<newline>21,12</newline>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>生产日</name>
+				<column>scsj_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>true</required>
+				<value>${date }</value>
+			</param>
+			<param>
+				<name>Coil No.</name>
+				<column>JBNO_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<length>7</length>
+			</param>
+		</params>
+	</entry>
+</root>

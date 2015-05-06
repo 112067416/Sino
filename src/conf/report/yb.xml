@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<entry>
+		<id>ycllbTable</id>
+		<title>原材履历表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/原材/原材履历表.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+			SELECT * FROM (	SELECT QDBJ_ = CASE WHEN QDBJ_ = '1' THEN '1' ELSE '' END ,CONVERT(VARCHAR(10),SJSJ_,111) AS ZZNY_,ZZSD_ +'-'+JBNO_ as XPNO_,XPHO_ , XPKN_ ,'' as XPCN_ 
+				,CHAN_,YCBR_,'' AS PLQF_,'' AS SPDJ_,DENG_,ZPZL_,YUNY_,FACE_,NULL AS SCZM_,NULL AS SCFM_,DHNO_,ZSNO_,'' AS CHNO_,BLNY_ AS ZZRQ_,KW_,ZTBJ_
+				 FROM SINO_YCAITP WHERE #1#
+				UNION ALL
+				SELECT QDBJ_ =  CASE DUIC_ WHEN 'D' THEN (CASE WHEN QDBJ_ = '1' THEN '1' ELSE '' END ) 
+				WHEN 'C' THEN (CASE WHEN SCBJ_ = '3' THEN '1' ELSE '' END )
+				WHEN 'E' THEN (CASE WHEN SCBJ_ = '3' or pxsd_ is not null THEN '1' ELSE '' END )
+				WHEN 'F' THEN (CASE WHEN SCBJ_ = '3' THEN '1' ELSE '' END )
+				WHEN 'G' THEN (CASE WHEN SCBJ_ = '3' THEN '1' ELSE '' END ) END
+				,CASE WHEN LEN(JBNO_)=8 THEN 
+				   (CASE WHEN (CONVERT(VARCHAR(1),PZNO_)='1' OR CONVERT(VARCHAR(1),PZNO_)='3') THEN CONVERT(VARCHAR(10),SJSJ_,111) WHEN CONVERT(VARCHAR(1),PZNO_)='2' THEN CONVERT(VARCHAR(10),CHSD_,111)END) 
+				 WHEN LEN(JBNO_)= 9 THEN 
+				  (CASE WHEN (CONVERT(VARCHAR(1),PZNO_)='1' OR CONVERT(VARCHAR(1),PZNO_)='3') THEN CONVERT(VARCHAR(10),SJSJ_,111) WHEN CONVERT(VARCHAR(1),PZNO_)='2' THEN CONVERT(VARCHAR(10),CHSD_,111)END) 
+				 WHEN LEN(JBNO_)=11 THEN
+				   (CASE WHEN PXSD_ IS NOT NULL THEN  CONVERT(VARCHAR(10),PXSD_,111) ELSE CONVERT (VARCHAR(10),CHSD_,111) END) END AS ZZNY_,
+				   ZZSD_ +'-'+JBNO_ as XPNO_ ,XPHO_ , 
+				XPKN_,CASE WHEN XPCN_ IS NOT NULL THEN  CAST(XPCN_ AS VARCHAR) WHEN XPCN_ IS NULL THEN 'COIL' END  as XPCN_
+				,CHAN_,ABBR_,PLQF_,SPDJ_,DENG_,ZPZL_,YUNY_,FACE_,SCZM_,SCFM_,DHNO_,CASE WHEN LEN(JBNO_)<10 THEN (SELECT ZSNO_ FROM SINO_YCAITP WHERE JBNO_=T.RCZPNO_ ) ELSE ZSNO_ END ZSNO_,CHNO_,CASE WHEN LEN(JBNO_)= 8 THEN CONVERT(VARCHAR(10),ETSD_,111) WHEN LEN(JBNO_)= 9 THEN CONVERT(VARCHAR(10),ETSD_,111) WHEN LEN(JBNO_) = 11 THEN CONVERT(VARCHAR(10),SLSD_,111) END AS ZZRQ_,KW_,ZTBJ_
+				FROM SINO_ZPNGTP T WHERE #1#) A ORDER BY A.XPNO_;
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>卷板NO</name>
+				<column>JBNO_</column>
+				<type>string</type>
+				<required>true</required>
+				<opt>like%</opt>
+				<required>false</required>
+				<length>7</length>
+			</param>
+		</params>
+	</entry>
+	<entry>
+	<id>ycqbdbbTable</id>
+	<title>原材情报对比表</title>
+	<type>2</type>
+	<excel><![CDATA[/WEB-INF/report/template/原材/原材情报对比表.xls]]></excel>
+	<sheet-index></sheet-index>
+	<row-index></row-index>
+	<cell-index></cell-index>
+	<seq-index></seq-index>
+	<modules>
+		<module>
+			<name>A</name>
+			<sql><![CDATA[
+			SELECT SHIP_,JB_,ZZSJ_,BLNY_,YCBR_,ZZSD_,YBLC_,FACE_,XPHO_,XPKN_,JBCN_,ZPZL_,CGDJ_,CBFY_ FROM (
+			SELECT ''AS SHIP_,''AS JB_,''AS ZZSJ_,NULL AS BLNY_,''AS YCBR_,''AS ZZSD_,''AS YBLC_,'合计卷数'AS FACE_,
+			cast(COUNT(*) as varchar) AS XPHO_,NULL AS XPKN_,NULL AS JBCN_,SUM(ZPZL_) AS ZPZL_,null as CGDJ_,SUM(CONVERT(DECIMAL(20,3),CGDJ_*(ZPZL_/1000.0)+YBCB_)) AS CBFY_,'' AS JBNO_
+			FROM SINO_YCAITP where LEN(JBNO_)=6 AND#1#
+			UNION ALL
+			SELECT SHIP_,ZZSD_+'-'+JBNO_ AS JB_,ZZSJ_,BLNY_,YCBR_,ZZSD_,YBLC_,FACE_,cast(XPHO_ as varchar),cast(XPKN_ as varchar),JBCN_,
+			ZPZL_,CGDJ_,CONVERT(DECIMAL(20,3),CGDJ_*(ZPZL_/1000.0)+YBCB_) AS CBFY_,JBNO_ FROM SINO_YCAITP a where len(JBNO_)=6 AND#1#) t ORDER BY JBNO_ ASC;
+				]]></sql>
+		</module>
+	</modules>
+	<params>
+		<param>
+			<name>船名</name>
+			<column>SHIP_</column>
+			<type>string</type>
+			<opt>eq</opt>
+			<required>false</required>
+			<length>20</length>
+		</param>
+		<param>
+			<name>纳期</name>
+			<column>BLNY_</column>
+			<type>date</type>
+			<opt>between</opt>
+			<required>false</required>
+		</param>
+		<param>
+			<name></name>
+			<column></column>
+			<type></type>
+			<opt></opt>
+			<required></required>
+		</param>
+		<param>
+			<name>原材卷板NO</name>
+			<column>JBNO_</column>
+			<type>string</type>
+			<opt>between</opt>
+			<required>false</required>
+			<length>7</length>
+		</param>
+		<param>
+			<name>制造商卷板NO</name>
+			<column>ZZSJ_</column>
+			<type>string</type>
+			<opt>%like</opt>
+			<required>false</required>
+			<length>14</length>
+		</param>
+	</params>
+	</entry>
+	<entry>
+	<id>ybcbmxTable</id>
+	<title>原板成本明细</title>
+	<type>2</type>
+	<excel><![CDATA[/WEB-INF/report/template/原材/原材成本明细.xls]]></excel>
+	<sheet-index></sheet-index>
+	<row-index></row-index>
+	<cell-index></cell-index>
+	<seq-index></seq-index>
+	<modules>
+		<module>
+			<name>A</name>
+			<sql><![CDATA[
+			select JBNO_,b.SHIP_,b.ZPZL_,b.DJ_,b.YBJG_,b.XCMT_,b.GZSL_,b.GZF_,b.YSGS_,b.YSSL_,b.YSF_,b.BFHL_,b.MYHL_,b.BXF_,b.GSSL_,
+			b.HGJJ_ ,b.HGBJ_ ,b.JKGS_,b.JKZZ_,b.JCFY_ from SINO_YCAICB b where#1# order by b.JBNO_ DESC
+				]]></sql>
+		</module>
+	</modules>
+	<params>
+		<param>
+			<name>船名</name>
+			<column>SHIP_</column>
+			<type>string</type>
+			<opt>eq</opt>
+			<required>false</required>
+			<length>20</length>
+		</param>
+	</params>
+</entry>
+<entry>
+	<id>ybkchzTable</id>
+	<title>原板库存汇总表</title>
+	<type>2</type>
+	<excel><![CDATA[/WEB-INF/report/template/原材/原板库存汇总表.xls]]></excel>
+	<sheet-index></sheet-index>
+	<row-index></row-index>
+	<cell-index></cell-index>
+	<seq-index></seq-index>
+	<modules>
+		<module>
+			<name>A</name>
+			<sql><![CDATA[
+			SELECT a.YCBR_,null as COND_,a.YUNY_,a.FACE_,cast(a.XPHO_ as varchar) as XPHO_,cast(a.XPKN_ as varchar) as XPKN_,sum(a.ZPZL_) from SINO_YCAITP a
+			where a.SCBJ_='0' and a.STAT_ in ('0','1') and a.FPYC_ in ('0','2') AND#1#
+			group by a.YCBR_,a.YUNY_,a.FACE_,a.XPHO_,a.XPKN_
+			order by a.YCBR_ desc,a.YUNY_ asc,a.FACE_ asc,a.XPHO_ asc,a.XPKN_ asc
+				]]></sql>
+		</module>
+	</modules>
+	<params>
+		<param>
+			<name>原板客户</name>
+			<column>a.YCBR_</column>
+			<type>string</type>
+			<opt>like%</opt>
+			<required>false</required>
+			<length>15</length>
+		</param>
+		<param>
+			<name>运用规格</name>
+			<column>a.YUNY_</column>
+			<type>string</type>
+			<opt>eq</opt>
+			<required>false</required>
+			<length>8</length>
+		</param>
+		<param>
+			<name>表面</name>
+			<column>a.FACE_</column>
+			<type>string</type>
+			<opt>eq</opt>
+			<required>false</required>
+			<length>2</length>
+		</param>
+		<param>
+			<name>尺寸.厚</name>
+			<column>a.XPHO_</column>
+			<type>int</type>
+			<opt>eq</opt>
+			<required>false</required>
+			<length>5</length>
+		</param>
+		<param>
+			<name>尺寸.宽</name>
+			<column>a.XPKN_</column>
+			<type>int</type>
+			<opt>eq</opt>
+			<required>false</required>
+			<length>7</length>
+		</param>
+	</params>
+</entry>
+</root>

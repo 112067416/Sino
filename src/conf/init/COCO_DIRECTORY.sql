@@ -1,0 +1,17 @@
+delete from COCO_DIRECTORY;
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0001', '资料室', null, '0', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0011', '安全关系', '1', '0001', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0010', 'SJS', '2', '0001', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0002', '作业基准', '3', '0001', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0003', '业务联络', '4', '0001', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0004', '别纸KP', '4', '0001', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0005', '实验报告', '5', '0001', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0006', '缺陷原因和对策', '7', '0001', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0007', 'NEWS', '8', '0001', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0008', '制造部共通细则', '9', '0001', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0009', '教育资料', '10', '0001', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0012', '制造部共同', '1', '0011', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0013', '保护用具管理', '2', '0011', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0014', '动火管理', '3', '0011', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0015', '紧急联络体制', '4', '0011', null, 1);
+insert into COCO_DIRECTORY (ID_, NAME_, ORDER_, PARENT_, REMARK_, VALID_)values ('0016', '剧毒仓库管理', '5', '0011', null, 1);

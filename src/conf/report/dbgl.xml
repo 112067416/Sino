@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+
+	
+	
+	<entry>
+		<id>dbrz</id>
+		<title>ETL锡原单位明细表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/端板管理/端板日志.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#CREA_#至#CREA__end#' as crea1
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select clq_,jbno_,CREA_,
+				case SLIN_ 
+				when 'V' then '剪切二线' 
+				when 'W' then '剪切三线' 
+				when 'T' then '选别' 
+				else '' end,
+				ZPZL_,DMFX_,KBAO_ FROM SINO_DbglLp WHERE #1# order by crea_ asc
+			]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>日期</name>
+				<column>CREA_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>true</required>
+			</param>
+			<param>
+				<name>生产线别</name>
+				<column>SLIN_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<select><![CDATA[
+				<option value="">全部</option>
+				<option value="V">剪切二线</option>
+				<option value="W">剪切三线</option>
+				<option value="T">选别</option>
+				]]></select>
+				<required>false</required>
+			</param>
+			<param>
+				<name>卷板号</name>
+				<column>jbno_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>11</length>
+			</param>
+			
+		</params>
+	</entry>	
+	
+</root>

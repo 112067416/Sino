@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+    
+    <bean id="com.coco.sys.dao.api.IMenuDAO" class="com.coco.sys.dao.MenuDAO">
+        <property name="dao" ref="dao" />
+    </bean>
+    <bean id="com.coco.sys.bo.api.IMenuBO" class="com.coco.sys.bo.MenuBO">
+        <property name="dao" ref="com.coco.sys.dao.api.IMenuDAO" />
+    </bean>
+    <bean id="com.coco.sys.dao.api.IDeptDAO" class="com.coco.sys.dao.DeptDAO">
+        <property name="dao" ref="dao" />
+    </bean>
+    <bean id="com.coco.sys.bo.api.IDeptBO" class="com.coco.sys.bo.DeptBO">
+        <property name="dao" ref="com.coco.sys.dao.api.IDeptDAO" />
+    </bean>
+    <bean id="com.coco.sys.dao.api.IPersonDAO" class="com.coco.sys.dao.PersonDAO">
+        <property name="dao" ref="dao" />
+    </bean>
+    <bean id="com.coco.sys.bo.api.IPersonBO" class="com.coco.sys.bo.PersonBO">
+        <property name="dao" ref="com.coco.sys.dao.api.IPersonDAO" />
+    </bean>
+    <bean id="com.coco.sys.dao.api.IUserDAO" class="com.coco.sys.dao.UserDAO">
+        <property name="dao" ref="dao" />
+    </bean>
+    <bean id="com.coco.sys.bo.api.IUserBO" class="com.coco.sys.bo.UserBO">
+        <property name="dao" ref="com.coco.sys.dao.api.IUserDAO" />
+    </bean>
+    <bean id="com.coco.sys.dao.api.IPostDAO" class="com.coco.sys.dao.PostDAO">
+        <property name="dao" ref="dao" />
+    </bean>
+    <bean id="com.coco.sys.bo.api.IPostBO" class="com.coco.sys.bo.PostBO">
+        <property name="dao" ref="com.coco.sys.dao.api.IPostDAO" />
+    </bean>
+    <bean id="com.coco.sys.dao.api.IRoleDAO" class="com.coco.sys.dao.RoleDAO">
+        <property name="dao" ref="dao" />
+    </bean>
+    <bean id="com.coco.sys.bo.api.IRoleBO" class="com.coco.sys.bo.RoleBO">
+        <property name="dao" ref="com.coco.sys.dao.api.IRoleDAO" />
+    </bean>
+    <bean id="com.coco.sys.dao.api.ICodeDAO" class="com.coco.sys.dao.CodeDAO">
+        <property name="dao" ref="dao" />
+    </bean>
+    <bean id="com.coco.sys.bo.api.ICodeBO" class="com.coco.sys.bo.CodeBO">
+        <property name="dao" ref="com.coco.sys.dao.api.ICodeDAO" />
+    </bean>
+    <bean id="com.coco.sys.dao.api.ISeqDAO" class="com.coco.sys.dao.SeqDAO">
+        <property name="dao" ref="dao" />
+    </bean>
+    <bean id="com.coco.sys.bo.api.ISeqBO" class="com.coco.sys.bo.SeqBO">
+        <property name="dao" ref="com.coco.sys.dao.api.ISeqDAO" />
+    </bean>
+    <bean id="com.coco.sys.dao.api.IAttachmentDAO" class="com.coco.sys.dao.AttachmentDAO">
+        <property name="dao" ref="dao" />
+    </bean>
+    <bean id="com.coco.sys.bo.api.IAttachmentBO" class="com.coco.sys.bo.AttachmentBO">
+        <property name="dao" ref="com.coco.sys.dao.api.IAttachmentDAO" />
+    </bean>
+    <bean id="com.coco.sys.dao.api.ISourceDAO" class="com.coco.sys.dao.SourceDAO">
+        <property name="dao" ref="dao" />
+    </bean>
+    <bean id="com.coco.sys.bo.api.ISourceBO" class="com.coco.sys.bo.SourceBO">
+        <property name="dao" ref="com.coco.sys.dao.api.ISourceDAO" />
+    </bean>
+    <bean id="com.coco.sys.bo.api.IAuth" class="com.coco.sys.bo.Auth">
+        <property name="userBo" ref="com.coco.sys.bo.api.IUserBO" />
+        <property name="postBo" ref="com.coco.sys.bo.api.IPostBO" />
+    </bean>
+    <!-- 转换器 -->
+    <bean id="com.coco.sys.bo.api.IConvertBO" class="com.coco.sys.bo.ConvertBO">
+        <property name="dao" ref="baseDAO" />
+    </bean>
+    <!-- 目录 -->
+     <bean id="com.coco.sys.dao.api.IDirectoryDAO" class="com.coco.sys.dao.DirectoryDAO">
+        <property name="dao" ref="dao" />
+    </bean>
+    <bean id="com.coco.sys.bo.api.IDirectoryBO" class="com.coco.sys.bo.DirectoryBO">
+        <property name="dao" ref="com.coco.sys.dao.api.IDirectoryDAO" />
+    </bean>
+    
+</beans>

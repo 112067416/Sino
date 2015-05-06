@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+<!-- 范例 -->
+	<include resource="report/sample.xml" />
+	
+	<include resource="report/dh.xml" />
+	<include resource="report/cmn.xml" />
+	<include resource="report/etl.xml" />
+	<include resource="report/zkfp.xml" />
+	<include resource="report/yb.xml" />
+	<include resource="report/dc.xml" />
+	<include resource="report/yccl.xml" />
+	<include resource="report/sc.xml" />
+	<include resource="report/kc.xml" />
+	<include resource="report/ss.xml" />
+	<include resource="report/cg.xml" />
+	<include resource="report/ch.xml" />
+	<include resource="report/sl.xml" />
+	<include resource="report/yszk.xml" />
+	<include resource="report/fxs.xml" />
+	<include resource="report/yygl.xml" />
+	<include resource="report/dbgl.xml" />
+	<include resource="report/zk.xml" />
+</root>

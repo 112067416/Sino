@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+
+	<entry>
+		<id>etlrz</id>
+		<title>ETL日志</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/ETL/ETL日志.xls]]></excel>
+		<sheet-index>0,1</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#a.CREA_#至#a.CREA__end#' as crea
+		
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+       select  c.ZSN_ ,c.cao_,c.ZZN_+'-'+c.ZRJ_,c.ABB_,c.JHD_,ZPZ_=(select ZRZL_ from sino_ycaitp where jbno_=c.ZRJ_),Xph=(select XPHO_ from sino_ycaitp where jbno_=c.ZRJ_),Xpk=(select XPKN_ from sino_ycaitp where jbno_=c.ZRJ_),c.YUN_,c.FAC_,'',c.YTY_,c.YQT_,c.Fgm_,'','',c.KN1_,'',c.KN2_,'',c.KN3_,'',c.KN4_,'',c.YLNO_,'',''
+      ,'',CONVERT(varchar(100), a.CREA_, 20),c.zzn_+'-'+b.Jbn_,dbo.getpkgno(b.CKN_),'','','',b.JBC_,a.Cutc_,a.LOSC_,a.LOSC2_,a.Jscn_,'',b.SCZ_,'',c.NJB_,c.NJN_,'',b.DEN_,'',b.QQD_,'',a.PHGS_,a.RJGS_,b.CLQ_,a.ZBOG_+'-'+a.ZBOJ_,(case when ZRZZ_='4' or ZRZZ_='5' then Cast(CAST((select sum(ZPZL_) from SINO_ZPNGTP where CHAN_='1' and RCZPNO_=C.ZRJ_) as numeric(10,0))/CAST((select ZRZL_ from sino_ycaitp where jbno_=c.ZRJ_) as numeric(10,0)) as  numeric(10,3)) end) as bl
+       ,'',eli=(select NAME_ from SINO_SCXBPZ WHERE TYPE_='1' and CODE_=c.eli_),'','',b.zpz_,b.JSZ_,b.SJZ_,b.JNZ_,a.ZRZZ_,a.LOSQ_,a.LOSQ2_,a.JDYN_,a.JSYN_,b.SCF_,'','','',b.CHA_,'',b.CZD_,'',a.JSNO_,'',a.BHBL_,b.YIN_,a.BOPG_+'-'+a.BOPJ_+' '+a.BDRG_+'-'+a.BDRJ_,''
+ from SINO_ETLSLP a inner join SINO_XPFMT b on a.XPFMT_=b.ID_ 
+ inner join SINO_ZSFMT c on a.ZSFMT_=c.ID_ 
+  WHERE  #1# order by a.CREA_ asc
+
+				]]></sql>
+				<newline>27,27,28</newline>
+			</module>
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+       select  CONVERT(varchar(100), a.CREA_, 20),c.ZSN_ ,c.cao_,eli=(select NAME_ from SINO_SCXBPZ WHERE TYPE_='1' and CODE_=c.eli_),c.ZZN_+'-'+c.ZRJ_,c.zzn_+'-'+b.Jbn_,c.ABB_
+       ,c.JHD_,ZPZ_=(select ZRZL_ from sino_ycaitp where jbno_=c.ZRJ_),Xph=(select XPHO_ from sino_ycaitp where jbno_=c.ZRJ_),Xpk=(select XPKN_ from sino_ycaitp where jbno_=c.ZRJ_)
+     ,b.zpz_,b.JSZ_,b.SJZ_,b.JNZ_,b.JBC_,a.Cutc_,a.LOSC_,a.LOSC2_,a.Jscn_,a.LOSQ_,a.LOSQ2_,b.QQD_,b.CHA_,b.DEN_,a.JSNO_,a.PHGS_,a.RJGS_,a.JDYN_,a.JSYN_,a.BHBL_,b.CLQ_,b.SCZ_,b.SCF_,a.ZBOG_+'-'+a.ZBOJ_,a.BOPG_+'-'+a.BOPJ_+' '+a.BDRG_+'-'+a.BDRJ_,c.YUN_,c.FAC_
+     ,c.YTY_,c.YQT_,c.Fgm_,c.KN1_,c.KN2_,c.KN3_,c.KN4_,c.YLNO_,dbo.getpkgno(b.CKN_),c.NJB_,c.NJN_,a.ZBWD_,'' as bl
+     ,a.ZRZZ_,b.CZD_,b.YIN_
+ from SINO_ETLSLP a inner join SINO_XPFMT b on a.XPFMT_=b.ID_ 
+ inner join SINO_ZSFMT c on a.ZSFMT_=c.ID_ 
+  WHERE #1# and a.ZRZZ_ is null order by a.CREA_ asc
+				]]></sql>		
+			</module>			
+		</modules>
+		<params>
+			<param>
+				<name>日期</name>
+				<column>a.CREA_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+			<param>
+				<name>入端卷板NO</name>
+				<column>c.ZRJ_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>10</length>
+			</param>
+			<param>
+				<name>镀锡生产线</name>
+				<column>c.Eli_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<scx>1</scx>
+				<required>false</required>
+			</param>
+			<param>
+				<name>班</name>
+				<column>a.BAN_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<key>SINO_BAN</key>
+				<required>false</required>
+			</param>
+			<param>
+				<name>组</name>
+				<column>a.ZU_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<key>SINO_ZU</key>
+				<required>false</required>
+			</param>
+			<param>
+				<name>用户代码</name>
+				<column>c.USR_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>15</length>
+			</param>
+		</params>
+	</entry>
+	
+	
+	<entry>
+		<id>etlxydwmxb</id>
+		<title>ETL锡原单位明细表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/ETL/ETL锡原单位明细表.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+select a.* from
+(
+select a.zzsd_,a.jbno_,a.zrzl_,etsd_=CONVERT(varchar(10),dbo.GET_ETSD(a.etsd_), 120),
+a.pzno_,a.abbr_,a.yuny_,a.baos_,a.zrzl1_,a.fuzm_,a.fufm_,a.zu_,
+a.zrzl2_,a.xpho_,a.xpkn_,a.jbcn_,a.mbfuzm_,a.mbfufm_,a.sjfuzm_,a.sjfufm_,
+a.mbfuzmAll_,a.mbfufmAll_,a.sjfuzmAll_,a.sjfufmAll_,
+blmbAll_=cast((a.mbfuzmAll_+a.mbfufmAll_)/a.zrzl2_ as numeric(4,2)),blsjAll_=cast((a.sjfuzmAll_+a.sjfufmAll_)/a.zrzl2_ as numeric(4,2)),
+bmmb_=cast(a.mbfuzmAll_/a.zrzl2_ as numeric(4,2)),bmsj_=cast(a.sjfuzmAll_/a.zrzl2_ as numeric(4,2)),
+lmmb_=cast(a.mbfufmAll_/a.zrzl2_ as numeric(4,2)),lmsj_=cast(a.sjfufmAll_/a.zrzl2_ as numeric(4,2)),
+a.dxks_,a.dxjs_,dxsj_=DATEDIFF(minute,a.dxks_,a.dxjs_)
+from
+(
+select a.*,mbfuzmAll_=cast(a.XPKN_*a.jbcn_*a.mbfuzm_/1000 as numeric(10,2)),mbfufmAll_=cast(a.XPKN_*a.jbcn_*a.mbfufm_/1000 as numeric(10,2)),
+sjfuzmAll_=cast(a.XPKN_*a.jbcn_*a.sjfuzm_/1000 as numeric(10,2)),sjfufmAll_=cast(a.XPKN_*a.jbcn_*a.sjfufm_/1000 as numeric(10,2))
+ from 
+(
+select a.*,
+mbfuzm_=cast(cast(a.fuzm_ as numeric(3,0))*1.12/10 as numeric(4,2)),
+mbfufm_=cast(cast(a.fufm_ as numeric(3,0))*1.12/10 as numeric(4,2)),
+sjfuzm_=(select top 1 sczm_ from  sino_zpngtp d where d.RCZPNO_=a.jbno_),
+sjfufm_=(select top 1 scfm_ from  sino_zpngtp d where d.RCZPNO_=a.jbno_)
+ from
+(
+select zzsd_=b.zzsd_,jbno_,zrzl_=zrzl_*0.001,
+etsd_=(select top 1 b.crea_ from SINO_ETLSLP b,SINO_ZSFMT c where  b.Zsfmt_=c.id_ and  b.Zrzz_ in('4','5') and c.zrj_=a.RCZPNO_ order by b.crea_ desc),
+pzno_=(select c.pzno_ from sino_dhuotp c where c.dhno_=substring(b.dhno_,1,7) and c.line_=substring(b.dhno_,8,2)),
+abbr_=(select c.abbr_ from sino_dhuotp c where c.dhno_=substring(b.dhno_,1,7) and c.line_=substring(b.dhno_,8,2)),
+b.yuny_,
+baos_=(select c.NWAI_ from sino_dhuotp c where c.dhno_=substring(b.dhno_,1,7) and c.line_=substring(b.dhno_,8,2)),
+zrzl1_=ZRZL_*0.001,
+fuzm_=dbo.GET_FU((select c.fudw_ from sino_dhuotp c where c.dhno_=substring(b.dhno_,1,7) and c.line_=substring(b.dhno_,8,2)),
+(select c.fuzm_ from sino_dhuotp c where c.dhno_=substring(b.dhno_,1,7) and c.line_=substring(b.dhno_,8,2))),
+fufm_=dbo.GET_FU((select c.fudw_ from sino_dhuotp c where c.dhno_=substring(b.dhno_,1,7) and c.line_=substring(b.dhno_,8,2)),
+(select c.fufm_ from sino_dhuotp c where c.dhno_=substring(b.dhno_,1,7) and c.line_=substring(b.dhno_,8,2))),
+zu_=(select top 1 b.zu_ from SINO_ETLSLP b,SINO_ZSFMT c where  b.Zsfmt_=c.id_ and  b.Zrzz_ in('4','5') and c.zrj_=a.RCZPNO_ order by b.crea_ desc),
+zrzl2_=ZRZL_,XPHO_,XPKN_,jbcn_=(select sum(d.jbcn_) from sino_zpngtp d where d.RCZPNO_=b.jbno_),
+b.dxks_,b.dxjs_
+from sino_ycaitp b , 
+(
+select distinct c.Zrj_ as RCZPNO_   from sino_zpngtp a,SINO_ETLSLP b,SINO_ZSFMT c 
+where a.RCZPNO_=c.Zrj_ and b.Zsfmt_=c.id_ and  b.Zrzz_ in('4','5') and
+#1#
+) a where b.jbno_=a.RCZPNO_  
+) a 
+) a 
+) a   
+) a ORDER BY a.etsd_ ASC,a.dxks_ ASC
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>日期</name>
+				<column>b.Crea_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+			<param>
+				<name>镀锡线别</name>
+				<column>c.Eli_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<scx>1</scx>
+				<required>false</required>
+			</param>
+			<param>
+				<name>班</name>
+				<column>b.BAN_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<key>SINO_BAN</key>
+				<required>false</required>
+			</param>
+			
+		</params>
+	</entry>	
+	
+	<entry>
+		<id>etlmxTable</id>
+		<title>etl日产量一览明细</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/ETL/ETL日产量一览明细.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select CONVERT(varchar(11) , getdate(),120 )  as crea,'#c.crea_#至#c.crea__end#' as crea1
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				
+select a.*
+from (
+select CONVERT(varchar(21),a.Sjsj_, 120) as Sjsj_,a.zzsd_,a.jbno_,pzno_=(select b.pzno_ from sino_dhuotp b where b.dhno_=substring(a.dhno_,1,7) and b.line_=substring(a.dhno_,8,2)),a.ZRZL_,zzzl_=a.ZPZL_-a.ZRZL_,
+C1_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_), 
+C2_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '2' AND b.RCZPNO_=a.jbno_), 
+C3_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '3' AND b.RCZPNO_=a.jbno_), 
+C4_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '4' AND b.RCZPNO_=a.jbno_), 
+C5_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '5' AND b.RCZPNO_=a.jbno_), 
+C9_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '9' AND b.RCZPNO_=a.jbno_), 
+CS_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = 'S' AND b.RCZPNO_=a.jbno_), 
+XJ_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.RCZPNO_=a.jbno_) ,
+cast(cast(dbo.GET_FU((select b.fudw_ from sino_dhuotp b where b.dhno_=substring(a.dhno_,1,7) and b.line_=substring(a.dhno_,8,2)),
+(select b.fuzm_ from sino_dhuotp b where b.dhno_=substring(a.dhno_,1,7) and b.line_=substring(a.dhno_,8,2))) as numeric(3,0))*1.12/10 as numeric(4,2)) AS fuzm_,
+cast(cast(dbo.GET_FU((select b.fudw_ from sino_dhuotp b where b.dhno_=substring(a.dhno_,1,7) and b.line_=substring(a.dhno_,8,2)),
+(select b.fufm_ from sino_dhuotp b where b.dhno_=substring(a.dhno_,1,7) and b.line_=substring(a.dhno_,8,2))) as numeric(3,0))*1.12/10 as numeric(4,2)) AS fufm_
+from SINO_YCAITP a ,(
+select distinct c.Zrj_ as RCZPNO_,b.crea_ from sino_zpngtp a,SINO_ETLSLP b,SINO_ZSFMT c 
+where a.RCZPNO_=c.Zrj_ and b.Zsfmt_=c.id_ and  b.Zrzz_ in('4','5')  
+) c where a.jbno_=c.RCZPNO_ and #1#
+union 
+select null,null,null,'总计:',sum(a.ZRZL_),sum(a.zzzl_),sum(a.C1_),sum(a.C2_),sum(a.C3_),sum(a.C4_),sum(a.C5_),sum(a.C9_),sum(a.CS_),sum(a.XJ_),null,null
+from 
+(
+select a.Sjsj_,a.zzsd_,a.jbno_,a.ZRZL_,zzzl_=a.ZPZL_-a.ZRZL_,
+C1_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_), 
+C2_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '2' AND b.RCZPNO_=a.jbno_), 
+C3_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '3' AND b.RCZPNO_=a.jbno_), 
+C4_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '4' AND b.RCZPNO_=a.jbno_), 
+C5_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '5' AND b.RCZPNO_=a.jbno_), 
+C9_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '9' AND b.RCZPNO_=a.jbno_), 
+CS_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = 'S' AND b.RCZPNO_=a.jbno_), 
+XJ_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.RCZPNO_=a.jbno_) ,
+cast(cast(dbo.GET_FU((select b.fudw_ from sino_dhuotp b where b.dhno_=substring(a.dhno_,1,7) and b.line_=substring(a.dhno_,8,2)),
+(select b.fuzm_ from sino_dhuotp b where b.dhno_=substring(a.dhno_,1,7) and b.line_=substring(a.dhno_,8,2))) as numeric(3,0))*1.12/10 as numeric(4,2)) AS fuzm_,
+cast(cast(dbo.GET_FU((select b.fudw_ from sino_dhuotp b where b.dhno_=substring(a.dhno_,1,7) and b.line_=substring(a.dhno_,8,2)),
+(select b.fufm_ from sino_dhuotp b where b.dhno_=substring(a.dhno_,1,7) and b.line_=substring(a.dhno_,8,2))) as numeric(3,0))*1.12/10 as numeric(4,2)) AS fufm_
+from SINO_YCAITP a ,(
+select distinct c.Zrj_ as RCZPNO_,b.crea_ from sino_zpngtp a,SINO_ETLSLP b,SINO_ZSFMT c 
+where a.RCZPNO_=c.Zrj_ and b.Zsfmt_=c.id_ and  b.Zrzz_ in('4','5') 
+) c where a.jbno_=c.RCZPNO_ and #1#
+) a 
+) a order by (case   WHEN   a.Sjsj_   is   NULL   then   '2099-01-01'   else   a.Sjsj_   end) asc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>日期</name>
+				<column>c.Crea_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+			<param>
+				<name>制造商</name>
+				<column>a.zzsd_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<key>012</key>
+				<required>false</required>
+			</param>
+		</params>
+	</entry>
+	
+	<entry>
+		<id>etlbanrz</id>
+		<title>ETL班别总日志</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/ETL/ETL班别日志.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#b.crea_#至#b.crea__end#' as crea
+		
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+  select 'S.J.M' ,a.ban_,a.pzno_,allZrzl_=sum(a.allZrzl_),allZpzl_=sum(a.allZpzl_),C1_=sum(C1_),C2_=sum(C2_),C3_=sum(C3_),C4_=sum(C4_),C5_=sum(C5_),C9_=sum(C9_),CS_=sum(CS_)  from
+(
+select dhno_=(select dhno_ from sino_ycaitp b where b.jbno_=a.jbno_),ban_=(select top 1 b.ban_ from SINO_ETLSLP b,SINO_ZSFMT c where  b.Zsfmt_=c.id_ and  b.Zrzz_ in('4','5') and c.zrj_=a.jbno_ order by b.crea_ desc),
+pzno_=(select c.pzno_ from sino_ycaitp b,sino_dhuotp c where b.jbno_=a.jbno_ and c.dhno_=substring(b.dhno_,1,7) and c.line_=substring(b.dhno_,8,2)),
+allZrzl_=(select ZRZL_ from sino_ycaitp b where b.jbno_=a.jbno_),
+allZpzl_=(select sum(b.zpzl_) from sino_zpngtp b where elin_='N' and b.RCZPNO_=a.jbno_),
+ C1_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_),
+ C2_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '2' AND b.RCZPNO_=a.jbno_),
+ C3_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '3' AND b.RCZPNO_=a.jbno_),
+ C4_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '4' AND b.RCZPNO_=a.jbno_), 
+ C5_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '5' AND b.RCZPNO_=a.jbno_),
+ C9_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '9' AND b.RCZPNO_=a.jbno_),
+ CS_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = 'S' AND b.RCZPNO_=a.jbno_)
+from
+(
+select distinct c.Zrj_ as jbno_ from sino_zpngtp a,SINO_ETLSLP b,SINO_ZSFMT c 
+where a.RCZPNO_=c.Zrj_ and b.Zsfmt_=c.id_ and  b.Zrzz_ in('4','5') and
+ #1#  
+)a  
+) a where substring(a.dhno_,1,1)='T' group by a.ban_,a.pzno_
+union
+select '正材' ,a.ban_,a.pzno_,allZrzl_=sum(a.allZrzl_),allZpzl_=sum(a.allZpzl_),C1_=sum(C1_),C2_=sum(C2_),C3_=sum(C3_),C4_=sum(C4_),C5_=sum(C5_),C9_=sum(C9_),CS_=sum(CS_)  from
+(
+select dhno_=(select dhno_ from sino_ycaitp b where b.jbno_=a.jbno_),ban_=(select top 1 b.ban_ from SINO_ETLSLP b,SINO_ZSFMT c where  b.Zsfmt_=c.id_ and  b.Zrzz_ in('4','5') and c.zrj_=a.jbno_ order by b.crea_ desc),
+pzno_=(select c.pzno_ from sino_ycaitp b,sino_dhuotp c where b.jbno_=a.jbno_ and c.dhno_=substring(b.dhno_,1,7) and c.line_=substring(b.dhno_,8,2)),
+allZrzl_=(select ZRZL_ from sino_ycaitp b where b.jbno_=a.jbno_),
+allZpzl_=(select sum(b.zpzl_) from sino_zpngtp b where elin_='N' and b.RCZPNO_=a.jbno_),
+ C1_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_),
+ C2_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '2' AND b.RCZPNO_=a.jbno_),
+ C3_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '3' AND b.RCZPNO_=a.jbno_),
+ C4_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '4' AND b.RCZPNO_=a.jbno_), 
+ C5_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '5' AND b.RCZPNO_=a.jbno_),
+ C9_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '9' AND b.RCZPNO_=a.jbno_),
+ CS_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = 'S' AND b.RCZPNO_=a.jbno_)
+from
+(
+select distinct c.Zrj_ as jbno_ from sino_zpngtp a,SINO_ETLSLP b,SINO_ZSFMT c 
+where a.RCZPNO_=c.Zrj_ and b.Zsfmt_=c.id_ and  b.Zrzz_ in('4','5') and
+ #1#
+)a  
+) a where substring(a.dhno_,1,1)<>'T' group by a.ban_,a.pzno_
+union
+select '总计', ban_=null,pzno_=null,allZrzl_=sum(a.allZrzl_),allZpzl_=sum(a.allZpzl_),C1_=sum(C1_),C2_=sum(C2_),C3_=sum(C3_),C4_=sum(C4_),C5_=sum(C5_),C9_=sum(C9_),CS_=sum(CS_)
+from
+(
+select allZrzl_=sum(a.allZrzl_),allZpzl_=sum(a.allZpzl_),C1_=sum(C1_),C2_=sum(C2_),C3_=sum(C3_),C4_=sum(C4_),C5_=sum(C5_),C9_=sum(C9_),CS_=sum(CS_) 
+ from
+(
+select allZrzl_=(select ZRZL_ from sino_ycaitp b where b.jbno_=a.jbno_),
+allZpzl_=(select sum(b.zpzl_) from sino_zpngtp b where elin_='N' and b.RCZPNO_=a.jbno_),
+ C1_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_),
+ C2_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '2' AND b.RCZPNO_=a.jbno_),
+ C3_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '3' AND b.RCZPNO_=a.jbno_),
+ C4_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '4' AND b.RCZPNO_=a.jbno_), 
+ C5_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '5' AND b.RCZPNO_=a.jbno_),
+ C9_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = '9' AND b.RCZPNO_=a.jbno_),
+ CS_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE elin_='N' and b.CHAN_ = 'S' AND b.RCZPNO_=a.jbno_)
+from
+(
+select distinct c.Zrj_ as jbno_ from sino_zpngtp a,SINO_ETLSLP b,SINO_ZSFMT c 
+where a.RCZPNO_=c.Zrj_ and b.Zsfmt_=c.id_ and  b.Zrzz_ in('4','5') and
+ #1#
+)a 
+) a 
+) a
+
+
+				]]></sql>
+				
+			</module>
+				
+		</modules>
+		<params>
+			<param>
+				<name>日期</name>
+				<column>b.crea_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+			<param>
+				<name>班</name>
+				<column>b.BAN_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<key>SINO_BAN</key>
+				<required>false</required>
+			</param>
+			
+			
+		</params>
+	</entry>
+	<entry>
+		<id>etlbl</id>
+		<title>Coil步留统计</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/ETL/ETLCoil步留统计.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#a.CREA_#至#a.CREA__end#' as crea
+		
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+     select CONVERT(varchar(100), a.CREA_, 20),a.jbno_,a.cutc_,a.losc_,a.losq_ from sino_zpngtp a where (a.losc_>0 or a.losq_>0)  
+and substring(a.pzno_,1,1) =2 and #1#
+
+				]]></sql>
+			</module>
+				
+		</modules>
+		<params>
+			<param>
+				<name>日期</name>
+				<column>a.CREA_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+			
+		</params>
+	</entry>
+	<entry>
+		<id>dmrj</id>
+		<title>垫木库存日志</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/ETL/垫木库存日志.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#CREA_#至#CREA__end#' as crea
+		
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+   
+  select 
+case when clq_='1' then '新建' 
+when clq_='2' then '更新' 
+when clq_='3' then '移库' 
+else clq_ 
+end as clq_,crea_,cast(kuan_ as varchar(10))+'*'+cast(cang_ as varchar(10)),dmfx_,kbao_,
+oukw_,ougs_,inkw_,ings_,case when dann_='V' then '二剪切线' when dann_='W' then '三剪切线' else dann_ end as dann_,ban_,zu_
+from SINO_DMLP where #1#
+
+				]]></sql>
+			</module>
+				
+		</modules>
+		<params>
+			<param>
+				<name>日期</name>
+				<column>CREA_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+				<value>${date }</value>
+			</param>
+			
+		</params>
+	</entry>
+	
+	<entry>
+		<id>blzptj</id>
+		<title>保留品统计</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/ETL/保留品统计.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#CREA_#至#CREA__end#' as crea
+		
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+     select jbno_,zpzl_,dhno_,abbr_,
+case when cang_ is null then cast(houu_ as varchar(10))+'*'+cast(kuan_ as varchar(10)) 
+else cast(houu_ as varchar(10))+'*'+cast(kuan_ as varchar(10))+'*'+cast(cang_ as varchar(10))
+end as zpcc_,pzno_,face_,deng_
+from sino_zpngtp where blbj_ is not null and #1#
+
+				]]></sql>
+			</module>
+				
+		</modules>
+		<params>
+			<param>
+				<name>日期</name>
+				<column>CREA_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+			
+		</params>
+	</entry>
+	<entry>
+		<id>dmkzbj</id>
+		<title>垫木库存比较统计</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/ETL/垫木库存比较.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select cast(t.kuan_ as varchar(10))+'*'+cast(t.cang_ as varchar(10)) as gg_,t.dmfx_,t.kbao_,t.zbgs_,f.dmgs_,isnull(f.dmgs_,0)-isnull(t.zbgs_,0) as xcgs_ from (
+				select a.kuan_,a.cang_,b.dmfx_,b.kbao_,cast(sum(a.zpzl_/(b.bdan_*b.bzzs_)) as int) as zbgs_ from 
+				sino_zpngtp a left join sino_ycaitp c on a.rczpno_=c.jbno_ left join sino_zsdhtp b on c.zsno_=b.zsno_
+				where a.duic_='D' AND a.chan_='1' and a.stat_='0' and a.cang_ > 0 
+				group by a.kuan_,a.cang_,b.dmfx_,b.kbao_) t left join 
+				(select sum(e.dmgs_)as dmgs_,e.kuan_,e.cang_,e.dmfx_,e.kbao_ from sino_dmgstp e group by e.kuan_,e.cang_,e.dmfx_,e.kbao_) f on 
+				f.kuan_=t.kuan_ and f.cang_=t.cang_ and f.kbao_=t.kbao_ where t.dmfx_ is null or len(t.dmfx_)=0 or f.dmfx_ is null or len(f.dmfx_)=0 or t.dmfx_=f.dmfx_
+				order by t.kuan_ asc,t.cang_ asc,t.dmfx_ asc,t.kbao_ asc
+				]]></sql>
+			</module>
+		</modules>
+	</entry>
+</root>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<entry>
+		<id>yyfxjg</id>
+		<title>药液分析结果记录表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/分析室/药液分析结果记录表.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				SELECT CONVERT(VARCHAR(10), RQ_, 111),CONVERT(VARCHAR(5), RQ_, 108), round(JJY_FREE_CON_,1), cast(round(JJY_TOTAL_CON_,1) as varchar),cast(round(JDJY_FREE_CON_,1) as varchar),
+				cast(round(JDJY_TOTAL_CON_,1) as varchar),cast(round(SDJY_HSO_CON_,1) as varchar),cast(round(SDJY_QT_,1) as varchar),cast(round(XDDY_SNT_CON_,1) as varchar),cast(round(XDDY_ACIDT_CON_,1) as varchar),cast(round(XDDY_ENSA_,1) as varchar),cast(round(XDDY_FE_,1) as varchar),
+				cast(round(XDDY_SLUDGE_,1) as varchar),cast(round(TCY_SN_CON_,1) as varchar),cast(round(TCY_ACID_CON_,1) as varchar),cast(round(HXCLY_CR_CON_,1) as varchar),cast(round(HXCLY_PH_,1) as varchar),cast(round(HXCLY_SLUDGE_,1) as varchar),cast(round(ZYG_CON_,1) as varchar),cast(round(ZYG_PH_,1) as varchar),QRR_,BZ_
+				FROM SINO_YYFXJGJL where#1# order by RQ_ desc;
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>记录日期</name>
+				<column>RQ_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>true</required>
+				<value>${date }</value>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>mktfxsj</id>
+		<title>马口铁分析数据</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/分析室/马口铁分析数据.xls]]></excel>
+		<sheet-index>0,1</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select CONVERT(VARCHAR(10), FXR_, 111),CONVERT(VARCHAR(5), FXR_, 108),JBNO_,BW_,'F',FUZM_,XFZL_SMT_,XFZL_SAT_,XFZL_SST_,XFZL_CMT_,XFZL_CAT_,XFZL_CST_,XFZL_NMT_,XFZL_NAT_,XFZL_NST_,CR_ST_,CR_CT_,CR_NT_,YQTY_,TYL_ST_,TYL_CT_,TYL_NT_,BMLJG_ST_,BMLJG_CT_,BMLJG_NT_,ISV_ZT_,cast(TCS_PD_T_ as varchar),ATC_FSYWKS_,ATC_FSYYKS_,ATC_ZT_,TCV_TBY_,TCV_ZT_,TLMZX_ST_,TLMZX_CT_,TLMZX_NT_,EPON_ST_,EPON_CT_,EPON_NT_,WDSY_T_,PLT_PD_,PORE_PDT_,
+                null,null,null,null,'B',FUFM_,XFZL_SMB_,XFZL_SAB_,XFZL_SSB_,XFZL_CMB_,XFZL_CAB_,XFZL_CSB_,XFZL_NMB_,XFZL_NAB_,XFZL_NSB_,CR_SB_,CR_CB_,CR_NB_,null,TYL_SB_,TYL_CB_,TYL_NB_,BMLJG_SB_,BMLJG_CB_,BMLJG_NB_,ISV_ZB_,cast(TCS_PD_B_ as varchar),null,null,ATC_ZB_,null,TCV_ZB_,TLMZX_SB_,TLMZX_CB_,TLMZX_NB_,EPON_SB_,EPON_CB_,EPON_NB_,WDSY_B_,null,PORE_PDB_
+                from SINO_MKTFXSJJL where#1# order by FXR_ desc
+				]]></sql>
+				<newline>41,41</newline>
+			</module>
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+				select FXR_,JBNO_,BW_,FUZM_,FUFM_
+				,XFZL_SMT_,XFZL_SMB_,XFZL_SAT_,XFZL_SAB_,XFZL_SST_,XFZL_SSB_
+				,XFZL_CMT_,XFZL_CMB_,XFZL_CAT_,XFZL_CAB_,XFZL_CST_,XFZL_CSB_
+				,XFZL_NMT_,XFZL_NMB_,XFZL_NAT_,XFZL_NAB_,XFZL_NST_,XFZL_NSB_
+				,CR_ST_,CR_SB_,CR_CT_,CR_CB_,CR_NT_,CR_NB_
+				,YQTY_,TYL_ST_,TYL_SB_,TYL_CT_,TYL_CB_,TYL_NT_,TYL_NB_
+				,BMLJG_ST_,BMLJG_SB_,BMLJG_CT_,BMLJG_CB_,BMLJG_NT_,BMLJG_NB_
+				,ISV_ZT_,ISV_ZB_,cast(TCS_PD_T_ as varchar),cast(TCS_PD_B_ as varchar)
+				,ATC_FSYWKS_,ATC_FSYYKS_,ATC_ZT_,ATC_ZB_
+				,TCV_TBY_,TCV_ZT_,TCV_ZB_
+				,TLMZX_ST_,TLMZX_SB_,TLMZX_CT_,TLMZX_CB_,TLMZX_NT_,TLMZX_NB_
+				,EPON_ST_,EPON_SB_,EPON_CT_,EPON_CB_,EPON_NT_,EPON_NB_
+				,WDSY_T_,WDSY_B_,PLT_PD_,PORE_PDT_,PORE_PDB_
+				from SINO_MKTFXSJJL where#1# order by FXR_ desc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>分析日</name>
+				<column>FXR_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>true</required>
+				<value>${date }</value>
+			</param>
+			<param>
+				<name>Coil No.</name>
+				<column>JBNO_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<length>7</length>
+			</param>
+		</params>
+	</entry>
+</root>

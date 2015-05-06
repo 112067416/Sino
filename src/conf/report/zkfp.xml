@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<entry>
+		<id>zkfpjg</id>
+		<title>在库分配结果确认LIST</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/在库分配/在库分配结果确认LIST.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select c.FPNO_,c.CREA_,c.DHNO_+c.LINE_,c.CQZS_,c.JBKB_,c.ZXBB_,c.QZBJ_,c.STAT_,c.ZPNO_,c.YCZK_,c.ZPZL_,c.HOUU_,c.KUAN_,c.CANG_,c.YCBR_,c.ABBR_,c.GGNO_,c.FPDJ_ from (
+				select a.FPNO_,
+				substring(a.DHNO_,1,7) as DHNO_,
+				substring(a.DHNO_,8,9) as LINE_,
+				a.ZPZL_ as CQZS_,
+				CASE WHEN a.JBKB_ is not null and a.JBKB_='1' THEN a.JBKB_ ELSE ''END as JBKB_,
+				a.ZXBB_,
+				a.QZBJ_,
+				a.STAT_,
+				CASE WHEN a.PLQF_  is not NULL and len(a.PLQF_) > 0 THEN a.PLQF_ ELSE '' END+CASE WHEN a.ZZNO_  is not NULL and len(a.ZZNO_) > 0 THEN a.ZZNO_+'-' ELSE '' END+a.JBNO_ AS ZPNO_,
+				a.YCZK_,
+				a.ZPZL_,
+				b.HOUU_,
+				b.KUAN_,
+				CASE WHEN b.CANG_  is NULL THEN 'COIL' ELSE CAST(b.CANG_ AS VARCHAR) END AS CANG_,
+				a.YCBR_,
+				b.ABBR_,
+				b.GGNO_,
+				b.FPDJ_,
+				a.JBNO_,
+				convert(varchar(10), a.CREA_, 23) as CREA_
+				 from SINO_ZSDXTP a left join SINO_DHUOTP b
+								on substring(a.DHNO_, 1, 7)=b.DHNO_ and substring(a.DHNO_, 8, 2)=b.LINE_ where a.FPNO_ is not null and len(a.FPNO_)>0 and a.FPNO_<>'B00000') c where#1# order by c.FPNO_ DESC
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>分配日期</name>
+				<column>c.CREA_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name></name>
+				<column></column>
+				<type></type>
+				<opt></opt>
+				<required></required>
+			</param>
+			<param>
+				<name></name>
+				<column></column>
+				<type></type>
+				<opt></opt>
+				<required></required>
+			</param>
+			<param>
+				<name>现品No</name>
+				<column>c.JBNO_</column>
+				<type>String</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>11</length>
+			</param>
+			<param>
+				<name>订货No.</name>
+				<column>c.DHNO_</column>
+				<type>String</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>7</length>
+				<jointChar>-</jointChar>
+				<jointColumn>LINE_</jointColumn>
+				<jointLength>2</jointLength>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>zrydyl</id>
+		<title>装入预定一览(明细版)</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/在库分配/装入预定一览(明细版).xls]]></excel>
+		<sheet-index>0,1</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#cldm#' as cldm
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select '' AS fpno,substring(b.DHNO_,1,7) as DHNO_,substring(b.DHNO_,8,2) AS LINE_,b.ZPCC_,b.DHFZ_,b.YQTY_,b.DMFX_,b.KBAO_,b.KBZS_,'' AS SV,b.KPN1_FLAG_+'-'+b.KPN1_,b.KPN2_FLAG_+'-'+b.KPN2_,b.KPN3_FLAG_+'-'+b.KPN3_,b.KPN4_FLAG_+'-'+b.KPN4_
+				,b.ZSNO_,b.JHQI_,b.ABBR_,b.ZRKN_,b.JBHK_,b.JDCN_,b.YUNY_,a.FACE_,a.DENG_,b.KBAO_+','+CAST(b.KBZS_ AS VARCHAR)+'~'+CAST(b.KBZX_ AS VARCHAR),'' AS BW,'' AS LV,'' AS KP,''
+				,A.ZZNO_+'-'+a.ZRJB_,a.ZPZL_,'' as DUIC,CAST (a.XPKN_ AS VARCHAR) +'*'+ CAST (a.XPHO_ AS VARCHAR)+'*'+'COIL',a.YUNY_,a.FUZM_+'/'+a.FUFM_,a.YTYP_,a.FACE_,a.DENG_,a.YLNO_,'' as YBKH
+				 from SINO_ZSZRTP a left join SINO_ZSDHTP b on a.ZSNO_=b.ZSNO_ where a.stat_='0' and b.ZSNO_ like 'N%' AND#1# order by b.ABBR_, b.ZSNO_ asc
+				]]></sql>
+				<newline>14,14,11</newline>
+			</module>
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+				select '' AS fpno,b.ZSNO_,substring(b.DHNO_,1,7) as DHNO_,substring(b.DHNO_,8,2) AS LINE_,b.ZPCC_,b.DHFZ_,b.YQTY_,b.DMFX_,b.KBAO_,b.KBZS_,'' AS SV,b.KPN1_FLAG_+'-'+b.KPN1_,b.KPN2_FLAG_+'-'+b.KPN2_,b.KPN3_FLAG_+'-'+b.KPN3_,b.KPN4_FLAG_+'-'+b.KPN4_
+				,b.JHQI_,b.ABBR_,b.ZRKN_,b.JBHK_,b.JDCN_,b.YUNY_,a.FACE_,a.DENG_,b.KBAO_+','+CAST(b.KBZS_ AS VARCHAR)+'~'+CAST(b.KBZX_ AS VARCHAR),'' AS BW,'' AS LV,'' AS KP
+				,A.ZZNO_+'-'+a.ZRJB_,a.ZPZL_,'' as DUIC,CAST (a.XPKN_ AS VARCHAR) +'*'+ CAST (a.XPHO_ AS VARCHAR)+'*'+'COIL',a.YUNY_,a.FUZM_+'/'+a.FUFM_,a.YTYP_,a.FACE_,a.DENG_,a.YLNO_,'' as YBKH
+				 from SINO_ZSZRTP a left join SINO_ZSDHTP b on a.ZSNO_=b.ZSNO_ where a.stat_='0' and b.ZSNO_ like 'N%' AND#1# order by b.ABBR_, b.ZSNO_ asc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>指示书No.</name>
+				<column>a.ZSNO_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>6</length>
+			</param>
+		<!-- 
+			<param>
+				<name>现品状况</name>
+				<column>field2</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<select>
+				<![CDATA[
+				<option value="原材">原材</option>
+				<option value="中间品">中间品</option>
+				]]>
+				</select>
+				<required>false</required>
+			</param>
+			<param>
+				<name>用户代码</name>
+				<column>field3</column>
+				<type>String</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param> -->
+		</params>
+	</entry>
+</root>

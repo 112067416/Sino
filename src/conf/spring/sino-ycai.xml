@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<bean id="com.quanta.sino.ycai.dao.api.IYcaitpDAO" class="com.quanta.sino.ycai.dao.YcaitpDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="com.quanta.sino.ycai.dao.api.IYcaicbDAO" class="com.quanta.sino.ycai.dao.YcaicbDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="com.quanta.sino.ycai.bo.api.IYcaitpBO" class="com.quanta.sino.ycai.bo.YcaitpBO">
+		<property name="bo" ref="com.quanta.sino.cg.bo.api.IWwhtBO" />
+		<property name="dao" ref="com.quanta.sino.ycai.dao.api.IYcaitpDAO" />
+		<property name="codeBo" ref="com.coco.sys.bo.api.ICodeBO" />
+		<property name="seqBo" ref="com.coco.sys.bo.api.ISeqBO" />
+		<property name="attachmentBO" ref="com.coco.sys.bo.api.IAttachmentBO" />
+		<property name="convertBO" ref="com.coco.sys.bo.api.IConvertBO" />
+		<property name="jchatpDAO" ref="com.quanta.sino.ycai.dao.api.IJchatpDAO" />
+		<property name="jinhlpDAO" ref="com.quanta.sino.ycai.dao.api.IJinhlpDAO" />
+		<property name="ycaicbDAO" ref="com.quanta.sino.ycai.dao.api.IYcaicbDAO" />
+		<property name="cmnBO" ref="com.quanta.sino.cmn.bo.api.ICmnBO" />
+	</bean>
+
+	<bean id="com.quanta.sino.ycai.dao.api.IJchatpDAO" class="com.quanta.sino.ycai.dao.JchatpDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="com.quanta.sino.ycai.dao.api.IJinhlpDAO" class="com.quanta.sino.ycai.dao.JinhlpDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+</beans>

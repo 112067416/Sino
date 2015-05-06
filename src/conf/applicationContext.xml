@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:database.properties</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="pc6000DataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+		<!--
+		<property name="Url"
+			value="jdbc:sqlserver://172.16.11.209;DatabaseName=zrdtemp" />
+		<property name="username" value="yuchengjun" />
+		<property name="password" value="zrd123" />   -->
+		<!--  -->
+		<property name="Url"
+			value="jdbc:sqlserver://127.0.0.1;DatabaseName=zrdtemp" />
+		<property name="username" value="sa" />
+		<property name="password" value="abc123" />
+	</bean>
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialPoolSize" value="60" />
+		<property name="minPoolSize" value="30" />
+		<property name="maxPoolSize" value="80" />
+		<property name="maxIdleTime" value="60" />
+		<property name="acquireIncrement" value="5" />
+		<property name="acquireRetryAttempts" value="30" />
+		<property name="acquireRetryDelay" value="2000" />
+		<property name="automaticTestTable" value="TEST_POOL" />
+		<property name="autoCommitOnClose" value="true" />
+		<property name="breakAfterAcquireFailure" value="true" />
+		<property name="maxStatements" value="0" />
+		<property name="idleConnectionTestPeriod" value="180" />
+		<property name="testConnectionOnCheckout" value="false" />
+		<property name="testConnectionOnCheckin" value="false" />
+	</bean>
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="pc6000JdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="pc6000DataSource" />
+	</bean>
+	<!-- JPA entityManager -->
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="persistenceXmlLocation" value="${jpa.persistence.location}" />
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="jpaTemplate" class="org.springframework.orm.jpa.JpaTemplate">
+		<constructor-arg ref="entityManagerFactory" />
+	</bean>
+
+	<!-- JPA的事务管理器定义 -->
+	<bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="query*" read-only="true" />
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="list*" read-only="true" />
+			<tx:method name="fetch*" read-only="true" />
+			<tx:method name="is*" read-only="true" />
+			<tx:method name="*" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config>
+		<aop:pointcut id="BoMethods" expression="execution(* com..*.bo.api.*.*(..))" />
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="BoMethods" />
+	</aop:config>
+
+	<!-- 数据访问基本接口 -->
+	<bean id="dao" class="com.coco.core.persistence.JpaDAO">
+		<property name="template" ref="jpaTemplate" />
+	</bean>
+	<!-- 基本数据访问实现 -->
+	<bean id="baseDAO" class="com.coco.core.api.BaseDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<!-- 原生SQL访问实现 -->
+	<bean id="sqlDao" class="com.coco.core.persistence.SqlDAO">
+		<property name="template" ref="jdbcTemplate" />
+	</bean>
+
+	<import resource="spring/sys.xml" />
+	<import resource="spring/query.xml" />
+	<import resource="spring/report.xml" />
+
+	<import resource="spring/sino-cmn.xml" />
+	<import resource="spring/sino-ch.xml" />
+	<import resource="spring/sino-etl.xml" />
+	<import resource="spring/sino-cg.xml" />
+	<import resource="spring/sino-kcgl.xml" />
+	<import resource="spring/sino-dy.xml" />
+	<import resource="spring/sino-yygl.xml" />
+	<import resource="spring/sino-zkfp.xml" />
+	<import resource="spring/sino-yszk.xml" />
+	<import resource="spring/sino-ycai.xml" />
+	<import resource="spring/sino-dh.xml" />
+	<import resource="spring/sino-fxs.xml" />
+	<import resource="spring/sino-zk.xml" />
+	<import resource="spring/sino-sl.xml" />
+	<import resource="spring/sino-yycl.xml" />
+	<!-- 指示书模块 -->
+	<import resource="spring/sino-zs.xml" />
+
+	<!--捆包生产 -->
+	<import resource="spring/sino-kb.xml" />
+	<!-- 实绩模块 -->
+	<import resource="spring/sino-sj.xml" />
+	<!-- 分选模块 -->
+	<import resource="spring/sino-ss.xml" />
+	<!-- 硬度维护 -->
+	<import resource="spring/sino-yd.xml" />
+
+	<!-- 级联查询器 -->
+	<import resource="spring/cascade.xml" />
+	<!-- 端板管理 -->
+	<import resource="spring/sino-dbgl.xml" />
+	<!-- 原材料仓库台帐 -->
+	<import resource="spring/sino-bbgl.xml" />
+</beans>

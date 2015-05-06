@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<entry>
+		<id>khyeTable</id>
+		<title>客户付款冲帐明细</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/应收账款/客户付款冲帐明细.xls]]></excel>
+		<sheet-index>0,1,2</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select CR_,NA_,FPNO_,FPRI_,FKJE_ from (
+				select 1 as XH_, a.CREA_, a.CREA_ as CR_,a.NAME_,a.NAME_ as NA_,c.FPNO_,c.FPRI_,b.FKJE_ from SINO_KHFK a, SINO_CZGL b, SINO_FKFP c where a.ID_=b.KHFK_ and b.FKFP_=c.ID_ and#1#
+				union
+				select 2 as XH_, a.CREA_, null as CR_,a.NAME_,null as NA_,'小计' as FPNO_,null as FPRI_,sum(b.FKJE_) as FKJE_ from SINO_KHFK a, SINO_CZGL b, SINO_FKFP c where a.ID_=b.KHFK_ and b.FKFP_=c.ID_ and#1# group by a.CREA_,a.NAME_
+				) t order by CREA_ asc, NAME_ asc, XH_ asc
+				]]></sql>
+			</module>
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+				select CR_,NA_,FPNO_,FPRI_,FKJE_ from (
+				select 1 as XH_, a.CREA_, a.CREA_ as CR_,a.NAME_,a.NAME_ as NA_,c.FPNO_,c.FPRI_,sum(b.FKJE_) as FKJE_ from SINO_KHFK a, SINO_CZGL b, SINO_FKFP c where a.ID_=b.KHFK_ and b.FKFP_=c.ID_ and#1# group by a.CREA_,c.FPRI_,a.NAME_,c.FPNO_
+				union
+				select 2 as XH_, a.CREA_, null as CR_,a.NAME_,null as NA_,'小计' as FPNO_,null as FPRI_,sum(b.FKJE_) as FKJE_ from SINO_KHFK a, SINO_CZGL b, SINO_FKFP c where a.ID_=b.KHFK_ and b.FKFP_=c.ID_ and#1# group by a.CREA_,a.NAME_
+				) t order by CREA_ asc, NAME_ asc, XH_ asc
+				]]></sql>
+			</module>	
+			<module>
+				<name>C</name>
+				<sql><![CDATA[
+				select t.FPYMC_,t.FPJE_,f.FKJE_,case when f.FKJE_ is null then 0 else f.FKJE_ end - case when t.FPJE_ is null then 0 else t.FPJE_ end from (
+				select a.FPYMC_,sum(a.FPJE_) as FPJE_ from SINO_FKFP a group by a.FPYMC_ ) t left join (
+				select a.NAME_,sum(a.FKJE_) as FKJE_ from SINO_KHFK a group by a.NAME_) f on t.FPYMC_=f.NAME_
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>付款日期</name>
+				<column>a.CREA_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>客户名称</name>
+				<column>a.NAME_</column>
+				<type>string</type>
+				<opt>like%</opt>
+				<required>false</required>
+				<length>16</length>
+			</param>
+		</params>
+	</entry>
+</root>

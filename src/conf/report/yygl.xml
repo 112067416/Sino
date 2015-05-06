@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<entry>
+		<id>jbdgd</id>
+		<title>基板订购单</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/营业管理/基板订购单.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select CONVERT(VARCHAR(10), getDate(), 120) as crea
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select ZJBZ_, ITEM_, ISGI_, INPU_, FACE_, YUNY_, HOUA_, X_, WIDTH_, HOUB_, AJBS_,DHSL_,CKSL_, CALC_, TOTAL_, CONF_, KG_, ABBR_, COND_, CODE_, REMA_, HANC_, FUZ_ from (
+				select 1 as XH_, '' as ZJBZ_, '' as ITEM_,a.ISGI_,a.INPU_,a.FACE_,a.YUNY_,cast(a.HOUA_ as varchar) as HOUA_,'X' as X_,a.WIDTH_,cast(a.HOUB_ as varchar) as HOUB_,a.AJB_,cast(a.AJB_ as varchar) as AJBS_,a.DHSL_, null as CKSL_,a.CALC_,a.TOTAL_ as TOTAL_,a.CONF_,null as KG_,a.ABBR_,a.COND_,a.CODE_,a.REMA_,a.HANC_,a.FUZM_+'/'+a.FUFM_ as FUZ_ from SINO_JBDD_ITEM a left join SINO_JBDD b on a.JBDD_=b.ID_ where a.NWAI_='1' and a.ZJZT_='0' and#1#
+				union all
+				select 1 as XH_, '' as ZJBZ_, '' as ITEM, null as ISGI_, null as INPU_, null as FACE_, null as YUNY_, null as HOUA_, '' as X_, null as WIDTH_, null as HOUB_,a.AJB_,null as AJBS_,null as DHSL_,null as CKSL_, null as CALC_,sum(a.TOTAL_) as TOTAL_,sum(a.CONF_) as CONF_,null as KG_, null as ABBR_, null as COND_, null as CODE_, null as REMA_, null as HANC_, null as FUZ_ from SINO_JBDD_ITEM a left join SINO_JBDD b on a.JBDD_=b.ID_ where a.NWAI_='1' and a.ZJZT_='0' and#1# group by a.AJB_
+				union all
+				select 2 as XH_, '' as ZJBZ_, '' as ITEM, null as ISGI_, null as INPU_, null as FACE_, null as YUNY_, null as HOUA_, '' as X_, null as WIDTH_, null as HOUB_, null as AJB_,null as AJBS_,null as DHSL_,null as CKSL_, null as CALC_,sum(a.TOTAL_) as TOTAL_,sum(a.CONF_) as CONF_,null as KG_, null as ABBR_, null as COND_, null as CODE_, null as REMA_, null as HANC_, null as FUZ_ from SINO_JBDD_ITEM a left join SINO_JBDD b on a.JBDD_=b.ID_ where a.NWAI_='1' and a.ZJZT_='0' and#1#
+				union all
+				select 3 as XH_, '' as ZJBZ_, '' as ITEM_,a.ISGI_,a.INPU_,a.FACE_,a.YUNY_,cast(a.HOUA_ as varchar) as HOUA_,'X' as X_,a.WIDTH_,cast(a.HOUB_ as varchar) as HOUB_,a.AJB_,cast(a.AJB_ as varchar) as AJBS_,null as DHSL_,a.CKSL_,a.CALC_,a.TOTAL_ as TOTAL_,a.CONF_,null as KG_,a.ABBR_,a.COND_,a.CODE_,a.REMA_,a.HANC_,a.FUZM_+'/'+a.FUFM_ as FUZ_ from SINO_JBDD_ITEM a left join SINO_JBDD b on a.JBDD_=b.ID_ where a.NWAI_='2' and a.ZJZT_='0' and#1#
+				union all
+				select 4 as XH_, '' as ZJBZ_, '' as ITEM, null as ISGI_, null as INPU_, null as FACE_, null as YUNY_, null as HOUA_, '' as X_, null as WIDTH_, null as HOUB_, null as AJB_,null as AJBS_,null as DHSL_,null as CKSL_, null as CALC_,sum(a.TOTAL_) as TOTAL_,sum(a.CONF_) as CONF_,null as KG_, null as ABBR_, null as COND_, null as CODE_, null as REMA_, null as HANC_, null as FUZ_ from SINO_JBDD_ITEM a left join SINO_JBDD b on a.JBDD_=b.ID_ where a.NWAI_='2' and a.ZJZT_='0' and#1#
+				union all
+				select 5 as XH_, '' as ZJBZ_, '' as ITEM, null as ISGI_, null as INPU_, null as FACE_, null as YUNY_, null as HOUA_, '' as X_, null as WIDTH_, null as HOUB_, null as AJB_,null as AJBS_,null as DHSL_,null as CKSL_, null as CALC_,sum(a.TOTAL_) as TOTAL_,sum(a.CONF_) as CONF_,null as KG_, null as ABBR_, null as COND_, null as CODE_, null as REMA_, null as HANC_, null as FUZ_ from SINO_JBDD_ITEM a left join SINO_JBDD b on a.JBDD_=b.ID_ where a.ZJZT_='0' and#1#
+				union all
+				select 6 as XH_, 'additionl' as ZJBZ_, '' as ITEM_,a.ISGI_,a.INPU_,a.FACE_,a.YUNY_,cast(a.HOUA_ as varchar) as HOUA_,'X' as X_,a.WIDTH_,cast(a.HOUB_ as varchar) as HOUB_,a.AJB_,cast(a.AJB_ as varchar) as AJBS_,a.DHSL_, null as CKSL_,a.CALC_,a.TOTAL_ as TOTAL_,a.CONF_,null as KG_,a.ABBR_,a.COND_,a.CODE_,a.REMA_,a.HANC_,a.FUZM_+'/'+a.FUFM_ as FUZ_ from SINO_JBDD_ITEM a left join SINO_JBDD b on a.JBDD_=b.ID_ where a.NWAI_='1' and a.ZJZT_='1' and#1#
+				union all
+				select 7 as XH_, 'additionl' as ZJBZ_, '' as ITEM_,a.ISGI_,a.INPU_,a.FACE_,a.YUNY_,cast(a.HOUA_ as varchar) as HOUA_,'X' as X_,a.WIDTH_,cast(a.HOUB_ as varchar) as HOUB_,a.AJB_,cast(a.AJB_ as varchar) as AJBS_,null as DHSL_,a.CKSL_,a.CALC_,a.TOTAL_ as TOTAL_,a.CONF_,null as KG_,a.ABBR_,a.COND_,a.CODE_,a.REMA_,a.HANC_,a.FUZM_+'/'+a.FUFM_ as FUZ_ from SINO_JBDD_ITEM a left join SINO_JBDD b on a.JBDD_=b.ID_ where a.NWAI_='2' and a.ZJZT_='1' and#1#
+				union all
+				select 8 as XH_, '' as ZJBZ_, '' as ITEM, null as ISGI_, null as INPU_, null as FACE_, null as YUNY_, null as HOUA_, '' as X_, null as WIDTH_, null as HOUB_, null as AJB_,null as AJBS_,null as DHSL_,null as CKSL_, null as CALC_,sum(a.TOTAL_) as TOTAL_,sum(a.CONF_) as CONF_,null as KG_, null as ABBR_, null as COND_, null as CODE_, null as REMA_, null as HANC_, null as FUZ_ from SINO_JBDD_ITEM a left join SINO_JBDD b on a.JBDD_=b.ID_ where a.ZJZT_='1' and#1#
+				union all
+				select 9 as XH_, '' as ZJBZ_, '' as ITEM, null as ISGI_, null as INPU_, null as FACE_, null as YUNY_, null as HOUA_, '' as X_, null as WIDTH_, null as HOUB_, null as AJB_,null as AJBS_,null as DHSL_,null as CKSL_, null as CALC_,sum(a.TOTAL_) as TOTAL_,sum(a.CONF_) as CONF_,null as KG_, null as ABBR_, null as COND_, null as CODE_, null as REMA_, null as HANC_, null as FUZ_ from SINO_JBDD_ITEM a left join SINO_JBDD b on a.JBDD_=b.ID_ where#1#
+				) t where t.TOTAL_ > 0 order by XH_ asc, AJB_ asc,CODE_ desc,COND_ desc,ABBR_ asc,HOUA_ asc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>订购单号</name>
+				<column>b.JBNO_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>true</required>
+				<length>8</length>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>ztchsjb</id>
+		<title>昨天出货实绩表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/营业管理/昨天出货实绩表.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				SELECT CHRI_, CYHHNM_, YSNM_, NAME_,DH ,CHSU_,CHZL_,MAZL_,SHNM_,ADDR_,HOUU_,KUAN_,CANG_,ZXNO_ FROM (
+				select 1 as XH_, CHRI_,case when CYHHNM_ is not null and len(CYHHNM_) > 0 then CYHHNM_ when CYHHNM1_ is not null and len(CYHHNM1_) > 0 then CYHHNM1_ when CYCKNM_ is not null and len(CYCKNM_) > 0 then CYCKNM_ when CYCKNM1_ is not null and len(CYCKNM1_) > 0 then CYCKNM1_ else '' end AS CYHHNM_,YSNM_,NAME_,DHNO_+'-'+LINE_ as DH,CHSU_,CHZL_,CASE WHEN NWAI_='2' THEN MAZL_ ELSE null END as MAZL_,SHNM_,ADDR_,
+				cast(HOUU_ as varchar(6)) AS HOUU_,cast(KUAN_ as varchar(8)) AS KUAN_,CASE WHEN CANG_  is NULL THEN 'COIL' ELSE CAST(CANG_ AS VARCHAR) END AS CANG_,ZXNO_
+				from SINO_KHYF where DHNO_ not like 'W%' and#1#
+				union
+				select 1 as XH_, CHRI_, null as CYHHNM_,YSNM_, NAME_,'小计' as DH ,sum(CHSU_) AS CHSU_,sum(CHZL_) AS CHZL_,CASE WHEN NWAI_='2' THEN sum(MAZL_) ELSE null END as MAZL_,SHNM_,ADDR_,
+				null AS HOUU_,null AS KUAN_,null AS CANG_,null AS ZXNO_
+				from SINO_KHYF where DHNO_ not like 'W%' and#1# group by CHRI_,NAME_,YSNM_,SHNM_,ADDR_,NWAI_ having count(*) > 1
+				union
+				select 2 as XH_, CHRI_,case when CYHHNM_ is not null and len(CYHHNM_) > 0 then CYHHNM_ when CYHHNM1_ is not null and len(CYHHNM1_) > 0 then CYHHNM1_ when CYCKNM_ is not null and len(CYCKNM_) > 0 then CYCKNM_ when CYCKNM1_ is not null and len(CYCKNM1_) > 0 then CYCKNM1_ else '' end as CYHHNM_,YSNM_,NAME_,DHNO_+'-'+LINE_ as DH,CHSU_,CHZL_,CASE WHEN NWAI_='2' THEN MAZL_ ELSE null END as MAZL_,SHNM_,ADDR_,
+				cast(HOUU_ as varchar(6)) AS HOUU_,cast(KUAN_ as varchar(8)) AS KUAN_,CASE WHEN CANG_  is NULL THEN 'COIL' ELSE CAST(CANG_ AS VARCHAR) END AS CANG_,ZXNO_
+				from SINO_KHYF where DHNO_ like 'W%' and#1#
+				union
+				select 2 as XH_, CHRI_, null as CYHHNM_,YSNM_, NAME_,'小计' as DH ,sum(CHSU_) AS CHSU_,sum(CHZL_) AS CHZL_,CASE WHEN NWAI_='2' THEN sum(MAZL_) ELSE null END as MAZL_,SHNM_,ADDR_,
+				null AS HOUU_,null AS KUAN_,null AS CANG_,null AS ZXNO_
+				from SINO_KHYF where DHNO_ like 'W%' and#1# group by CHRI_,NAME_,YSNM_,SHNM_,ADDR_,NWAI_ having count(*) > 1
+				union
+				select 0 as XH_, null as CHRI_, null as CYHHNM_, null as YSNM_, null as NAME_,'总计' as DH ,sum(CHSU_) AS CHSU_,sum(CHZL_) AS CHZL_,null AS MAZL_,null AS SHNM_,NULL AS ADDR_,
+				null AS HOUU_,null AS KUAN_,null AS CANG_,null AS ZXNO_
+				from SINO_KHYF where DHNO_ not like 'W%' and CHZL_ > 0 and#1#
+				) c order by c.CHRI_ asc,  c.XH_ asc, c.NAME_ asc, c.YSNM_ asc, c.SHNM_ asc, c.ADDR_ asc, c.MAZL_ asc, c.DH asc;
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>日期</name>
+				<column>CHRI_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>true</required>
+				<value>${date }</value>
+			</param>
+			<param>
+				<name>运输行</name>
+				<column>YSGS_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<key>021</key>
+				<required>false</required>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>chlld</id>
+		<title>出货联络单表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/营业管理/出货联络单.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#CHQI_#' as chqi
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select YSNM_, YSFM_, NAME_, SC_, DH_,CHZL_, SHNM_, ADDR_, BHZK_, YWNM_ from (
+				select 0 as XH_, null as USER_,null as YSGS_,null as SHNO_,null as YSNM_, null as YSFM_, null as NAME_, null as SC_, '合计' as DH_,sum(CHZL_) as CHZL_, null as SHNM_, null as ADDR_, null as BHZK_, null as YWNM_ from SINO_CHLLD where DHNO_ not like 'W%' and#1#
+				union
+				select 1 as XH_,USER_,YSGS_,SHNO_,YSNM_,YSFM_,NAME_,CASE WHEN CANG_ is not null and CANG_ > 0 THEN 'S' ELSE 'C' END as SC_,DHNO_+ CASE WHEN LINE_ is not null THEN LINE_ ELSE '' END AS DH_,CHZL_,SHNM_,ADDR_,BHZK_,YWNM_ from SINO_CHLLD where DHNO_ not like 'W%' and#1#
+                union
+				select 2 as XH_, USER_,YSGS_,SHNO_,YSNM_,YSFM_,NAME_,CASE WHEN CANG_ is not null and CANG_ > 0 THEN 'S' ELSE 'C' END as SC_,DHNO_+ CASE WHEN LINE_ is not null THEN LINE_ ELSE '' END AS DH_,CHZL_,SHNM_,ADDR_,BHZK_,YWNM_ from SINO_CHLLD where DHNO_ like 'W%' and#1#
+                ) t
+			    order by XH_ asc,USER_ asc, YSGS_ asc, SHNO_ asc, ADDR_ asc, DH_ asc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>出货日期</name>
+				<column>CHQI_</column>
+				<type>date</type>
+				<required>true</required>
+				<value>${date }</value>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>bspchqd</id>
+		<title>串货清单表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/营业管理/串货清单.xls]]></excel>
+		<sheet-index>0,1</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select (case when a.SPBH_='1' then 'h < 0.3' when a.SPBH_='2' then '0.30 <= h < 0.5' when a.SPBH_='3' then '0.5 <= h < 1.0' end ),sum(a.ZPZL_) as ZPZL_ from SINO_V_BSPCHQD a where#1# group by a.SPBH_
+				]]></sql>
+			</module>
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+				select a.ZZSD_+'-'+a.JBNO_,a.HOUU_,a.ABBR_,a.DHNO_,a.LINE_,a.ZPZL_,convert(varchar(10), a.CHSD_, 111) from  SINO_V_BSPCHQD a where#1# order by a.HOUU_ asc,a.ABBR_ asc,a.DHNO_ asc,a.LINE_ asc
+				]]></sql>
+			</module>	
+		</modules>
+		<params>
+			<param>
+				<name>出货日期</name>
+				<column>CHSD_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>订货No.</name>
+				<column>DHNO_</column>
+				<type>String</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>7</length>
+				<jointChar>-</jointChar>
+				<jointColumn>LINE_</jointColumn>
+				<jointLength>2</jointLength>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>yongml</id>
+		<title>用户目录</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/营业管理/用户目录.xls]]></excel>
+		<sheet-index>0,1</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select RSV1_,USER_ from (
+				select a.RSV1_,a.USER_,a.REGION_ from SINO_YONGMP a where a.VALID_='Y' and a.REGION_ is not null and len(a.REGION_) > 0 and#1#
+				union all
+				select (select top 1 b.VALUE_ from COCO_CODE_ITEM b where b.CODE_='SINO_REGION' and b.KEY_=a.REGION_) as RSV1_,null as USER_,a.REGION_ from SINO_YONGMP a  where a.VALID_='Y' and a.REGION_ is not null and len(a.REGION_) > 0 and#1# group by a.REGION_) t order by t.REGION_ asc,t.USER_ asc
+				]]></sql>
+			</module>
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+				select (select top 1 b.VALUE_ from COCO_CODE_ITEM b where b.CODE_='SINO_REGION' and b.KEY_=a.REGION_), a.RSV1_,a.USER_ from SINO_YONGMP a where a.VALID_='Y' and a.REGION_ is not null and len(a.REGION_) > 0 and#1# order by a.REGION_ asc,a.USER_ asc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>所属区域</name>
+				<column>a.REGION_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<key>SINO_REGION</key>
+				<required>false</required>
+			</param>
+		</params>
+	</entry>
+</root>

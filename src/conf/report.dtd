@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 根节点 -->
+<!ELEMENT root ((entry | include)* ) >
+<!-- 报表实体 -->
+<!ELEMENT entry (id, title, excel, sheet-index?, row-index?, cell-index?, seq-index?,modules?,params?,variable?,script?,copy-property?) >
+<!-- 报表ID -->
+<!ELEMENT id (#PCDATA)>
+<!-- 报表名称 -->
+<!ELEMENT title (#PCDATA)>
+<!-- excel模板相对路径 -->
+<!ELEMENT excel (#PCDATA)>
+<!-- 表索引列表（以逗号隔开），第一个为0 -->
+<!ELEMENT sheet-index (#PCDATA)>
+<!-- 报表输出起始行，第一个为0 -->
+<!ELEMENT row-index (#PCDATA)>
+<!-- 报表输出起始列，第一个为0 -->
+<!ELEMENT cell-index (#PCDATA)>
+<!-- 报表序号列，第一个为0 -->
+<!ELEMENT seq-index (#PCDATA)>
+<!-- 报表查询模块 -->
+<!ELEMENT modules (module*) >
+<!-- 查询模块 -->
+<!ELEMENT module (name,sql,group?,newline?)>
+<!-- 模块名 -->
+<!ELEMENT name (#PCDATA)>
+<!-- 查询SQL -->
+<!ELEMENT sql (#PCDATA)>
+<!-- 分组列表 -->
+<!ELEMENT group (#PCDATA)>
+<!-- 换行列表,如"3,4"表示前3个字段一行，后4个字段另起一行 -->
+<!ELEMENT newline (#PCDATA)>
+<!-- 查询条件 -->
+<!ELEMENT params (param)>
+<!-- 条件字段 -->
+<!ELEMENT param (name,column,type?,opt?,scx?,key?,select?,required?,value?,valAppend?,length?,jointChar?,jointColumn?,jointLength?,jointed?)>
+<!-- 字段中文名 -->
+<!ELEMENT name (#PCDATA)>
+<!-- 字段名 -->
+<!ELEMENT column (#PCDATA)>
+<!-- 字段类型 -->
+<!ELEMENT type (#PCDATA)>
+<!-- 操作运算 between, eq, like, lt, gt, le, ge -->
+<!ELEMENT opt (#PCDATA)>
+<!-- 生产线类型，填写生产线别的类型，如ETL类型：1 -->
+<!ELEMENT scx (#PCDATA)>
+<!-- 码表模块，填写码表的模块名 ，如生产组类型：SINO_ZU -->
+<!ELEMENT key (#PCDATA)>
+<!-- 自定义下拉选项（值一定要使用CDATA），如<option value="">全部</option><option value="1">男</option><option value="2">女</option> -->
+<!ELEMENT select (#PCDATA)>
+<!-- 是否必需的-->
+<!ELEMENT required (#PCDATA)>
+<!-- 初始值  -->
+<!ELEMENT value (#PCDATA)>
+<!-- 值追加串  -->
+<!ELEMENT valAppend (#PCDATA)>
+<!-- 输入框的长度  -->
+<!ELEMENT length (#PCDATA)>
+<!-- 联合查询条件间的分隔符。如：当对订货No进行查询时,要将其分为订货号和行号。_______-__   -->
+<!ELEMENT jointChar (#PCDATA)>
+<!-- 联合查询条件名。如：当对订货No进行查询时,要将其分为订货号和行号。_______-__  -->
+<!ELEMENT jointColumn (#PCDATA)>
+<!-- 联合查询条件的长度  -->
+<!ELEMENT jointLength (#PCDATA)>
+<!-- 判断联合查询条件是否独立查询。如：是否将订货号和行号组合起来查询  -->
+<!ELEMENT jointed (#PCDATA)>
+<!-- 运行变量  -->
+<!ELEMENT variable (#PCDATA)>
+<!-- 运行后执行js脚本 -->
+<!ELEMENT script (#PCDATA)>
+<!-- 下行是否自动复制上行的属性值 1：表示不复制；空或者其它值表示复制-->
+<!ELEMENT copy-property (#PCDATA)>
+
+
+<!-- 导入子配置文件 -->
+<!ELEMENT include EMPTY>
+<!-- 文件相对工程路径 -->
+<!ATTLIST include resource CDATA #REQUIRED>

@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="SinoPU" transaction-type="RESOURCE_LOCAL">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		
+		<!-- 系统管理表 -->
+		<class>com.coco.sys.orm.Menu</class>
+		<class>com.coco.sys.orm.User</class>
+		<class>com.coco.sys.orm.Person</class>
+		<class>com.coco.sys.orm.Dept</class>
+		<class>com.coco.sys.orm.Post</class>
+		<class>com.coco.sys.orm.UserPost</class>
+		<class>com.coco.sys.orm.Role</class>
+		<class>com.coco.sys.orm.PostRole</class>
+		<class>com.coco.sys.orm.RoleMenu</class>
+		<class>com.coco.sys.orm.Seq</class>
+		<class>com.coco.sys.orm.SeqRule</class>
+		<class>com.coco.sys.orm.Code</class>
+		<class>com.coco.sys.orm.CodeItem</class>
+		<class>com.coco.sys.orm.Attachment</class>
+		<class>com.coco.sys.orm.SourceClass</class>
+		<class>com.coco.sys.orm.SourceMethod</class>
+		<class>com.coco.sys.orm.RoleSource</class>
+		<class>com.coco.sys.orm.ConvertEntity</class>
+		<class>com.coco.sys.orm.ConvertField</class>
+		<class>com.coco.sys.orm.Directory</class>
+		
+		<!-- 查询配置表 -->
+		<class>com.coco.query.orm.Entry</class>
+		<class>com.coco.query.orm.Meta</class>
+		<class>com.coco.query.orm.Param</class>
+
+		<class>com.quanta.sino.orm.YongMp</class>
+		<class>com.quanta.sino.orm.YongShdz</class>
+		<class>com.quanta.sino.orm.YongSize</class>
+		<class>com.quanta.sino.orm.ZzsyMp</class>
+		<class>com.quanta.sino.orm.DhuoTp</class>
+		<class>com.quanta.sino.orm.WwhtTp</class>
+		<class>com.quanta.sino.orm.JchaTp</class>
+		<class>com.quanta.sino.orm.ZxzsTp</class>
+		<class>com.quanta.sino.orm.Zng1Tp</class>
+		<class>com.quanta.sino.orm.Zng2Tp</class>
+		<class>com.quanta.sino.orm.ZsdhTp</class>
+		<class>com.quanta.sino.orm.ZszrTp</class>
+		<class>com.quanta.sino.orm.ZscdTp</class>
+		<class>com.quanta.sino.orm.ZsdxTp</class>
+		<class>com.quanta.sino.orm.QxbgTp</class>
+		<class>com.quanta.sino.orm.ZpngTp</class>
+		<class>com.quanta.sino.orm.YcaiTp</class>
+		<class>com.quanta.sino.orm.JinhLp</class>
+		<class>com.quanta.sino.orm.ChuhLp</class>
+		<class>com.quanta.sino.orm.RiziLp</class>
+		<class>com.quanta.sino.orm.EtlsLp</class>
+		<class>com.quanta.sino.orm.SlsjLp</class>
+		<class>com.quanta.sino.orm.PlscLp</class>
+		<class>com.quanta.sino.orm.PlxmLp</class>
+		<class>com.quanta.sino.orm.PngzLp</class>
+		<class>com.quanta.sino.orm.SljzLp</class>
+		<class>com.quanta.sino.orm.Zsfmt</class>
+		<class>com.quanta.sino.orm.Xpfmt</class>
+		
+		<class>com.quanta.sino.orm.DataInfo</class>
+		<!-- 营业管理-->
+		<class>com.quanta.sino.orm.Chlld</class>
+		<class>com.quanta.sino.orm.Jbdd</class>
+		<class>com.quanta.sino.orm.JbddItem</class>
+		<!-- 客户运输费用单价 -->
+		<class>com.quanta.sino.orm.Khyfdj</class>
+		<!-- 客户运费管理 -->
+		<class>com.quanta.sino.orm.Khyf</class>
+		<!-- 资料信息共享表 -->
+		<class>com.quanta.sino.orm.InformTp</class>
+		<!-- 资料室目录对应的部门 -->
+		<class>com.quanta.sino.orm.DirectoryDept</class>
+		
+		<!-- 捆包日志-->
+		<class>com.quanta.sino.orm.Kbrzb</class>
+		
+		<!-- 退货表 -->
+		<class>com.quanta.sino.orm.ThTp</class>
+		<!-- 投诉表 -->
+		<class>com.quanta.sino.orm.TsTp</class>
+		<!-- 客户付款 -->
+		<class>com.quanta.sino.orm.Khfk</class>
+		<!-- 付款发票 -->
+		<class>com.quanta.sino.orm.Fkfp</class>
+		<!-- 冲账关联 -->
+		<class>com.quanta.sino.orm.Czgl</class>
+		<!-- 马口铁分析数据记录表 -->
+		<class>com.quanta.sino.orm.MktfxshJl</class>
+		<!-- 药液分析结果记录表 -->
+		<class>com.quanta.sino.orm.YyfxjgJl</class>
+		<!-- 分析作业日志表 -->
+		<class>com.quanta.sino.orm.FxzyRz</class>
+		<!-- 分析作业日志异常事项 -->
+		<class>com.quanta.sino.orm.FxzyRzYcsx</class>
+		<!-- 生产线别配置 -->
+		<class>com.quanta.sino.orm.Scxbpz</class>
+		<!-- 采样日志 -->
+		<class>com.quanta.sino.orm.Cyrz</class>
+		<!-- 采样日志SL接收线别 -->
+		<class>com.quanta.sino.orm.CyrzSlxb</class>
+		<!-- ETL品质管理表 -->
+		<class>com.quanta.sino.orm.EtlpzGl</class>
+		<!-- 制品检查证明书主表 -->
+		<class>com.quanta.sino.orm.Jczms</class>
+		<!-- 制品检查证明书明细表 -->
+		<class>com.quanta.sino.orm.JczmsItem</class>
+		<!-- 分配操作记录表 -->
+		<class>com.quanta.sino.orm.ZkfpCzjl</class>
+		<!-- 分配错误记录表 -->
+		<class>com.quanta.sino.orm.ZkfpCwjl</class>
+		<!-- ETL药液管理记录 -->
+		<class>com.quanta.sino.orm.Etlyygljl</class>
+		<!-- ETL药液管理记录 -从表 -->
+		<class>com.quanta.sino.orm.EtlyygljlItem</class>
+		<!-- 现品信息日志表 -->
+		<class>com.quanta.sino.orm.Xpxx</class>
+		<!-- 合并包记录表 -->
+		<class>com.quanta.sino.orm.Hbbjl</class>
+		<!-- 作业日志 -->
+		<class>com.quanta.sino.orm.Zyrz</class>
+		<!-- 业联日志 -->
+		<class>com.quanta.sino.orm.Ylrz</class>
+
+		<!-- 堆场日志 -->
+		<class>com.quanta.sino.orm.Dcrz</class>
+
+		<!-- 原板费用管理 -->
+		<class>com.quanta.sino.orm.Ycaicb</class>
+		<!--入侧日志-->
+		<class>com.quanta.sino.orm.Rcrz</class>
+		<!-- 记录变更日志 -->
+		<class>com.quanta.sino.orm.Jlbg</class>
+		<!-- 打印日志记录 -->
+		<class>com.quanta.sino.orm.PrintLog</class>
+		<!-- 中控中间表 -->
+		<class>com.quanta.sino.orm.Jcb</class>
+		<!-- 端板管理表 -->
+		<class>com.quanta.sino.orm.DbglTp</class>
+		<!-- 分选中间包日志 -->
+		<class>com.quanta.sino.orm.PlscItemLp</class>
+		<!-- 端板日志 -->
+		<class>com.quanta.sino.orm.DbglLp</class>
+		<!-- 垫木库存 -->
+		<class>com.quanta.sino.orm.Dmgs</class>
+		<!-- 垫木库存日志 -->
+		<class>com.quanta.sino.orm.DmLp</class>
+		<!-- ETL速报 -->
+		<class>com.quanta.sino.orm.ETLsbTp</class>
+		<!-- ETL停止速报 -->
+		<class>com.quanta.sino.orm.ETLStopTp</class>
+		<!-- 原板采购单价表 -->
+		<class>com.quanta.sino.orm.YbCgdj</class>
+		<!-- ETL特记表 -->
+		<class>com.quanta.sino.orm.ETLVariTp</class>
+		<!-- 订货生产安排 -->
+		<class>com.quanta.sino.orm.SczsTp</class>
+		<!-- 购销合同 -->
+		<class>com.quanta.sino.orm.GxhtTp</class>
+		<!-- 基板订单日志 -->
+		<class>com.quanta.sino.orm.JbddItemLog</class>
+		<!-- 原材成本费用明细管理 -->
+		<class>com.quanta.sino.orm.Ybcbmx</class>
+		<!-- 高耐蚀性马口铁出荷判定表(#75以上) -->
+		<class>com.quanta.sino.orm.Chpdb</class>
+		<!-- 台帐备注表 -->
+		<class>com.quanta.sino.orm.Tzbz</class>
+		
+		<exclude-unlisted-classes>true</exclude-unlisted-classes>
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.SQLServerDialect" />
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.EhCacheProvider" />
+			<property name="hibernate.cache.use_query_cache" value="true" />
+			<property name="hibernate.cache.use_second_level_cache"
+				value="true" />
+			<property name="hibernate.show_sql" value="false" />
+			<property name="hibernate.format_sql" value="false" />
+			<property name="hibernate.use_sql_comments" value="false" />
+			<property name="hibernate.connection.autocommit" value="true" />
+		</properties>
+	</persistence-unit>
+</persistence>

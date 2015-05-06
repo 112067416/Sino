@@ -1,0 +1,617 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+<entry>
+		<id>pilxmrz</id>
+		<title>Pile消灭日志</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/SS生产/Pile消灭日志.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#CREA_#至#CREA__end#' as CREA_
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+			select CONVERT(varchar(21),a.Crea_, 120) as Crea_,
+etlsj_=(select CONVERT(varchar(21),d.crea_, 120) from sino_zpngtp d,sino_zpngtp c where d.jbno_=c.RCZPNO_ and c.jbno_=b.Jbn_),
+a.Abbr_,b.Zzn_,substring(b.Jbn_,1,6),b.Plq_+b.Zzn_+'-'+b.Jbn_,slin_=(select case when slin_='V' then '剪切二线' when slin_='W' THEN '剪切三线' ELSE slin_ end from sino_zpngtp c where c.jbno_=b.jbn_),
+b.xph_,b.Xpk_,b.xpc_
+,isnull(a.Qxn1_,'  '),isnull(a.Qxd1_,' '),cast(a.Qxz1_  as varchar(4))
+,isnull(a.Qxn2_,'  '),isnull(a.Qxd2_,' '),cast(a.Qxz2_  as varchar(4))
+,isnull(a.Qxn3_,'  '),isnull(a.Qxd3_,' '),cast(a.Qxz3_  as varchar(4))
+,isnull(a.Qxn4_,'  '),isnull(a.Qxd4_,' '),cast(a.Qxz4_  as varchar(4))
+,isnull(a.Qxn5_,'  '),isnull(a.Qxd5_,' '),cast(a.Qxz5_  as varchar(4))
+,isnull(a.Qxn6_,'  '),isnull(a.Qxd6_,' '),cast(a.Qxz6_  as varchar(4))
+,isnull(a.Qxn7_,'  '),isnull(a.Qxd7_,' '),cast(a.Qxz7_  as varchar(4))
+,isnull(a.Qxn8_,'  '),isnull(a.Qxd8_,' '),cast(a.Qxz8_  as varchar(4))
+from SINO_PLXMLP a left join SINO_XPFMT b on a.xpfmt_=b.ID_ where #1# order by a.CREA_ asc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>消灭日期</name>
+				<column>CREA_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>pilescrclyl</id>
+		<title>Pile生成日产量一览</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/SS生产/Pile生成日产量一览.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+			select '#PSSD_#至#PSSD__end#' as CREA_
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select CONVERT(VARCHAR(11), dbo.GET_ETSD(PSSD_), 120) as PSSD_,
+SUM(CASE WHEN CHAN_='1' THEN ZPZL_ ELSE 0 END) AS 合格,
+SUM(CASE WHEN CHAN_='2' THEN ZPZL_ ELSE 0 END) AS OR1,
+SUM(CASE WHEN CHAN_='3' THEN ZPZL_ ELSE 0 END) AS OR2,
+SUM(CASE WHEN CHAN_='4' THEN ZPZL_ ELSE 0 END) AS 发生,
+0,
+SUM(CASE WHEN CHAN_='9' THEN ZPZL_ ELSE 0 END) AS 保留,
+SUM(CASE WHEN CHAN_='5' or CHAN_='7' OR CHAN_='S' THEN ZPZL_ ELSE 0 END) AS SCRAP,
+SUM(ZPZL_) from SINO_ZPNGTP where JDJS_='1' AND#1# group by CONVERT(VARCHAR(11), dbo.GET_ETSD(PSSD_), 120)
+union
+select '合计' ,
+SUM(CASE WHEN CHAN_='1' THEN ZPZL_ ELSE 0 END) AS 合格,
+SUM(CASE WHEN CHAN_='2' THEN ZPZL_ ELSE 0 END) AS OR1,
+SUM(CASE WHEN CHAN_='3' THEN ZPZL_ ELSE 0 END) AS OR2,
+SUM(CASE WHEN CHAN_='4' THEN ZPZL_ ELSE 0 END) AS 发生,
+0 AS 零头,
+SUM(CASE WHEN CHAN_='9' THEN ZPZL_ ELSE 0 END) AS 保留,
+SUM(CASE WHEN CHAN_='5' or CHAN_='7' OR CHAN_='S' THEN ZPZL_ ELSE 0 END) AS SCRAP,
+SUM(ZPZL_)
+FROM SINO_ZPNGTP where JDJS_='1' and #1#
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>生产日期</name>
+				<column>PSSD_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+		</params>
+	</entry>
+	
+	
+
+	<entry>
+		<id>pilxmcrclyl</id>
+		<title>Pile消灭日产量一览</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/SS生产/Pile消灭日产量一览.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#PXSD_#至#PXSD__end#' as CREA_
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				
+select CONVERT(varchar(11) , dbo.GET_ETSD(PXSD_),120 ) as PXSD_,
+SUM(CASE WHEN CHAN_='1' THEN ZPZL_ ELSE 0 END) AS 合格,
+SUM(CASE WHEN CHAN_='2' THEN ZPZL_ ELSE 0 END) AS OR1,
+SUM(CASE WHEN CHAN_='3' THEN ZPZL_ ELSE 0 END) AS OR2,
+SUM(CASE WHEN CHAN_='4' THEN ZPZL_ ELSE 0 END) AS 发生,
+0,
+SUM(CASE WHEN CHAN_='9' THEN ZPZL_ ELSE 0 END) AS 保留,
+SUM(CASE WHEN CHAN_='5' or CHAN_='7' OR CHAN_='S' THEN ZPZL_ ELSE 0 END) AS SCRAP,
+SUM(ZPZL_) from SINO_ZPNGTP where SCBJ_='2' AND #1# group by CONVERT(varchar(11) , dbo.GET_ETSD(PXSD_),120 )
+
+union
+select '合计' ,
+SUM(CASE WHEN CHAN_='1' THEN ZPZL_ ELSE 0 END) AS 合格,
+SUM(CASE WHEN CHAN_='2' THEN ZPZL_ ELSE 0 END) AS OR1,
+SUM(CASE WHEN CHAN_='3' THEN ZPZL_ ELSE 0 END) AS OR2,
+SUM(CASE WHEN CHAN_='4' THEN ZPZL_ ELSE 0 END) AS 发生,
+0 AS 零头,
+SUM(CASE WHEN CHAN_='9' THEN ZPZL_ ELSE 0 END) AS 保留,
+SUM(CASE WHEN CHAN_='5' or CHAN_='7' OR CHAN_='S' THEN ZPZL_ ELSE 0 END) AS SCRAP,
+SUM(ZPZL_)
+FROM SINO_ZPNGTP where SCBJ_='2' and #1#
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>生产日期</name>
+				<column>PXSD_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+		</params>
+	</entry>
+	
+	<entry>
+		<id>blmx</id>
+		<title>步留明细</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/SS生产/blmx.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#PXSD_#至#PXSD__end#' as CREA_
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+			select pxsd_,a.jbno_,zpzl=isnull(A0,0)+isnull(A1,0)+isnull(A2,0)+isnull(A3,0)+isnull(A4,0)+isnull(A5,0)+isnull(A6,0)+isnull(A7,0)+isnull(A8,0)+isnull(A9,0)+isnull(B0,0)+isnull(B1,0)+isnull(B2,0)+isnull(B3,0)+isnull(B4,0)+isnull(B5,0)+isnull(B6,0)+isnull(B7,0)+isnull(B8,0)+isnull(B9,0)+
+ isnull(C0,0)+isnull(C1,0)+isnull(C2,0)+isnull(C3,0)+isnull(C4,0)+isnull(C5,0)+isnull(C6,0)+isnull(C7,0)+isnull(C8,0)+isnull(C9,0)+isnull(D0,0)+isnull(D1,0)+isnull(D2,0)+isnull(D3,0)+isnull(D4,0)+isnull(D5,0)+isnull(D6,0)+isnull(D7,0)+isnull(D8,0)+isnull(D9,0)+
+ isnull( E0,0)+isnull(E1,0)+isnull(E2,0)+isnull(E3,0)+isnull(E4,0)+isnull(E5,0)+isnull(E6,0)+isnull(E7,0)+isnull(E8,0)+isnull(E9,0)+isnull(F0,0)+isnull(F1,0)+isnull(F2,0)+isnull(F3,0)+isnull(F4,0)+isnull(F5,0)+isnull(F6,0)+isnull(F7,0)+isnull(F8,0)+isnull(F9,0)+
+ isnull(G0,0)+isnull(G1,0)+isnull(G2,0)+isnull(G3,0)+isnull(G4,0)+isnull(G5,0)+isnull(G6,0)+isnull(G7,0)+isnull(G8,0)+isnull(G9,0)+isnull(H0,0)+isnull(H1,0)+isnull(H2,0)+isnull(H3,0)+isnull(H4,0)+isnull(H5,0)+isnull(H6,0)+isnull(H7,0)+isnull(H8,0)+isnull(H9,0)+
+ isnull(J0,0)+isnull(J1,0)+isnull(J2,0)+isnull(J3,0)+isnull(J4,0)+isnull(J5,0)+isnull(J6,0)+isnull(J7,0)+isnull(J8,0)+isnull(J9,0)+isnull(K0,0)+isnull(K1,0)+isnull(K2,0)+isnull(K3,0)+isnull(K4,0)+isnull(K5,0)+isnull(K6,0)+isnull(K7,0)+isnull(K8,0)+isnull(K9,0)+
+ isnull(L0,0)+isnull(L1,0)+isnull(L2,0)+isnull(L3,0)+isnull(L4,0)+isnull(L5,0)+isnull(L6,0)+isnull(L7,0)+isnull(L8,0)+isnull(L9,0)+isnull(M0,0)+isnull(M1,0)+isnull(M2,0)+isnull(M3,0)+isnull(M4,0)+isnull(M5,0)+isnull(M6,0)+isnull(M7,0)+isnull(M8,0)+isnull(M9,0)+
+ isnull(N0,0)+isnull(N1,0)+isnull(N2,0)+isnull(N3,0)+isnull(N4,0)+isnull(N5,0)+isnull(N6,0)+isnull(N7,0)+isnull(N8,0)+isnull(N9,0)+isnull(P0,0)+isnull(P1,0)+isnull(P2,0)+isnull(P3,0)+isnull(P4,0)+isnull(P5,0)+isnull(P6,0)+isnull(P7,0)+isnull(P8,0)+isnull(P9,0)+
+isnull(Q0,0)+isnull(Q1,0)+isnull(Q2,0)+isnull(Q3,0)+isnull(Q4,0)+isnull(Q5,0)+isnull(Q6,0)+isnull(Q7,0)+isnull(Q8,0)+isnull(Q9,0),
+bdan_, 
+a.A0,a.A1,a.A2,a.A3,a.A4,a.A5,a.A6,a.A7,a.A8,a.A9,a.B0,a.B1,a.B2,a.B3,
+a.B4,a.B5,a.B6,a.B7,a.B8,a.B9,a.C0,a.C1,a.C2,a.C3,a.C4,a.C5,a.C6,a.C7,
+a.C8,a.C9,a.D0,a.D1,a.D2,a.D3,a.D4,a.D5,a.D6,a.D7,a.D8,a.D9,a.E0,a.E1,
+a.E2,a.E3,a.E4,a.E5,a.E6,a.E7,a.E8,a.E9,a.F0,a.F1,a.F2,a.F3,a.F4,a.F5,
+a.F6,a.F7,a.F8,a.F9,a.G0,a.G1,a.G2,a.G3,a.G4,a.G5,a.G6,a.G7,a.G8,a.G9,
+a.H0,a.H1,a.H2,a.H3,a.H4,a.H5,a.H6,a.H7,a.H8,a.H9,a.J0,a.J1,a.J2,a.J3,
+a.J4,a.J5,a.J6,a.J7,a.J8,a.J9,a.K0,a.K1,a.K2,a.K3,a.K4,a.K5,a.K6,a.K7,
+a.K8,a.K9,a.L0,a.L1,a.L2,a.L3,a.L4,a.L5,a.L6,a.L7,a.L8,a.L9,a.M0,a.M1,
+a.M2,a.M3,a.M4,a.M5,a.M6,a.M7,a.M8,a.M9,a.N0,a.N1,a.N2,a.N3,a.N4,a.N5,
+a.N6,a.N7,a.N8,a.N9,a.P0,a.P1,a.P2,a.P3,a.P4,a.P5,a.P6,a.P7,a.P8,a.P9,
+a.Q0,a.Q1,a.Q2,a.Q3,a.Q4,a.Q5,a.Q6,a.Q7,a.Q8,a.Q9
+from (
+select Jbno_,Pxsd_,Bdan_,
+A0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A0',bdan_),
+A1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A1',bdan_),
+A2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A2',bdan_),
+A3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A3',bdan_),
+A4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A4',bdan_),
+A5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A5',bdan_),
+A6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A6',bdan_),
+A7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A7',bdan_),
+A8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A8',bdan_),
+A9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A9',bdan_),
+B0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B0',bdan_),
+B1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B1',bdan_),
+B2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B2',bdan_),
+B3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B3',bdan_),
+B4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B4',bdan_),
+B5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B5',bdan_),
+B6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B6',bdan_),
+B7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B7',bdan_),
+B8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B8',bdan_),
+B9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B9',bdan_),
+C0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C0',bdan_),
+C1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C1',bdan_),
+C2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C2',bdan_),
+C3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C3',bdan_),
+C4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C4',bdan_),
+C5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C5',bdan_),
+C6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C6',bdan_),
+C7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C7',bdan_),
+C8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C8',bdan_),
+C9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C9',bdan_),
+D0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D0',bdan_),
+D1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D1',bdan_),
+D2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D2',bdan_),
+D3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D3',bdan_),
+D4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D4',bdan_),
+D5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D5',bdan_),
+D6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D6',bdan_),
+D7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D7',bdan_),
+D8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D8',bdan_),
+D9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D9',bdan_),
+E0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E0',bdan_),
+E1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E1',bdan_),
+E2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E2',bdan_),
+E3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E3',bdan_),
+E4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E4',bdan_),
+E5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E5',bdan_),
+E6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E6',bdan_),
+E7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E7',bdan_),
+E8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E8',bdan_),
+E9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E9',bdan_),
+F0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F0',bdan_),
+F1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F1',bdan_),
+F2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F2',bdan_),
+F3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F3',bdan_),
+F4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F4',bdan_),
+F5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F5',bdan_),
+F6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F6',bdan_),
+F7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F7',bdan_),
+F8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F8',bdan_),
+F9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F9',bdan_),
+G0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G0',bdan_),
+G1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G1',bdan_),
+G2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G2',bdan_),
+G3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G3',bdan_),
+G4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G4',bdan_),
+G5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G5',bdan_),
+G6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G6',bdan_),
+G7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G7',bdan_),
+G8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G8',bdan_),
+G9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G9',bdan_),
+H0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H0',bdan_),
+H1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H1',bdan_),
+H2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H2',bdan_),
+H3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H3',bdan_),
+H4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H4',bdan_),
+H5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H5',bdan_),
+H6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H6',bdan_),
+H7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H7',bdan_),
+H8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H8',bdan_),
+H9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H9',bdan_),
+J0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J0',bdan_),
+J1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J1',bdan_),
+J2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J2',bdan_),
+J3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J3',bdan_),
+J4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J4',bdan_),
+J5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J5',bdan_),
+J6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J6',bdan_),
+J7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J7',bdan_),
+J8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J8',bdan_),
+J9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J9',bdan_),
+K0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K0',bdan_),
+K1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K1',bdan_),
+K2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K2',bdan_),
+K3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K3',bdan_),
+K4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K4',bdan_),
+K5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K5',bdan_),
+K6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K6',bdan_),
+K7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K7',bdan_),
+K8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K8',bdan_),
+K9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K9',bdan_),
+L0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L0',bdan_),
+L1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L1',bdan_),
+L2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L2',bdan_),
+L3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L3',bdan_),
+L4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L4',bdan_),
+L5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L5',bdan_),
+L6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L6',bdan_),
+L7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L7',bdan_),
+L8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L8',bdan_),
+L9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L9',bdan_),
+M0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M0',bdan_),
+M1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M1',bdan_),
+M2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M2',bdan_),
+M3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M3',bdan_),
+M4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M4',bdan_),
+M5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M5',bdan_),
+M6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M6',bdan_),
+M7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M7',bdan_),
+M8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M8',bdan_),
+M9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M9',bdan_),
+N0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N0',bdan_),
+N1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N1',bdan_),
+N2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N2',bdan_),
+N3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N3',bdan_),
+N4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N4',bdan_),
+N5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N5',bdan_),
+N6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N6',bdan_),
+N7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N7',bdan_),
+N8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N8',bdan_),
+N9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N9',bdan_),
+P0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P0',bdan_),
+P1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P1',bdan_),
+P2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P2',bdan_),
+P3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P3',bdan_),
+P4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P4',bdan_),
+P5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P5',bdan_),
+P6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P6',bdan_),
+P7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P7',bdan_),
+P8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P8',bdan_),
+P9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P9',bdan_),
+Q0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q0',bdan_),
+Q1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q1',bdan_),
+Q2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q2',bdan_),
+Q3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q3',bdan_),
+Q4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q4',bdan_),
+Q5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q5',bdan_),
+Q6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q6',bdan_),
+Q7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q7',bdan_),
+Q8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q8',bdan_),
+Q9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q9',bdan_)
+from sino_zpngtp where Scbj_='2'   and #1# 
+)a order by pxsd_ asc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>生产日期</name>
+				<column>PXSD_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+		</params>
+	</entry>
+	
+	<entry>
+		<id>bltj</id>
+		<title>步留统计</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/SS生产/bltj.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#PXSD_#至#PXSD__end#' as CREA_
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+			
+select a.pxsd_,cast(sum(zrzl_) as numeric(10,0)),sum(a.zpzl),
+sum(a.A0),sum(a.A1),sum(a.A2),sum(a.A3),sum(a.A4),sum(a.A5),sum(a.A6),sum(a.A7),sum(a.A8),sum(a.A9),sum(a.B0),sum(a.B1),sum(a.B2),sum(a.B3),
+sum(a.B4),sum(a.B5),sum(a.B6),sum(a.B7),sum(a.B8),sum(a.B9),sum(a.C0),sum(a.C1),sum(a.C2),sum(a.C3),sum(a.C4),sum(a.C5),sum(a.C6),sum(a.C7),
+sum(a.C8),sum(a.C9),sum(a.D0),sum(a.D1),sum(a.D2),sum(a.D3),sum(a.D4),sum(a.D5),sum(a.D6),sum(a.D7),sum(a.D8),sum(a.D9),sum(a.E0),sum(a.E1),
+sum(a.E2),sum(a.E3),sum(a.E4),sum(a.E5),sum(a.E6),sum(a.E7),sum(a.E8),sum(a.E9),sum(a.F0),sum(a.F1),sum(a.F2),sum(a.F3),sum(a.F4),sum(a.F5),
+sum(a.F6),sum(a.F7),sum(a.F8),sum(a.F9),sum(a.G0),sum(a.G1),sum(a.G2),sum(a.G3),sum(a.G4),sum(a.G5),sum(a.G6),sum(a.G7),sum(a.G8),sum(a.G9),
+sum(a.H0),sum(a.H1),sum(a.H2),sum(a.H3),sum(a.H4),sum(a.H5),sum(a.H6),sum(a.H7),sum(a.H8),sum(a.H9),sum(a.J0),sum(a.J1),sum(a.J2),sum(a.J3),
+sum(a.J4),sum(a.J5),sum(a.J6),sum(a.J7),sum(a.J8),sum(a.J9),sum(a.K0),sum(a.K1),sum(a.K2),sum(a.K3),sum(a.K4),sum(a.K5),sum(a.K6),sum(a.K7),
+sum(a.K8),sum(a.K9),sum(a.L0),sum(a.L1),sum(a.L2),sum(a.L3),sum(a.L4),sum(a.L5),sum(a.L6),sum(a.L7),sum(a.L8),sum(a.L9),sum(a.M0),sum(a.M1),
+sum(a.M2),sum(a.M3),sum(a.M4),sum(a.M5),sum(a.M6),sum(a.M7),sum(a.M8),sum(a.M9),sum(a.N0),sum(a.N1),sum(a.N2),sum(a.N3),sum(a.N4),sum(a.N5),
+sum(a.N6),sum(a.N7),sum(a.N8),sum(a.N9),sum(a.P0),sum(a.P1),sum(a.P2),sum(a.P3),sum(a.P4),sum(a.P5),sum(a.P6),sum(a.P7),sum(a.P8),sum(a.P9),
+sum(a.Q0),sum(a.Q1),sum(a.Q2),sum(a.Q3),sum(a.Q4),sum(a.Q5),sum(a.Q6),sum(a.Q7),sum(a.Q8),sum(a.Q9)
+from (	
+select pxsd_=CONVERT(varchar(10),dbo.GET_ETSD(pxsd_), 121),zrzl_, zpzl=isnull(A0,0)+isnull(A1,0)+isnull(A2,0)+isnull(A3,0)+isnull(A4,0)+isnull(A5,0)+isnull(A6,0)+isnull(A7,0)+isnull(A8,0)+isnull(A9,0)+isnull(B0,0)+isnull(B1,0)+isnull(B2,0)+isnull(B3,0)+isnull(B4,0)+isnull(B5,0)+isnull(B6,0)+isnull(B7,0)+isnull(B8,0)+isnull(B9,0)+
+ isnull(C0,0)+isnull(C1,0)+isnull(C2,0)+isnull(C3,0)+isnull(C4,0)+isnull(C5,0)+isnull(C6,0)+isnull(C7,0)+isnull(C8,0)+isnull(C9,0)+isnull(D0,0)+isnull(D1,0)+isnull(D2,0)+isnull(D3,0)+isnull(D4,0)+isnull(D5,0)+isnull(D6,0)+isnull(D7,0)+isnull(D8,0)+isnull(D9,0)+
+ isnull( E0,0)+isnull(E1,0)+isnull(E2,0)+isnull(E3,0)+isnull(E4,0)+isnull(E5,0)+isnull(E6,0)+isnull(E7,0)+isnull(E8,0)+isnull(E9,0)+isnull(F0,0)+isnull(F1,0)+isnull(F2,0)+isnull(F3,0)+isnull(F4,0)+isnull(F5,0)+isnull(F6,0)+isnull(F7,0)+isnull(F8,0)+isnull(F9,0)+
+ isnull(G0,0)+isnull(G1,0)+isnull(G2,0)+isnull(G3,0)+isnull(G4,0)+isnull(G5,0)+isnull(G6,0)+isnull(G7,0)+isnull(G8,0)+isnull(G9,0)+isnull(H0,0)+isnull(H1,0)+isnull(H2,0)+isnull(H3,0)+isnull(H4,0)+isnull(H5,0)+isnull(H6,0)+isnull(H7,0)+isnull(H8,0)+isnull(H9,0)+
+ isnull(J0,0)+isnull(J1,0)+isnull(J2,0)+isnull(J3,0)+isnull(J4,0)+isnull(J5,0)+isnull(J6,0)+isnull(J7,0)+isnull(J8,0)+isnull(J9,0)+isnull(K0,0)+isnull(K1,0)+isnull(K2,0)+isnull(K3,0)+isnull(K4,0)+isnull(K5,0)+isnull(K6,0)+isnull(K7,0)+isnull(K8,0)+isnull(K9,0)+
+ isnull(L0,0)+isnull(L1,0)+isnull(L2,0)+isnull(L3,0)+isnull(L4,0)+isnull(L5,0)+isnull(L6,0)+isnull(L7,0)+isnull(L8,0)+isnull(L9,0)+isnull(M0,0)+isnull(M1,0)+isnull(M2,0)+isnull(M3,0)+isnull(M4,0)+isnull(M5,0)+isnull(M6,0)+isnull(M7,0)+isnull(M8,0)+isnull(M9,0)+
+ isnull(N0,0)+isnull(N1,0)+isnull(N2,0)+isnull(N3,0)+isnull(N4,0)+isnull(N5,0)+isnull(N6,0)+isnull(N7,0)+isnull(N8,0)+isnull(N9,0)+isnull(P0,0)+isnull(P1,0)+isnull(P2,0)+isnull(P3,0)+isnull(P4,0)+isnull(P5,0)+isnull(P6,0)+isnull(P7,0)+isnull(P8,0)+isnull(P9,0)+
+ isnull(Q0,0)+isnull(Q1,0)+isnull(Q2,0)+isnull(Q3,0)+isnull(Q4,0)+isnull(Q5,0)+isnull(Q6,0)+isnull(Q7,0)+isnull(Q8,0)+isnull(Q9,0),
+a.A0,a.A1,a.A2,a.A3,a.A4,a.A5,a.A6,a.A7,a.A8,a.A9,a.B0,a.B1,a.B2,a.B3,
+a.B4,a.B5,a.B6,a.B7,a.B8,a.B9,a.C0,a.C1,a.C2,a.C3,a.C4,a.C5,a.C6,a.C7,
+a.C8,a.C9,a.D0,a.D1,a.D2,a.D3,a.D4,a.D5,a.D6,a.D7,a.D8,a.D9,a.E0,a.E1,
+a.E2,a.E3,a.E4,a.E5,a.E6,a.E7,a.E8,a.E9,a.F0,a.F1,a.F2,a.F3,a.F4,a.F5,
+a.F6,a.F7,a.F8,a.F9,a.G0,a.G1,a.G2,a.G3,a.G4,a.G5,a.G6,a.G7,a.G8,a.G9,
+a.H0,a.H1,a.H2,a.H3,a.H4,a.H5,a.H6,a.H7,a.H8,a.H9,a.J0,a.J1,a.J2,a.J3,
+a.J4,a.J5,a.J6,a.J7,a.J8,a.J9,a.K0,a.K1,a.K2,a.K3,a.K4,a.K5,a.K6,a.K7,
+a.K8,a.K9,a.L0,a.L1,a.L2,a.L3,a.L4,a.L5,a.L6,a.L7,a.L8,a.L9,a.M0,a.M1,
+a.M2,a.M3,a.M4,a.M5,a.M6,a.M7,a.M8,a.M9,a.N0,a.N1,a.N2,a.N3,a.N4,a.N5,
+a.N6,a.N7,a.N8,a.N9,a.P0,a.P1,a.P2,a.P3,a.P4,a.P5,a.P6,a.P7,a.P8,a.P9,
+a.Q0,a.Q1,a.Q2,a.Q3,a.Q4,a.Q5,a.Q6,a.Q7,a.Q8,a.Q9
+from (
+select Jbno_,Pxsd_,Bdan_,zrzl_=(select  sum(a.zs_)*isnull(bdan_,0) from SINO_HBBJL a  where a.zjbh_=jbno_),
+A0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A0',bdan_),
+A1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A1',bdan_),
+A2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A2',bdan_),
+A3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A3',bdan_),
+A4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A4',bdan_),
+A5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A5',bdan_),
+A6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A6',bdan_),
+A7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A7',bdan_),
+A8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A8',bdan_),
+A9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'A9',bdan_),
+B0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B0',bdan_),
+B1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B1',bdan_),
+B2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B2',bdan_),
+B3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B3',bdan_),
+B4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B4',bdan_),
+B5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B5',bdan_),
+B6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B6',bdan_),
+B7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B7',bdan_),
+B8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B8',bdan_),
+B9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'B9',bdan_),
+C0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C0',bdan_),
+C1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C1',bdan_),
+C2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C2',bdan_),
+C3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C3',bdan_),
+C4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C4',bdan_),
+C5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C5',bdan_),
+C6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C6',bdan_),
+C7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C7',bdan_),
+C8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C8',bdan_),
+C9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'C9',bdan_),
+D0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D0',bdan_),
+D1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D1',bdan_),
+D2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D2',bdan_),
+D3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D3',bdan_),
+D4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D4',bdan_),
+D5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D5',bdan_),
+D6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D6',bdan_),
+D7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D7',bdan_),
+D8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D8',bdan_),
+D9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'D9',bdan_),
+E0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E0',bdan_),
+E1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E1',bdan_),
+E2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E2',bdan_),
+E3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E3',bdan_),
+E4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E4',bdan_),
+E5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E5',bdan_),
+E6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E6',bdan_),
+E7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E7',bdan_),
+E8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E8',bdan_),
+E9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'E9',bdan_),
+F0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F0',bdan_),
+F1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F1',bdan_),
+F2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F2',bdan_),
+F3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F3',bdan_),
+F4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F4',bdan_),
+F5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F5',bdan_),
+F6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F6',bdan_),
+F7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F7',bdan_),
+F8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F8',bdan_),
+F9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'F9',bdan_),
+G0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G0',bdan_),
+G1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G1',bdan_),
+G2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G2',bdan_),
+G3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G3',bdan_),
+G4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G4',bdan_),
+G5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G5',bdan_),
+G6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G6',bdan_),
+G7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G7',bdan_),
+G8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G8',bdan_),
+G9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'G9',bdan_),
+H0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H0',bdan_),
+H1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H1',bdan_),
+H2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H2',bdan_),
+H3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H3',bdan_),
+H4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H4',bdan_),
+H5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H5',bdan_),
+H6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H6',bdan_),
+H7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H7',bdan_),
+H8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H8',bdan_),
+H9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'H9',bdan_),
+J0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J0',bdan_),
+J1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J1',bdan_),
+J2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J2',bdan_),
+J3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J3',bdan_),
+J4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J4',bdan_),
+J5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J5',bdan_),
+J6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J6',bdan_),
+J7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J7',bdan_),
+J8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J8',bdan_),
+J9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'J9',bdan_),
+K0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K0',bdan_),
+K1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K1',bdan_),
+K2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K2',bdan_),
+K3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K3',bdan_),
+K4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K4',bdan_),
+K5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K5',bdan_),
+K6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K6',bdan_),
+K7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K7',bdan_),
+K8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K8',bdan_),
+K9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'K9',bdan_),
+L0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L0',bdan_),
+L1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L1',bdan_),
+L2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L2',bdan_),
+L3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L3',bdan_),
+L4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L4',bdan_),
+L5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L5',bdan_),
+L6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L6',bdan_),
+L7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L7',bdan_),
+L8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L8',bdan_),
+L9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'L9',bdan_),
+M0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M0',bdan_),
+M1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M1',bdan_),
+M2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M2',bdan_),
+M3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M3',bdan_),
+M4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M4',bdan_),
+M5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M5',bdan_),
+M6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M6',bdan_),
+M7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M7',bdan_),
+M8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M8',bdan_),
+M9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'M9',bdan_),
+N0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N0',bdan_),
+N1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N1',bdan_),
+N2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N2',bdan_),
+N3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N3',bdan_),
+N4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N4',bdan_),
+N5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N5',bdan_),
+N6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N6',bdan_),
+N7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N7',bdan_),
+N8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N8',bdan_),
+N9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'N9',bdan_),
+P0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P0',bdan_),
+P1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P1',bdan_),
+P2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P2',bdan_),
+P3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P3',bdan_),
+P4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P4',bdan_),
+P5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P5',bdan_),
+P6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P6',bdan_),
+P7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P7',bdan_),
+P8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P8',bdan_),
+P9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'P9',bdan_),
+Q0=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q0',bdan_),
+Q1=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q1',bdan_),
+Q2=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q2',bdan_),
+Q3=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q3',bdan_),
+Q4=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q4',bdan_),
+Q5=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q5',bdan_),
+Q6=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q6',bdan_),
+Q7=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q7',bdan_),
+Q8=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q8',bdan_),
+Q9=dbo.getQxzl(Qxn1_,Qxz1_,Qxn2_,Qxz2_,Qxn3_,Qxz3_,Qxn4_,Qxz4_,Qxn5_,Qxz5_,Qxn6_,Qxz6_,Qxn7_,Qxz7_,Qxn8_,Qxz8_,'Q9',bdan_)
+from sino_zpngtp where Scbj_='2' and #1#
+)a
+)a group by a.pxsd_ order by a.pxsd_ asc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>生产日期</name>
+				<column>PXSD_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>pilehz</id>
+		<title>Pile生成日汇总</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/SS生产/Pile生成检查速报.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+			select '#PSSD_#至#PSSD__end#' as CREA_
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select CONVERT(VARCHAR(11), dbo.GET_ETSD(PSSD_), 120) as PSSD_,
+SUM(SJZL_) as zpzl_,
+SUM(CASE WHEN CHAN_='1' or CHAN_='9' THEN SJZL_ ELSE 0 END) AS hgzl_,
+SUM(CASE WHEN CHAN_<>'1' and CHAN_<>'9' THEN SJZL_ ELSE 0 END) AS bhgzl_
+from SINO_ZPNGTP where JDJS_='1' AND #1# group by CONVERT(VARCHAR(11), dbo.GET_ETSD(PSSD_), 120)
+union
+select '合计' ,
+SUM(SJZL_) as zpzl_,
+SUM(CASE WHEN CHAN_='1' or CHAN_='9' THEN SJZL_ ELSE 0 END) AS hgzl_,
+SUM(CASE WHEN CHAN_<>'1' and CHAN_<>'9' THEN SJZL_ ELSE 0 END) AS bhgzl_
+FROM SINO_ZPNGTP where JDJS_='1' and #1#
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>生产日期</name>
+				<column>PSSD_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+		</params>
+	</entry>
+	
+</root>

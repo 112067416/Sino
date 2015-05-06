@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<entry>
+		<id>slrz</id>
+		<title>SL生产日志表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/SL/SL日志.xls]]></excel>
+		<sheet-index>0,1</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#C.CREA_#至#C.CREA__end#' as crea
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				SELECT A.ZSN_, A.ZZN_+'-'+A.ZRJ_, ZPZ_=(select zrzl_ from sino_zpngtp where jbno_=a.zrj_), A.ZRK_, A.XPH_, A.XPK_, A.XPC_, A.JDC_, A.YUN_, A.ABB_,'','','','', A.FAC_,'','','','', A.FGM_,'','', A.KN1_, A.KN2_, A.KN3_, A.KN4_, A.YLNO_,'','','',
+				CONVERT(varchar(21),C.CREA_, 120), isnull(B.PLQ_,'')+isnull(A.ZZN_,'')+'-'+B.JBN_, B.CKN_, 'S', B.JSZ_, B.SJZ_, B.JNZ_, B.MAZ_, B.YIN_, C.JSYN_, '', B.QQD_,B.QQ2_,B.QQ3_,C.CP15_,C.CP10_, C.CP05_,C.CP00_,C.CM05_,  C.BOPG_+'-'+C.BOPJ_, C.BDRG_+'-'+C.BDRJ_, C.BDJI_, C.ZOPZ_,C.ZDRZ_,C.ZNDZ_, C.DNDD_, C.HNDZ_, C.ZNDD_, C.ZBOG_+'-'+C.ZBOJ_, C.QDUZ_,
+				B.CLQ_,eli=(select NAME_ from SINO_SCXBPZ WHERE TYPE_='2' and CODE_=A.eli_),'',B.Cqp_,'','','',C.ZSHU_, C.LNSD_, C.JDYN_, B.CHA_, B.DEN_,'','', B.CZD_,'','','','', C.SCKN_, C.JDCN_,'',B.MAX_,B.MAS_,B.MAOP_,B.MADR_,C.VARI_,'','',''
+				FROM SINO_ZSFMT A, SINO_XPFMT B, SINO_SLSJLP C
+				WHERE C.ZSFMT_ = A.ID_ AND A.ZRJ_=C.RCZPNO_ AND C.XPFMT_ = B.ID_ AND#1# order by C.CREA_ asc
+				]]></sql>
+				<newline>30,30,31</newline>
+			</module>
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+				SELECT B.CLQ_,CONVERT(varchar(21),C.CREA_, 120),A.ZSN_,eli=(select NAME_ from SINO_SCXBPZ WHERE TYPE_='2' and CODE_=A.eli_), A.ZZN_+'-'+A.ZRJ_, isnull(B.PLQ_,'')+isnull(A.ZZN_,'')+'-'+B.JBN_,
+				ZPZ_=(select zrzl_ from sino_zpngtp where jbno_=a.zrj_),B.JSZ_, B.SJZ_,B.CHA_, B.DEN_, B.CZD_, C.ZSHU_,  A.ZRK_, A.XPH_, A.XPK_, A.XPC_, A.JDC_, A.YUN_, A.ABB_, A.FAC_, A.FGM_, A.KN1_, A.KN2_, A.KN3_, A.KN4_, A.YLNO_,
+				B.CKN_, 'S', B.JNZ_, B.MAZ_, B.YIN_, C.JSYN_, B.QQD_,B.QQ2_,B.QQ3_,C.CP15_,C.CP10_,C.CP05_,C.CP00_,C.CM05_, 
+				 C.BOPG_+'-'+C.BOPJ_, C.BDRG_+'-'+C.BDRJ_, C.BDJI_, C.ZOPZ_,C.ZDRZ_,C.ZNDZ_, C.DNDD_, C.HNDZ_, C.ZNDD_, C.ZBOG_+'-'+C.ZBOJ_, C.QDUZ_,B.Cqp_,
+				 C.LNSD_, C.JDYN_, C.SCKN_, C.JDCN_,B.MAX_,B.MAS_,B.MAOP_,B.MADR_,C.VARI_
+				FROM SINO_ZSFMT A, SINO_XPFMT B, SINO_SLSJLP C
+				WHERE C.ZSFMT_ = A.ID_ AND A.ZRJ_=C.RCZPNO_ AND C.XPFMT_ = B.ID_ and c.ZRZZ_='1' AND #1# order by C.CREA_ asc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>日期</name>
+				<column>C.CREA_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>false</required>
+			</param>
+			<param>
+				<name>入端卷板NO</name>
+				<column>A.ZRJ_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>15</length>
+			</param>
+			<param>
+				<name>班</name>
+				<column>C.BAN_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<key>SINO_BAN</key>
+				<required>false</required>
+			</param>
+			<param>
+				<name>组</name>
+				<column>C.ZU_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<key>SINO_ZU</key>
+				<required>false</required>
+			</param>
+			<param>
+				<name>SL生产线</name>
+				<column>A.Eli_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<scx>2</scx>
+				<required>false</required>
+			</param>
+			<param>
+				<name>用户代码</name>
+				<column>A.USR_</column>
+				<type>String</type>
+				<opt>like</opt>
+				<required>false</required>
+				<length>15</length>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>slrclmx</id>
+		<title>SL日产量一览明细</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/SL/SL日产量一览明细.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+			select '#a.sjsj_#至#a.sjsj__end#' as crea
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				
+select a.*
+from (
+select sjsj_=(select CONVERT(varchar(100), sjsj_, 20) from SINO_ZPNGTP b where b.jbno_=a.jbno_),a.jbno_,
+allZrzl_=(select ZRZL_ from SINO_ZPNGTP b where b.jbno_=a.jbno_ ),
+allZrzz_=(select ZPZL_-ZRZL_ from SINO_ZPNGTP b where b.jbno_=a.jbno_),
+ C1_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE  b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_ and b.czdm_ is null and b.pssd_ is null),
+ C11_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_ and b.czdm_ is not null and b.pssd_ is null),
+ C2_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE  b.CHAN_ = '2' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ C3_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE  b.CHAN_ = '3' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ C4_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE  b.CHAN_ = '4' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+ C5_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE  b.CHAN_ = '5' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ C9_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE  b.CHAN_ = '9' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ CS_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE  b.CHAN_ = 'S' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ allzpzl_=(SELECT SUM(b.ZPZL_) FROM SINO_ZPNGTP b WHERE  b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ SCZM_=(SELECT top 1 b.SCZM_ FROM SINO_ZPNGTP b WHERE  b.RCZPNO_=a.jbno_ and b.pssd_ is null ),
+ SCFM_=(SELECT top 1 b.SCFM_ FROM SINO_ZPNGTP b WHERE  b.RCZPNO_=a.jbno_ and b.pssd_ is null )
+from 
+(
+   select distinct a.jbno_ from sino_zpngtp a ,SINO_SLSJLP b ,SINO_ZSFMT c
+where b.Zsfmt_=c.ID_ AND b.Rczpno_=a.jbno_ and b.Zrzz_ in ('2','3')
+ and  #1# 
+ and len(a.jbno_)<10 AND a.pssd_ is null  
+) a 
+union
+select sjsj_=NULL,jbno_='总计:',allZrzl_=sum(a.allZrzl_),allZrzz_=sum(a.allZrzz_),
+C1_=sum(C1_),C11_=sum(C11_),C2_=sum(C2_),C3_=sum(C3_),C4_=sum(C4_),
+C5_=sum(C5_),C9_=sum(C9_),CS_=sum(CS_),allzpzl_=Sum(allzpzl_),SCZM_=NULL,SCFM_=NULL
+from
+(
+select 
+allZrzl_=(select ZRZL_ from SINO_ZPNGTP b where b.jbno_=a.jbno_ ),
+allZrzz_=(select ZPZL_-ZRZL_ from SINO_ZPNGTP b where b.jbno_=a.jbno_),
+ C1_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE  b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_ and b.czdm_ is null and b.pssd_ is null),
+ C11_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_ and b.czdm_ is not null and b.pssd_ is null),
+ C2_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE  b.CHAN_ = '2' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ C3_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE  b.CHAN_ = '3' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ C4_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE  b.CHAN_ = '4' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+ C5_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE  b.CHAN_ = '5' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ C9_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE  b.CHAN_ = '9' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ CS_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE  b.CHAN_ = 'S' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ allzpzl_=(SELECT SUM(b.ZPZL_) FROM SINO_ZPNGTP b WHERE  b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ SCZM_=(SELECT top 1 b.SCZM_ FROM SINO_ZPNGTP b WHERE  b.RCZPNO_=a.jbno_ and b.pssd_ is null ),
+ SCFM_=(SELECT top 1 b.SCFM_ FROM SINO_ZPNGTP b WHERE  b.RCZPNO_=a.jbno_ and b.pssd_ is null )
+from 
+(
+ select distinct a.jbno_ from sino_zpngtp a ,SINO_SLSJLP b ,SINO_ZSFMT c
+where b.Zsfmt_=c.ID_ AND b.Rczpno_=a.jbno_ and b.Zrzz_ in ('2','3')
+ and  #1# 
+ and len(a.jbno_)<10 AND a.pssd_ is null  
+) a
+) a
+) a order by (case   WHEN   a.sjsj_   is   NULL   then   '2099-01-01'   else   a.sjsj_  end) asc
+		
+		
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>剪切线别</name>
+				<column>C.Eli_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<scx>2</scx>
+				<required>false</required>
+			</param>
+			<param>
+				<name>日期</name>
+				<column>a.sjsj_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+		</params>
+	</entry>
+	<!--select CONVERT(varchar(100), a.crea_, 20) as crea_,a.jbno_,CAST(a.XPHO_ 
+		as varchar), cast(a.XPKN_ as varchar),cast(a.XPCN_ as varchar),a.FUDW_,a.FUZM_,a.FUFM_,a.FACE_ 
+		from sino_zpngtp a where len(a.jbno_)>8 and (a.czdm_<>'' or a.czdm_ is not 
+		null) and pssd_ is null and #1# -->
+	<entry>
+		<id>slxb</id>
+		<title>SL选 别品</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/SL/SL选别品.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+			select '#a.crea_#至#a.crea__end#' as crea
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select CONVERT(varchar(100), a.crea_, 20) as crea_,(CASE WHEN a.PLQF_ IS NULL then '' else a.PLQF_ END)+a.ZZSD_+'-'+a.jbno_,CAST(a.XPHO_ as varchar), cast(a.XPKN_ as varchar),cast(a.XPCN_ as varchar),a.FUDW_,a.FUZM_,a.FUFM_,a.FACE_ from sino_zpngtp a where
+				len(a.jbno_)>8 and PLQF_ in ('S','T') and #1#
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>剪切线别</name>
+				<column>a.elin_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<scx>2</scx>
+				<required>false</required>
+			</param>
+			<param>
+				<name>日期</name>
+				<column>a.crea_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>slbanrz</id>
+		<title>SL班别总日志</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/SL/SL班别日志.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#a.sjsj_#至#a.sjsj__end#' as crea
+		
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+   
+select 'S.J.M',a.ban_,sum(a.Zrzl_),sum(a.Zpzl_),sum(C1_),sum(C11_),sum(C2_),sum(C3_),sum(C4_),sum(C5_),sum(C9_),sum(CS_)
+ from ( 
+select a.dhno_,ban_=(select top 1 b.ban_ from SINO_SLSJLP b where b.Rczpno_=a.jbno_ and b.Zrzz_ in ('2','3') order by b.crea_ desc),
+Zrzl_=(select sum(ZRZL_) from SINO_ZPNGTP b where b.jbno_=a.jbno_ ), 
+Zpzl_=(select sum(ZPZL_) from SINO_ZPNGTP b where b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+C1_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_ and b.czdm_ is null and b.pssd_ is null), 
+C11_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_ and b.czdm_ is not null and b.pssd_ is null),
+ C2_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '2' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+C3_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '3' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ C4_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '4' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+C5_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '5' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+C9_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '9' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+CS_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = 'S' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null) 
+from (
+ select distinct a.jbno_,a.dhno_ from sino_zpngtp a ,SINO_SLSJLP b ,SINO_ZSFMT c
+where b.Zsfmt_=c.ID_ AND b.Rczpno_=a.jbno_ and b.Zrzz_ in ('2','3')
+ and   #1# 
+ and len(a.jbno_)<10 AND a.pssd_ is null 
+) a 
+) a where substring(a.dhno_,1,1)='T' group by a.ban_ 
+union 
+select '正材',a.ban_,sum(a.Zrzl_),sum(a.Zpzl_),sum(C1_),sum(C11_),sum(C2_),sum(C3_),sum(C4_),sum(C5_),sum(C9_),sum(CS_) 
+from ( 
+select a.dhno_,ban_=(select top 1 b.ban_ from SINO_SLSJLP b where b.Rczpno_=a.jbno_ and b.Zrzz_ in ('2','3') order by b.crea_ desc),
+Zrzl_=(select sum(ZRZL_) from SINO_ZPNGTP b where b.jbno_=a.jbno_), 
+Zpzl_=(select sum(ZPZL_) from SINO_ZPNGTP b where b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+C1_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_ and b.czdm_ is null and b.pssd_ is null), 
+C11_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_ and b.czdm_ is not null and b.pssd_ is null),
+ C2_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '2' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+C3_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '3' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+C4_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '4' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ C5_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '5' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+C9_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '9' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+CS_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = 'S' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null) 
+from 
+( 
+select distinct a.jbno_,a.dhno_ from sino_zpngtp a ,SINO_SLSJLP b ,SINO_ZSFMT c
+where b.Zsfmt_=c.ID_ AND b.Rczpno_=a.jbno_ and b.Zrzz_ in ('2','3')
+ and   #1# 
+ and len(a.jbno_)<10 AND a.pssd_ is null 
+) a 
+) a where substring(a.dhno_,1,1)<>'T' group by a.ban_ 
+union 
+select '总计:','',sum(a.allZrzl_),sum(a.allZpzl_),sum(a.C1_),sum(a.C11_),sum(a.C2_),sum(a.C3_),sum(a.C4_),sum(a.C5_), sum(a.C9_),sum(a.CS_) 
+from ( 
+select allZrzl_=sum(a.Zrzl_),allZpzl_=sum(a.Zpzl_),C1_=sum(C1_),C11_=sum(C11_),C2_=sum(C2_),C3_=sum(C3_),C4_=sum(C4_),C5_=sum(C5_),C9_=sum(C9_),CS_=sum(CS_) 
+from (
+ select ban_=(select top 1 b.ban_ from SINO_SLSJLP b where b.Rczpno_=a.jbno_ and b.Zrzz_ in ('2','3') order by b.crea_ desc),
+Zrzl_=(select sum(ZRZL_) from SINO_ZPNGTP b where b.jbno_=a.jbno_), 
+Zpzl_=(select sum(ZPZL_) from SINO_ZPNGTP b where b.RCZPNO_=a.jbno_ and b.pssd_ is null),
+ C1_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_ and b.czdm_ is null and b.pssd_ is null), 
+C11_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '1' AND b.RCZPNO_=a.jbno_ and b.czdm_ is not null and b.pssd_ is null), 
+C2_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '2' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+C3_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '3' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+C4_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '4' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+C5_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '5' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+C9_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = '9' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null), 
+CS_=(SELECT SUM(ZPZL_) FROM SINO_ZPNGTP b WHERE b.CHAN_ = 'S' AND b.RCZPNO_=a.jbno_ and b.pssd_ is null) 
+from ( 
+select distinct a.jbno_ from sino_zpngtp a ,SINO_SLSJLP b ,SINO_ZSFMT c
+where b.Zsfmt_=c.ID_ AND b.Rczpno_=a.jbno_ and b.Zrzz_ in ('2','3')
+ and   #1#  
+ and len(a.jbno_)<10 AND a.pssd_ is null 
+) a 
+) a group by a.ban_ 
+) a
+				]]></sql>
+
+			</module>
+
+		</modules>
+		<params>
+			<param>
+				<name>日期</name>
+				<column>a.sjsj_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<valAppend>8:00:00</valAppend>
+				<required>true</required>
+			</param>
+			<param>
+				<name>SL生产线</name>
+				<column>C.Eli_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<scx>2</scx>
+				<required>false</required>
+			</param>
+			<param>
+				<name>班</name>
+				<column>b.ban_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<key>SINO_BAN</key>
+				<required>false</required>
+			</param>
+
+
+		</params>
+	</entry>
+
+	<entry>
+		<id>slydjl</id>
+		<title>硬度结果记录</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/SL/硬度结果记录.xls]]></excel>
+		<sheet-index>0,1</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select convert(varchar(10), a.YDSJ_, 120),a.ZZSD_,a.ZZSD_+'-'+a.JBNO_,b.YUNY_,b.DHNO_+'-'+b.LINE_,b.ABBR_,b.COND_,cast(b.HOUU_ as varchar),cast(b.KUAN_ as varchar),CASE WHEN b.CANG_  is NULL THEN 'COIL' ELSE CAST(b.CANG_ AS VARCHAR) END,b.FUZM_,b.FUFM_,a.YING_/10.0 from SINO_YCAITP a left join SINO_DHUOTP b
+				on a.DHNO_=b.DHNO_+b.LINE_ where LEN(a.JBNO_)=6 AND#1#  order by a.YDSJ_ desc
+				]]></sql>
+			</module>
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+				select convert(varchar(10), a.YDSJ_, 120),a.ZZSD_,a.ZZSD_+'-'+a.JBNO_,b.YUNY_,b.DHNO_+'-'+b.LINE_,b.ABBR_,b.COND_,cast(b.HOUU_ as varchar),cast(b.KUAN_ as varchar),CASE WHEN b.CANG_  is NULL THEN 'COIL' ELSE CAST(b.CANG_ AS VARCHAR) END,b.FUZM_,b.FUFM_,a.YING_/10.0,
+				case when a.YUNY_ is not null and a.YUNY_='T1BA' then a.YING_/10.0 else null end,
+				case when a.YUNY_ is not null and (a.YUNY_='T1CA' or a.YUNY_='T1') then a.YING_/10.0 else null end,
+				case when a.YUNY_ is not null and a.YUNY_='T2BA' then a.YING_/10.0 else null end,
+				case when a.YUNY_ is not null and (a.YUNY_='T2CA' or a.YUNY_='T2') then a.YING_/10.0 else null end,
+				case when a.YUNY_ is not null and a.YUNY_='T2.5BA' then a.YING_/10.0 else null end,
+				case when a.YUNY_ is not null and (a.YUNY_='T2.5CA' or a.YUNY_='T2.5') then a.YING_/10.0 else null end,
+				case when a.YUNY_ is not null and a.YUNY_='T3BA' then a.YING_/10.0 else null end,
+				case when a.YUNY_ is not null and a.YUNY_='(T3BA)' then a.YING_/10.0 else null end,
+				case when a.YUNY_ is not null and (a.YUNY_='T3CA' or a.YUNY_='T3') then a.YING_/10.0 else null end,
+				case when a.YUNY_ is not null and (a.YUNY_='T3.5CA' or a.YUNY_='T3.5' or a.YUNY_='TSCA') then a.YING_/10.0 else null end,
+				case when a.YUNY_ is not null and a.YUNY_='T4CA' then a.YING_/10.0 else null end,
+				case when a.YUNY_ is not null and a.YUNY_='T5CA' then a.YING_/10.0 else null end,
+				case when a.YUNY_ is not null and a.YUNY_='DR8CA' then a.YING_/10.0 else null end,
+				case when a.YUNY_ is not null and a.YUNY_='DR9CA' then a.YING_/10.0 else null end
+				from SINO_YCAITP a left join SINO_DHUOTP b on a.DHNO_=b.DHNO_+b.LINE_ where LEN(a.JBNO_)=6 AND#1#  order by a.YDSJ_ desc
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>Coil NO.</name>
+				<column>a.JBNO_</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>6</length>
+			</param>
+			<param>
+				<name>检验时间</name>
+				<column>a.YDSJ_</column>
+				<type>date</type>
+				<opt>between</opt>
+			</param>
+		</params>
+	</entry>
+</root>

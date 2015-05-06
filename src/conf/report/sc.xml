@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<entry>
+		<id>coilcysj</id>
+		<title>coil操业实绩(本月)</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/生产统计/coil操业实绩.xls]]></excel>
+		<sheet-index>0,1</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select CONVERT(VARCHAR(10),GETDATE()) as cldm
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				SELECT * FROM (
+select 
+ZZSD_,YCNO_,YBZL,ABBR_,XPHO_,XPKN_,YUNY_,ETSD,PZNO,SPBH_,
+SFBS_,ETLZRL,ETL1J,ETL2J,ETL3J,ETL4J,ETLCCL,ETLX,CUTC,LOSC,FUZM_,
+FUFM_,SLSD,SLSCX,ZJBB,SLZRL,SL1J,SL2J,SL3J,SL4J,SLCCL,SLX
+ FROM SINO_V_COILCYSJ 
+UNION
+SELECT 
+'','',SUM(YBZL),'',NULL,NULL,'','合计：','','',
+'',SUM(ETLZRL),SUM(ETL1J),SUM(ETL2J),SUM(ETL3J),SUM(ETL4J),SUM(ETLCCL),SUM(ETLX),SUM(CUTC),SUM(LOSC),'',
+'','','','',SUM(SLZRL),SUM(SL1J),SUM(SL2J),SUM(SL3J),SUM(SL4J),SUM(SLCCL),SUM(SLX)
+
+FROM SINO_V_COILCYSJ )TT ORDER BY TT.ETSD,TT.SLSD,TT.YCNO_ 
+				]]></sql>
+			</module>
+			
+			
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+				SELECT * FROM (
+select 
+ZZSD_,YCNO_,YBZL,ABBR_,XPHO_,XPKN_,YUNY_,ETSD,PZNO,SPBH_,
+SFBS_,ETLZRL,ETL1J,ETL2J,ETL3J,ETL4J,ETLCCL,ETLX,CUTC,LOSC,FUZM_,
+FUFM_,SLSD,SLSCX,ZJBB,SLZRL,SL1J,SL2J,SL3J,SL4J,SLCCL,SLX
+ FROM SINO_V_COILCYSJ_SZ 
+UNION
+SELECT 
+'','',SUM(YBZL),'',NULL,NULL,'','合计：','','',
+'',SUM(ETLZRL),SUM(ETL1J),SUM(ETL2J),SUM(ETL3J),SUM(ETL4J),SUM(ETLCCL),SUM(ETLX),SUM(CUTC),SUM(LOSC),'',
+'','','','',SUM(SLZRL),SUM(SL1J),SUM(SL2J),SUM(SL3J),SUM(SL4J),SUM(SLCCL),SUM(SLX)
+
+FROM SINO_V_COILCYSJ_SZ )TT ORDER BY TT.ETSD,TT.SLSD,TT.YCNO_ 
+				]]></sql>
+			</module>
+		</modules>
+	</entry>
+	
+	<entry>
+		<id>coilcysj_ls</id>
+		<title>coil操业实绩(历史)</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/生产统计/coil操业实绩.xls]]></excel>
+		<sheet-index>0,1</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select SUBSTRING(CAST('#NY#' AS VARCHAR),1,4)+'年'+SUBSTRING(CAST('#NY#' AS VARCHAR),5,2)+'月' as cldm
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				   SELECT * FROM (
+select 
+ZZSD_,YCNO_,YBZL,ABBR,XPHO_,XPKN_,YUNY_,ETSD,PZNO,SPBH_,
+SFBS_,ETLZRL,ETL1J,ETL2J,ETL3J,ETL4J,ETLCCL,ETLX,CUTC,LOSC,FUZM_,
+FUFM_,SLSD,SLSCX,ZJBB,SLZRL,SL1J,SL2J,SL3J,SL4J,SLCCL,SLX
+ FROM SINO_RPT_COILCYSJ WHERE DORT = 'D' AND #1#
+UNION
+SELECT 
+'','',SUM(YBZL),'',NULL,NULL,'','2合计：','','',
+'',SUM(ETLZRL),SUM(ETL1J),SUM(ETL2J),SUM(ETL3J),SUM(ETL4J),SUM(ETLCCL),SUM(ETLX),SUM(CUTC),SUM(LOSC),'',
+'','','','',SUM(SLZRL),SUM(SL1J),SUM(SL2J),SUM(SL3J),SUM(SL4J),SUM(SLCCL),SUM(SLX)
+
+FROM SINO_RPT_COILCYSJ WHERE DORT = 'D' AND  #1#
+
+)TT ORDER BY TT.ETSD,TT.SLSD,TT.YCNO_ 
+				]]></sql>
+			</module>
+		
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+   SELECT * FROM (
+select 
+ZZSD_,YCNO_,YBZL,ABBR,XPHO_,XPKN_,YUNY_,ETSD,PZNO,SPBH_,
+SFBS_,ETLZRL,ETL1J,ETL2J,ETL3J,ETL4J,ETLCCL,ETLX,CUTC,LOSC,FUZM_,
+FUFM_,SLSD,SLSCX,ZJBB,SLZRL,SL1J,SL2J,SL3J,SL4J,SLCCL,SLX
+ FROM SINO_RPT_COILCYSJ WHERE DORT = 'T' AND #1#
+UNION
+SELECT 
+'','',SUM(YBZL),'',NULL,NULL,'','2合计：','','',
+'',SUM(ETLZRL),SUM(ETL1J),SUM(ETL2J),SUM(ETL3J),SUM(ETL4J),SUM(ETLCCL),SUM(ETLX),SUM(CUTC),SUM(LOSC),'',
+'','','','',SUM(SLZRL),SUM(SL1J),SUM(SL2J),SUM(SL3J),SUM(SL4J),SUM(SLCCL),SUM(SLX)
+
+FROM SINO_RPT_COILCYSJ WHERE DORT = 'T' AND  #1#
+
+)TT ORDER BY TT.ETSD,TT.SLSD,TT.YCNO_ 
+				]]></sql>
+			</module>
+
+
+		<module>
+				<name>C</name>
+				<sql><![CDATA[
+ 
+SELECT bz_ FROM SINO_TZBZ WHERE BBM_='COILCYSJZ' AND #1# 
+  ]]></sql>
+			</module>		
+	<module>
+				<name>D</name>
+				<sql><![CDATA[
+ 
+SELECT bz_ FROM SINO_TZBZ WHERE BBM_='COILCYSJS' AND #1# 
+  ]]></sql>
+			</module>	
+		</modules>
+		<params>
+			<param>
+				<name>年月(YYYYMM)</name>
+				<column>NY</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>TRUE</required>
+				<length>6</length>
+			</param>
+		</params>	 
+	</entry>
+	
+	<entry>
+		<id>coilzSl</id>
+		<title>SL每日生产实绩一览</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/生产统计/SL每日生产实绩一览.xls]]></excel>
+		<sheet-index>0,1</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select CONVERT(VARCHAR(10),GETDATE()) as cldm
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+	select * from (SELECT A.riqi,A.WKDY,A.SLZRL1,
+    CASE WHEN A.SLSZ1=0 THEN NULL ELSE A.SLSZ1 END SLSZ1,
+    CASE WHEN A.SL1J=0 THEN NULL ELSE A.SL1J END SL1J,
+    CASE WHEN A.SL2J=0 THEN NULL ELSE A.SL2J END SL2J,
+    CASE WHEN A.SL3J=0 THEN NULL ELSE A.SL3J END SL3J,
+    CASE WHEN A.SL4J=0 THEN NULL ELSE A.SL4J END SL4J,
+    CASE WHEN A.SLCC=0 THEN NULL ELSE A.SLCC END SLCC,
+    A.SLZRL2,
+    CASE WHEN A.SLSZ2=0 THEN NULL ELSE A.SLSZ2 END SLSZ2,
+    CASE WHEN A.SL1J2=0 THEN NULL ELSE A.SL1J2 END SL1J2,
+    CASE WHEN A.SL2J2=0 THEN NULL ELSE A.SL2J2 END SL2J2,
+    CASE WHEN A.SL3J2=0 THEN NULL ELSE A.SL3J2 END SL3J2,
+    CASE WHEN A.SL4J2=0 THEN NULL ELSE A.SL4J2 END SL4J2,
+    CASE WHEN A.SLCC2=0 THEN NULL ELSE A.SLCC2 END SLCC2,
+    CASE WHEN A.PSZL=0 THEN NULL ELSE A.PSZL END PSZL,
+    CASE WHEN A.PXZL=0 THEN NULL ELSE A.PXZL END PXZL,
+    CASE WHEN A.CY=0 THEN NULL ELSE A.CY END  CY             
+FROM SINO_V_COILZ_SL A
+union
+SELECT '','合计',sum(A.SLZRL1),
+    SUM(A.SLSZ1),
+    sum(A.SL1J),
+    sum(A.SL2J),
+    sum(A.SL3J),
+    sum(A.SL4J),
+    sum(A.SLCC),
+   sum(A.SLZRL2),
+    sum(A.SLSZ2),
+    sum(A.SL1J2),
+    sum(A.SL2J2),
+    sum(A.SL3J2),
+    sum(A.SL4J2),
+    sum(A.SLCC2),
+    sum(A.PSZL),
+    sum(A.PXZL),
+    sum(A.CY) 
+
+FROM SINO_V_COILZ_SL A) b order by cast(b.RIQI as int), wkdy
+				]]></sql>
+			</module>
+
+		</modules>
+	 
+	</entry>
+	
+		<entry>
+		<id>coilzEtl</id>
+		<title>每日生产实绩一览</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/生产统计/每日生产实绩一览.xls]]></excel>
+		<sheet-index>0,1</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select CONVERT(VARCHAR(10),GETDATE()) as cldm
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+select * from (SELECT A.riqi,A.WKDY,
+    CASE WHEN A.购进=0 THEN NULL ELSE A.购进/1000.0 end 购进,
+    A.结存/1000.0 结存,A.etlZRL/1000.0 etlZRL,
+    CASE WHEN A.ETsSZ=0 THEN NULL ELSE A.ETsSZ/1000.0 END ETsSZ,
+    CASE WHEN A.ETL1J=0 THEN NULL ELSE A.ETL1J/1000.0 END ETL1J,
+    CASE WHEN A.ETL2J=0 THEN NULL ELSE A.ETL2J/1000.0 END ETL2J,
+    CASE WHEN A.ETL3J=0 THEN NULL ELSE A.ETL3J/1000.0 END ETL3J,
+    CASE WHEN A.ETL4J=0 THEN NULL ELSE A.ETL4J/1000.0 END ETL4J,
+    CASE WHEN A.ETLCCL=0 THEN NULL ELSE A.ETLCCL/1000.0 END ETLCCL,
+    CASE WHEN A.ETLX=0 THEN NULL ELSE A.ETLX/1000.0 END ETLX,
+    CASE WHEN A.CC=0 THEN NULL ELSE A.CC/1000.0 END CC, 
+    CASE WHEN A.FH1J=0 THEN NULL ELSE A.FH1J/1000.0 END FH1J,
+    CASE WHEN A.JC=0 THEN NULL ELSE A.JC/1000.0 END JC, 
+    CASE WHEN A.JCJC=0 THEN NULL ELSE A.JCJC/1000.0 END JCJC,
+    CASE WHEN A.QBJC=0 THEN NULL ELSE A.QBJC/1000.0 END QBJC,
+    CASE WHEN A.ZFH=0 THEN NULL ELSE A.ZFH/1000.0 END  ZFH              
+ FROM SINO_V_COILZ_etl A 
+ union
+ select '','合计',
+    sum(A.购进/1000.0),
+    null,
+    sum(A.etlZRL/1000.0),
+    sum(A.ETsSZ/1000.0),
+    sum(A.ETL1J/1000.0),
+    sum(A.ETL2J/1000.0),
+    sum(A.ETL3J/1000.0),
+    sum(A.ETL4J/1000.0),
+    sum(A.ETLCCL/1000.0),
+    sum(A.ETLX/1000.0),
+    sum(A.CC/1000.0), 
+    sum(A.FH1J/1000.0),
+    null, 
+    null,
+    null,
+    sum(A.ZFH/1000.0)               
+ FROM SINO_V_COILZ_etl A) b order by CAST(b.riqi as int)
+				]]></sql>
+			</module>
+	
+		</modules>
+	 
+
+	</entry>
+	
+		<entry>
+		<id>coilzSl_ls</id>
+		<title>SL每日生产实绩(历史)</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/生产统计/SL每日生产实绩一览.xls]]></excel>
+		<sheet-index>0,1</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select SUBSTRING(CAST('#NY#' AS VARCHAR),1,4)+'年'+SUBSTRING(CAST('#NY#' AS VARCHAR),5,2)+'月' as cldm
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+	 	select * from (	SELECT A.riqi,A.WKDY,A.SLZRL1,
+    CASE WHEN A.SLSZ1=0 THEN NULL ELSE A.SLSZ1 END SLSZ1,
+    CASE WHEN A.SL1J=0 THEN NULL ELSE A.SL1J END SL1J,
+    CASE WHEN A.SL2J=0 THEN NULL ELSE A.SL2J END SL2J,
+    CASE WHEN A.SL3J=0 THEN NULL ELSE A.SL3J END SL3J,
+    CASE WHEN A.SL4J=0 THEN NULL ELSE A.SL4J END SL4J,
+    CASE WHEN A.SLCC=0 THEN NULL ELSE A.SLCC END SLCC,
+    A.SLZRL2,
+    CASE WHEN A.SLSZ2=0 THEN NULL ELSE A.SLSZ2 END SLSZ2,
+    CASE WHEN A.SL1J2=0 THEN NULL ELSE A.SL1J2 END SL1J2,
+    CASE WHEN A.SL2J2=0 THEN NULL ELSE A.SL2J2 END SL2J2,
+    CASE WHEN A.SL3J2=0 THEN NULL ELSE A.SL3J2 END SL3J2,
+    CASE WHEN A.SL4J2=0 THEN NULL ELSE A.SL4J2 END SL4J2,
+    CASE WHEN A.SLCC2=0 THEN NULL ELSE A.SLCC2 END SLCC2,
+    CASE WHEN A.PSZL=0 THEN NULL ELSE A.PSZL END PSZL,
+    CASE WHEN A.PXZL=0 THEN NULL ELSE A.PXZL END PXZL,
+    CASE WHEN A.CY=0 THEN NULL ELSE A.CY END CY             
+FROM SINO_RPT_COILZ_SL A 
+WHERE #1# 
+union
+ 		SELECT null,'合计',sum(A.SLZRL1),
+    sum(A.SLSZ1) ,
+    sum(A.SL1J),
+    sum(A.SL2J),
+    sum(A.SL3J),
+    sum(A.SL4J),
+    sum(A.SLCC),
+    sum(A.SLZRL2),
+    sum(A.SLSZ2),
+    sum(A.SL1J2),
+    sum(A.SL2J2),
+    sum(A.SL3J2),
+    sum(A.SL4J2),
+    sum(A.SLCC2),
+    sum(A.PSZL),
+    sum(A.PXZL),
+    sum(A.CY)              
+FROM SINO_RPT_COILZ_SL A WHERE #1# ) b
+ ORDER BY cast(RIQI as int)
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>年月(YYYYMM)</name>
+				<column>NY</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>TRUE</required>
+				<length>6</length>
+			</param>
+		</params>	 
+	</entry>
+
+		<entry>
+		<id>coilzEtl_ls</id>
+		<title>ETL每日生产实绩(历史)</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/生产统计/每日生产实绩一览.xls]]></excel>
+		<sheet-index>0,1</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select SUBSTRING(CAST('#NY#' AS VARCHAR),1,4)+'年'+SUBSTRING(CAST('#NY#' AS VARCHAR),5,2)+'月' as cldm
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+SELECT * FROM (	SELECT A.riqi,A.WKDY,
+	CASE WHEN A.购进=0 THEN NULL ELSE A.购进/1000.0 end 购进,
+	A.结存/1000.0 结存,A.etlZRL/1000.0 etlZRL,
+    CASE WHEN A.ETsSZ=0 THEN NULL ELSE A.ETsSZ/1000.0 END ETsSZ,
+    CASE WHEN A.ETL1J=0 THEN NULL ELSE A.ETL1J/1000.0 END ETL1J,
+    CASE WHEN A.ETL2J=0 THEN NULL ELSE A.ETL2J/1000.0 END ETL2J,
+    CASE WHEN A.ETL3J=0 THEN NULL ELSE A.ETL3J/1000.0 END ETL3J,
+    CASE WHEN A.ETL4J=0 THEN NULL ELSE A.ETL4J/1000.0 END ETL4J,
+    CASE WHEN A.ETLCCL=0 THEN NULL ELSE A.ETLCCL/1000.0 END ETLCCL,
+    CASE WHEN A.ETLX=0 THEN NULL ELSE A.ETLX/1000.0 END ETLX,
+    CASE WHEN A.CC=0 THEN NULL ELSE A.CC/1000.0 END CC, 
+    CASE WHEN A.FH1J=0 THEN NULL ELSE A.FH1J/1000.0 END FH1J,
+    CASE WHEN A.JC=0 THEN NULL ELSE A.JC/1000.0 END JC, 
+    CASE WHEN A.JCJC=0 THEN NULL ELSE A.JCJC/1000.0 END JCJC,
+    CASE WHEN A.QBJC=0 THEN NULL ELSE A.QBJC/1000.0 END QBJC,
+    CASE WHEN A.ZFH=0 THEN NULL ELSE A.ZFH/1000.0 END ZFH               
+ FROM SINO_RPT_COILZ_etl A
+ WHERE #1# 
+  union
+ 	SELECT null,'合计',
+ 	sum(A.购进/1000.0),
+ 	null,
+ 	sum(A.etlZRL/1000.0),
+    sum(A.ETsSZ/1000.0),
+    sum(A.ETL1J/1000.0),
+    sum(A.ETL2J/1000.0),
+    sum(A.ETL3J/1000.0),
+    sum(A.ETL4J/1000.0),
+    sum(A.ETLCCL/1000.0),
+    sum(A.ETLX/1000.0),
+    sum(A.CC/1000.0), 
+    sum(A.FH1J/1000.0),
+    null, 
+    null,
+    null,
+    sum(A.ZFH/1000.0)               
+ FROM SINO_RPT_COILZ_etl A 
+ WHERE #1# ) B 
+ ORDER BY cast(B.RIQI as int)
+				]]></sql>
+			</module>		
+		</modules>
+		<params>
+			<param>
+				<name>年月(YYYYMM)</name>
+				<column>NY</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>TRUE</required>
+				<length>6</length>
+			</param>
+		</params>	 
+	</entry>
+</root>

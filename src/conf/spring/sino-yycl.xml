@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+     
+    <bean id="com.quanta.sino.yccl.dao.api.IXpxxDAO" class="com.quanta.sino.yccl.dao.XpxxDAO">
+        <property name="dao" ref="dao" />
+     </bean>
+      <bean id="com.quanta.sino.yccl.dao.api.IJlbgDAO" class="com.quanta.sino.yccl.dao.JlbgDAO">
+        <property name="dao" ref="dao" />
+     </bean>
+     <bean id="com.quanta.sino.yccl.dao.api.IZyrzDAO" class="com.quanta.sino.yccl.dao.ZyrzDAO">
+        <property name="dao" ref="dao" />
+     </bean>
+      <bean id="com.quanta.sino.yccl.dao.api.IYlrzDAO" class="com.quanta.sino.yccl.dao.YlrzDAO">
+        <property name="dao" ref="dao" />
+     </bean>
+      <bean id="com.quanta.sino.yccl.dao.api.IDcrzDAO" class="com.quanta.sino.yccl.dao.DcrzDAO">
+        <property name="dao" ref="dao" />
+     </bean>
+     <bean id="com.quanta.sino.yycl.bo.api.IXpxxBO" class="com.quanta.sino.yccl.bo.XpxxBO">
+         <property name="dao" ref="com.quanta.sino.yccl.dao.api.IXpxxDAO"/>
+         <property name="zpBo" ref="com.quanta.sino.etl.bo.api.IZpBO"/>
+         <property name="ycaiBo" ref="com.quanta.sino.ycai.bo.api.IYcaitpBO"/>
+        <property name="codeBo" ref="com.coco.sys.bo.api.ICodeBO"/>
+        <property name="wwhtBo" ref="com.quanta.sino.cg.bo.api.IWwhtBO"/>
+        <property name="sjBo" ref="com.quanta.sino.sj.bo.api.ISjBO"/>
+        <property name="jinhlpDao" ref="com.quanta.sino.ycai.dao.api.IJinhlpDAO"/>
+         <property name="zyrzDao" ref="com.quanta.sino.yccl.dao.api.IZyrzDAO"/>
+         <property name="ylrzDao" ref="com.quanta.sino.yccl.dao.api.IYlrzDAO"/>
+         <property name="dcrzDao" ref="com.quanta.sino.yccl.dao.api.IDcrzDAO"/>
+          <property name="jlbgdao" ref="com.quanta.sino.yccl.dao.api.IJlbgDAO"/>
+          <property name="cmnBo" ref="com.quanta.sino.cmn.bo.api.ICmnBO"/>
+          <property name="zsBo" ref="com.quanta.sino.zs.bo.api.IZsBO"/>
+          <property name="dhBo" ref="com.quanta.sino.dh.bo.api.IDhBO"/>
+          <property name="czjlBO" ref="com.quanta.sino.cmn.bo.api.ICzjlBO" />
+          <property name="sqlDao" ref="sqlDao" />
+          <property name="informBO" ref="com.quanta.sino.cmn.bo.api.IInformBO" />
+          <property name="ychBO" ref="com.quanta.sino.cmn.bo.api.IYchBO" />
+     </bean>
+</beans>

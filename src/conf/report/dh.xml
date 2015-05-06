@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<entry>
+		<id>dh!dhjd</id>
+		<title>订货进度表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/订货/订货进度表.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select getDate() as crea
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select a.ABBR_,a.JHQI_,a.DHNO_+a.LINE_,a.PZNO_,a.GGNO_,a.YUNY_,a.FUDW_,a.FUZM_,a.FUFM_,cast(a.HOUU_ as varchar),cast(a.KUAN_ as varchar),CASE WHEN a.CANG_  is NULL THEN 'COIL' ELSE CAST(a.CANG_ AS VARCHAR) END,a.FACE_,a.YYAN_,a.DMFX_,
+				a.HTZL_,a.JHQF_,a.JHFZ_,a.JHZZ_,a.FPLN_,a.ETLH_,a.SLHG_,a.CHUS_,a.KBUS_,DDNM_ from SINO_V_DHUO_SCTJ a
+				where#1# order by a.JHY_ asc, a.JHM_ asc, a.ABBR_ asc, a.JHQI_ asc,a.DHNO_ asc, a.LINE_ asc;
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>交货期</name>
+				<column>a.JHQI_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>业务员代码</name>
+				<column>a.DDNO_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>
+			<param>
+				<name></name>
+				<column></column>
+				<type></type>
+				<opt></opt>
+				<required></required>
+			</param>
+			<param>
+				<name>订货No</name>
+				<column>a.DHNO_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>7</length>
+				<jointChar>-</jointChar>
+				<jointColumn>a.LINE_</jointColumn>
+				<jointLength>2</jointLength>
+			</param>
+			<param>
+				<name>用户代码</name>
+				<column>a.USER_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>dh!dhhtb</id>
+		<title>订货合同表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/订货/订货合同表.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#JHQI_#至#JHQI__end#' as JHQI_
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select NAME_,JHQI_,HTQI_,DH,PZNO_,COND_,GGNO_,YUNY_,FUDW_,FUZM_,FUFM_,HOUU_,KUAN_,CANG_,YSFS_,QIXN_,DDNM_,FACE_,HTDJ_,HTZL_ from (
+				select 1 as XH_, a.NAME_,convert(varchar(10), a.JHQI_, 120) as JHQI_,a.HTQI_,a.DHNO_+'-'+a.LINE_ as DH,a.PZNO_,a.COND_,a.GGNO_,a.YUNY_,a.FUDW_,a.FUZM_,a.FUFM_,cast(a.HOUU_ as varchar) as HOUU_,cast(a.KUAN_ as varchar) as KUAN_,CASE WHEN a.CANG_  is NULL THEN 'COIL' ELSE CAST(a.CANG_ AS VARCHAR) END as CANG_,(select top 1 b.value_ from COCO_CODE_ITEM b where b.CODE_='SINO_YSFS' and b.KEY_=a.YSFS_) as YSFS_,a.QIXN_,a.DDNM_,a.FACE_,a.HTDJ_,a.HTZL_
+				from SINO_V_DHHTB a where (a.DHNO_ like 'D%' OR a.DHNO_ like 'E%') AND#1# 
+				UNION ALL
+				select 0 as XH_, null as NAME_,null as JHQI_,null as HTQI_,null as DH,null as PZNO_,null as COND_,null as GGNO_,null as YUNY_,null as FUDW_,null as FUZM_,null as FUFM_,null as HOUU_,null as KUAN_,null as CANG_,null as YSFS_,null as QIXN_,null as DDNM_,'合计' as FACE_,null as HTDJ_,sum(HTZL_) as HTZL_
+				from SINO_V_DHHTB where (DHNO_ like 'D%' OR DHNO_ like 'E%') AND#1# 
+				UNION ALL
+				select 1 as XH_, f.NAME_,cast(f.YEAR_ as varchar)+'-'+case when f.MONTH_ > 9 then cast(f.MONTH_ as varchar) else '0'+cast(f.MONTH_ as varchar) end as JHQI_,null as HTQI_,null as DH,null as PZNO_,null as COND_,null as GGNO_,null as YUNY_,null as FUDW_,null as FUZM_,null as FUFM_,null as HOUU_,null as KUAN_,null as CANG_,null as YSFS_,null as QIXN_,null as DDNM_,'小计' as FACE_,null as HTDJ_,sum(f.HTZL_) as HTZL_ from (
+				select a.NAME_,YEAR(a.JHQI_) as YEAR_,MONTH(a.JHQI_) as MONTH_,a.HTZL_ from SINO_V_DHHTB a where (a.DHNO_ like 'D%' OR a.DHNO_ like 'E%') AND#1#) f group by f.NAME_,f.YEAR_,f.MONTH_
+				UNION ALL
+				select 2 as XH_, NAME_,null as JHQI_,null as HTQI_,null as DH,null as PZNO_,null as COND_,null as GGNO_,null as YUNY_,null as FUDW_,null as FUZM_,null as FUFM_,null as HOUU_,null as KUAN_,null as CANG_,null as YSFS_,null as QIXN_,null as DDNM_,'小计' as FACE_,null as HTDJ_,sum(HTZL_) as HTZL_
+				from SINO_V_DHHTB where (DHNO_ like 'D%' OR DHNO_ like 'E%') AND#1# GROUP BY NAME_) t
+				order by NAME_ asc, XH_ asc, JHQI_ asc, DH asc;
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>交货期</name>
+				<column>JHQI_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>创建期</name>
+				<column>CREA_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>合同日</name>
+				<column>HTQI_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>6</length>
+			</param>
+			<param>
+				<name>订货No</name>
+				<column>DHNO_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>7</length>
+				<jointChar>-</jointChar>
+				<jointColumn>LINE_</jointColumn>
+				<jointLength>2</jointLength>
+			</param>
+			<param>
+				<name>用户代码</name>
+				<column>USER_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>
+			<param>
+				<name>业务员代码</name>
+				<column>DDNO_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>3</length>
+			</param>
+			<param>
+				<name>合同类别</name>
+				<column>HTLB_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<select>
+				<![CDATA[
+				<option value="">全部</option>
+				<option value="S">剪切板</option>
+				<option value="C">钢卷</option>
+				]]>
+				</select>
+				<required>false</required>
+				<length>8</length>
+			</param>
+			<param>
+				<name>内外销</name>
+				<column>NWAI_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<select>
+				<![CDATA[
+				<option value="">全部</option>
+				<option value="D">内销</option>
+				<option value="E">出口</option>
+				]]>
+				</select>
+				<required>false</required>
+				<length>8</length>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>dh!dhscjdss</id>
+		<title>订货合同生产进度实时表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/订货/订货合同生产进度实时表.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select getDate() as crea
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select ABBR_,JHQI_,DHNO_,PZNO_,GGNO_,YUNY_,FUDW_,FUZM_,FUFM_,HOUU_,KUAN_,CANG_,FACE_,YYAN_,DMFX_,HTZL_,JHQF_,JHFZ_,JHZZ_,FPLN_,ETLW,ETLH_,SLW,SLHG_,KCUS_,CHUS_,KBUS_, WWCL_,DDNM_ from (
+				select '1' as XH_, a.ABBR_,cast(a.JHY_ as VARCHAR) + '-' + cast(a.JHM_ as VARCHAR) as JHQI_,a.DHNO_+a.LINE_ as DHNO_,a.PZNO_,a.GGNO_,a.YUNY_,a.FUDW_,a.FUZM_,a.FUFM_,cast(a.HOUU_ as varchar) as HOUU_,cast(a.KUAN_ as varchar) as KUAN_,case when a.CANG_  is NULL then 'COIL' else CAST(a.CANG_ AS VARCHAR) end as CANG_,a.FACE_,a.YYAN_,a.DMFX_,
+				a.HTZL_,a.JHQF_,a.JHFZ_,a.JHZZ_,a.FPLN_,a.ETLW,a.ETLH_,a.SLW,a.SLHG_,a.KCUS_,a.CHUS_,a.KBUS_,a.WWCL_,a.DDNM_ from SINO_V_DHUO_SCTJ a
+				where a.PZNO_ in ('11','21') AND#1#
+				union
+				select '2' as XH_, '小计' as ABBR_,cast(a.JHY_ as VARCHAR) + '-' + cast(a.JHM_ as VARCHAR) as JHQI_,null as DHNO_,null as PZNO_,null as GGNO_,null as YUNY_,null as FUDW_,null as FUZM_,null as FUFM_,null as HOUU_,null as KUAN_,null as CANG_,null as FACE_,null as YYAN_,null as DMFX_,
+				null as HTZL_,null as JHQF_,null as JHFZ_,null as JHZZ_,null as FPLN_,null as ETLW,null as ETLH_,null as SLW,null as SLHG_,null as KCUS_,null as CHUS_,null as KBUS_,sum(a.WWCL_) as WWCL_,null as DDNM_ from SINO_V_DHUO_SCTJ a
+				where a.PZNO_ in ('11','21') and a.WWCL_ > 0 AND#1# group by a.JHY_,a.JHM_) t order by JHQI_ desc, XH_ asc, ABBR_ desc, DHNO_ asc;
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>交货期</name>
+				<column>a.JHQI_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>业务员代码</name>
+				<column>a.DDNO_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>3</length>
+			</param>
+			<param>
+				<name>状态</name>
+				<column>a.STAT_</column>
+				<type>string</type>
+				<length>10</length>
+				<opt>eq</opt>
+				<key>SINO_DH_STAT</key>
+				<required>false</required>
+			</param>
+			<param>
+				<name>订货No</name>
+				<column>a.DHNO_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>7</length>
+				<jointChar>-</jointChar>
+				<jointColumn>a.LINE_</jointColumn>
+				<jointLength>2</jointLength>
+			</param>
+			<param>
+				<name>用户代码</name>
+				<column>a.USER_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>dh!wwht</id>
+		<title>未完合同表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/订货/未完合同表.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select month(getDate()) as crea
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select JHM_,ABBR_,DHNO_,YUNY_,CDNM_,FUDW_,FUZM_,FUFM_,HOUU_,KUAN_,CANG_,WWCL_ from (
+				select '1' as XH_,cast(a.JHY_ as VARCHAR) + '-' + cast(a.JHM_ as VARCHAR) as JHQI_,cast(a.JHM_ as varchar)+'月' as JHM_, a.ABBR_,a.DHNO_+''+a.LINE_ as DHNO_,a.YUNY_,a.CDNM_,a.FUDW_,a.FUZM_,a.FUFM_,cast(a.HOUU_ as varchar) as HOUU_,cast(a.KUAN_ as varchar) as KUAN_,CASE WHEN a.CANG_  is NULL THEN 'COIL' ELSE CAST(a.CANG_ AS VARCHAR) END as CANG_,a.WWCL_ from SINO_V_DHUO_SCTJ a
+				where a.STAT_<>'4' and a.WWCL_>0 and a.WWCL_ > a.JHXX_ and a.PZNO_ in ('11','21') AND#1#
+				union
+				select '2' as XH_,cast(a.JHY_ as VARCHAR) + '-' + cast(a.JHM_ as VARCHAR) as JHQI_,null as JHM_, null as ABBR_,null as DHNO_,null as YUNY_,null as CDNM_,null as FUDW_,null as FUZM_,null as FUFM_,null as HOUU_,null as KUAN_,null as CANG_,sum(a.WWCL_) as WWCL_ from SINO_V_DHUO_SCTJ a
+				where a.STAT_<>'4' and a.WWCL_>0 and a.WWCL_ > a.JHXX_ and a.PZNO_ in ('11','21') AND#1# group by a.JHY_,a.JHM_) t order by JHQI_ desc, XH_ asc, ABBR_ desc, DHNO_ asc;
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>交货期</name>
+				<column>a.JHQI_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>用户代码</name>
+				<column>a.USER_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>
+			<param>
+				<name></name>
+				<column></column>
+				<type></type>
+				<opt></opt>
+				<required></required>
+			</param>
+			<param>
+				<name>订货No</name>
+				<column>a.DHNO_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>7</length>
+				<jointChar>-</jointChar>
+				<jointColumn>LINE_</jointColumn>
+				<jointLength>2</jointLength>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>dh!dhchdbb</id>
+		<title>订货出货对比表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/订货/订货出货对比表.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select a.NAME_,a.DHNO_+''+a.LINE_ as DH_,a.PZNO_,a.CDNM_,a.GGNO_,a.YUNY_,a.FUDW_,a.FUZM_,a.FUFM_,a.HOUU_,a.KUAN_,a.CANG_,a.QIXN_,a.DDNM_,a.FACE_,a.HTDJ_,a.HTZL_,sum(isnull(d.CHZL_,0)) as CHZL_,HTZL_- sum(isnull(d.CHZL_,0)) as HTC_
+				from SINO_V_DHHTB a left join
+				(select c.CHRI_,b.DHNO_,b.LINE_,sum(b.CHZL_) as CHZL_ from sino_zng1tp b left join SINO_ZXZS c on b.ZXZSTP_=c.ID_ where c.STAT_='1' group by c.CHRI_,b.DHNO_,b.LINE_) d
+				on a.DHNO_=d.DHNO_ and a.LINE_=d.LINE_ where (a.DHNO_ like 'D%' or a.DHNO_ like 'E%') AND#1#
+				group by a.DHNO_,a.LINE_,a.NAME_,a.PZNO_,a.CDNM_,a.GGNO_,a.YUNY_,a.FUDW_,a.FUZM_,a.FUFM_,a.HOUU_,a.KUAN_,a.CANG_,a.QIXN_,a.DDNM_,a.FACE_,a.HTDJ_,a.HTZL_
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>交货期</name>
+				<column>a.JHQI_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>出货期</name>
+				<column>d.CHRI_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name></name>
+				<column></column>
+				<type></type>
+				<opt></opt>
+				<required></required>
+			</param>
+			<param>
+				<name>订货No</name>
+				<column>a.DHNO_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>7</length>
+				<jointChar>-</jointChar>
+				<jointColumn>a.LINE_</jointColumn>
+				<jointLength>2</jointLength>
+			</param>
+			<param>
+				<name>用户代码</name>
+				<column>a.USER_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>
+			<param>
+				<name>业务员</name>
+				<column>a.DDNM_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>8</length>
+			</param>
+			<param>
+				<name>合同类别</name>
+				<column>a.HTLB_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<select>
+				<![CDATA[
+				<option value="">全部</option>
+				<option value="S">剪切板</option>
+				<option value="C">钢卷</option>
+				]]>
+				</select>
+				<required>false</required>
+				<length>8</length>
+			</param>
+		</params>
+	</entry>
+</root>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entries>
+	<entry id="menu1" name="菜单查询">
+		<sql><![CDATA[
+	select * from COCO_MENU where#1
+	]]>
+		</sql>
+		<description>查询框架测试
+		</description>
+		<valid>true</valid>
+		<excel>false</excel>
+		<metas>
+			<meta id="id" expr="ID_" label="菜单编号" orderable="true" />
+			<meta id="name" expr="NAME_" label="菜单名称" orderable="true" />
+		</metas>
+		<params>
+			<param id="name">
+				<column>NAME_</column>
+				<label>菜单名称</label>
+				<area value="1" />
+				<type>java.lang.String</type>
+			</param>
+		</params>
+	</entry>
+</entries>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<entry>
+		<id>cgyeTable</id>
+		<title>采购余额表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/采购/采购余额表.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select SSNO_,SSNM_,ZZSD_,ZZSM_,HTNO_,LINE_,QYRI_,HTDT_,ZZGG_,ZRGG_,cast(HOUU_ as varchar),cast(KUAN_ as varchar),HTZL_,DHSL_,HTZL_-CASE WHEN DHSL_ IS NOT NULL AND DHSL_ > 0 THEN DHSL_ ELSE 0 END,FPDJ_,FACE_,HTDJ_,ABBR_
+				 from SINO_WWHTTP where#1# order by CREA_ DESC
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>签约日期</name>
+				<column>QYRI_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>尺寸.厚</name>
+				<column>HOUU_</column>
+				<type>int</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>5</length>
+			</param>
+			<param>
+				<name>尺寸.宽</name>
+				<column>KUAN_</column>
+				<type>int</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>7</length>
+			</param>
+			<param>
+				<name>签约状态</name>
+				<column>QYWL_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<select>
+				<![CDATA[
+				<option value="">全部</option>
+				<option value="0">未完成</option>
+				<option value="1">已完成</option>
+				]]>
+				</select>
+				<required>false</required>
+				<length>8</length>
+			</param>
+			<param>
+				<name>供应商合同NO</name>
+				<column>HTNO_</column>
+				<type>String</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>7</length>
+				<jointChar>-</jointChar>
+				<jointColumn>LINE_</jointColumn>
+				<jointLength>3</jointLength>
+			</param>
+		</params>
+	</entry>
+</root>

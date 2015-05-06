@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	<!-- 装箱指示业务 -->
+	<bean id="com.quanta.sino.ch.dao.api.IZng1DAO" class="com.quanta.sino.ch.dao.Zng1DAO">
+		<property name="dao" ref="dao" />
+		<property name="jt" ref="jdbcTemplate" />
+	</bean>
+	<bean id="com.quanta.sino.ch.dao.api.IZng2DAO" class="com.quanta.sino.ch.dao.Zng2DAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="com.quanta.sino.ch.dao.api.IZxzsDAO" class="com.quanta.sino.ch.dao.ZxzsDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="com.quanta.sino.ch.bo.api.IZxzsBO" class="com.quanta.sino.ch.bo.ZxzsBO">
+        <property name="seqBo" ref="com.coco.sys.bo.api.ISeqBO"/>
+        <property name="dhBo" ref="com.quanta.sino.dh.bo.api.IDhBO"/>
+        <property name="cbo" ref="com.quanta.sino.yygl.bo.api.IChlldBO"/>
+        <property name="codeBo" ref="com.coco.sys.bo.api.ICodeBO"/>
+        <property name="jczmsBO" ref="com.quanta.sino.ch.bo.api.IJczmsBO"/>
+        <property name="zpbo" ref="com.quanta.sino.etl.bo.api.IZpBO"/>
+         <property name="zng1DAO" ref="com.quanta.sino.ch.dao.api.IZng1DAO"/>
+        <property name="zng2DAO" ref="com.quanta.sino.ch.dao.api.IZng2DAO"/>
+        <property name="yongBo" ref="com.quanta.sino.cmn.bo.api.IYongBO"/>
+        <property name="zxzsDAO" ref="com.quanta.sino.ch.dao.api.IZxzsDAO"/>
+        <property name="khfkBo" ref="com.quanta.sino.yszk.bo.api.IKhfkBO"/>
+        <property name="fkfpBO" ref="com.quanta.sino.yszk.bo.api.IFkfpBO"/>
+        <property name="cmnBO" ref="com.quanta.sino.cmn.bo.api.ICmnBO"/>
+	</bean>
+
+	<!-- 出货实绩业务 -->
+	<bean id="com.quanta.sino.ch.dao.api.IChuhDAO" class="com.quanta.sino.ch.dao.ChuhDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="com.quanta.sino.ch.bo.api.IZxdzBO" class="com.quanta.sino.ch.bo.ZxdzBO">
+		<property name="dao" ref="com.quanta.sino.ch.dao.api.IChuhDAO" />
+		<property name="bo" ref="com.quanta.sino.ch.bo.api.IZxzsBO" />
+		<property name="zpbo" ref="com.quanta.sino.etl.bo.api.IZpBO"/>
+		<property name="dhBo" ref="com.quanta.sino.dh.bo.api.IDhBO"/>
+		<property name="zng1DAO" ref="com.quanta.sino.ch.dao.api.IZng1DAO"/>
+		<property name="jczmBo" ref="com.quanta.sino.ch.bo.api.IJczmsBO"/>
+		<property name="yszkBO" ref="com.quanta.sino.yszk.bo.api.IFkfpBO"/>
+		<property name="khyfBO" ref="com.quanta.sino.yygl.bo.api.IKhyfBO"/>
+		<property name="codeBO" ref="com.coco.sys.bo.api.ICodeBO"/>
+		<property name="zxzsDAO" ref="com.quanta.sino.ch.dao.api.IZxzsDAO"/>
+		<property name="yongBO" ref="com.quanta.sino.cmn.bo.api.IYongBO"/>
+		<property name="zng2DAO" ref="com.quanta.sino.ch.dao.api.IZng2DAO"/>
+		<property name="attachmentBO" ref="com.coco.sys.bo.api.IAttachmentBO"/>
+	</bean>
+	
+	<!-- 退货业务 -->
+	<bean id="com.quanta.sino.ch.dao.api.IThDAO" class="com.quanta.sino.ch.dao.ThDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="com.quanta.sino.ch.bo.api.IThBO" class="com.quanta.sino.ch.bo.ThBO">
+		<property name="dao" ref="com.quanta.sino.ch.dao.api.IThDAO" />
+		<property name="tsBo" ref="com.quanta.sino.ch.bo.api.ITsBO" />
+		<property name="zsBo" ref="com.quanta.sino.ch.bo.api.IZxzsBO" />
+		<property name="zpBo" ref="com.quanta.sino.etl.bo.api.IZpBO" />
+		<property name="dhBo" ref="com.quanta.sino.dh.bo.api.IDhBO" />
+	</bean>
+	
+	<!-- 投诉业务 -->
+	<bean id="com.quanta.sino.ch.dao.api.ITsDAO" class="com.quanta.sino.ch.dao.TsDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="com.quanta.sino.ch.bo.api.ITsBO" class="com.quanta.sino.ch.bo.TsBO">
+		<property name="dao" ref="com.quanta.sino.ch.dao.api.ITsDAO" />
+		<property name="zpBo" ref="com.quanta.sino.etl.bo.api.IZpBO"/>
+		<property name="zng2DAO" ref="com.quanta.sino.ch.dao.api.IZng2DAO"/>
+	</bean>
+	
+	<!-- 检查证明书业务 -->
+	<bean id="com.quanta.sino.ch.dao.api.IJczmsDAO" class="com.quanta.sino.ch.dao.JczmsDAO">
+		<property name="dao" ref="dao" />
+		<property name="jt" ref="jdbcTemplate" />
+	</bean>
+	<bean id="com.quanta.sino.ch.bo.api.IJczmsBO" class="com.quanta.sino.ch.bo.JczmsBO">
+		<property name="dao" ref="com.quanta.sino.ch.dao.api.IJczmsDAO" />
+		<property name="codeBO" ref="com.coco.sys.bo.api.ICodeBO" />
+		<property name="zpBO" ref="com.quanta.sino.etl.bo.api.IZpBO" />
+		<property name="ycaitpBO" ref="com.quanta.sino.ycai.bo.api.IYcaitpBO" />
+		<property name="zxzsBO" ref="com.quanta.sino.ch.bo.api.IZxzsBO" />
+		<property name="dhBO" ref="com.quanta.sino.dh.bo.api.IDhBO" />
+		<property name="yongBO" ref="com.quanta.sino.cmn.bo.api.IYongBO" />
+	</bean>
+	
+	<!-- 送货单管理 -->
+	<bean id="com.quanta.sino.ch.bo.api.IShdBO" class="com.quanta.sino.ch.bo.ShdBO">
+	    <property name="zpbo" ref="com.quanta.sino.etl.bo.api.IZpBO"/>
+	    <property name="dao" ref="com.quanta.sino.ch.dao.api.IZng1DAO"/>
+	    <property name="dhBo" ref="com.quanta.sino.dh.bo.api.IDhBO"/>
+	    <property name="chuhDAO" ref="com.quanta.sino.ch.dao.api.IChuhDAO"/>
+	    <property name="khyfBO" ref="com.quanta.sino.yygl.bo.api.IKhyfBO"/>
+	    <property name="yszkBO" ref="com.quanta.sino.yszk.bo.api.IFkfpBO"/>
+	    <property name="codeBO" ref="com.coco.sys.bo.api.ICodeBO"/>
+	     <property name="zxzsDAO" ref="com.quanta.sino.ch.dao.api.IZxzsDAO"/>
+	</bean>
+	
+	<!-- 包装清单管理 -->
+	<bean id="com.quanta.sino.ch.bo.api.IBzqdBO" class="com.quanta.sino.ch.bo.BzqdBO">
+	  <property name="dhBo" ref="com.quanta.sino.dh.bo.api.IDhBO" />
+	  <property name="zsBo" ref="com.quanta.sino.ch.bo.api.IZxzsBO" />
+	  <property name="codeBO" ref="com.coco.sys.bo.api.ICodeBO" />
+	  <property name="zng2DAO" ref="com.quanta.sino.ch.dao.api.IZng2DAO" />
+	</bean>
+</beans>

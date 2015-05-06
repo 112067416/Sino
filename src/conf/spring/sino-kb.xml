@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+    <bean id="com.quanta.sino.kb.dao.api.IKbDAO" class="com.quanta.sino.kb.dao.KbDAO">
+        <property name="dao" ref="dao" />
+    </bean>
+    <bean id="com.quanta.sino.kb.bo.api.IKbBO" class="com.quanta.sino.kb.bo.KbBO">
+        <property name="dao" ref="com.quanta.sino.kb.dao.api.IKbDAO" />
+        <property name="dhBo" ref="com.quanta.sino.dh.bo.api.IDhBO" />
+        <property name="zpBo" ref="com.quanta.sino.etl.bo.api.IZpBO" />
+    </bean>
+</beans>

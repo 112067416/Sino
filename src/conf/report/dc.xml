@@ -1,0 +1,560 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<entry>
+		<id>dcljylbTable</id>
+		<title>堆场累计一览表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/堆场/堆场累计一览.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select CAST('#DUIC_#' AS VARCHAR(1)) AS DUIC,CONVERT(VARCHAR(12), GETDATE(), 111) AS SYSDATE	
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select duic_,pzno_,chan_,sum(zpzl_) from SINO_ZPNGTP where scbj_='0' and#1# group by duic_,pzno_,chan_
+    			union  
+    			select duic_,pzno_,chan_,sum(zpzl_) from sino_ycaitp where scbj_='0' and#1# group by duic_,pzno_,chan_ 
+				]]></sql>
+				<newline>9,8</newline>
+			</module>
+		</modules>
+			<params>
+				<name>堆场</name>
+				<column>a.DUIC_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<select>
+				<![CDATA[
+				<option value="A">A</option>
+				<option value="B">B</option>
+				<option value="X">X</option>
+				<option value="C">C</option>
+				<option value="D">D</option>
+				<option value="E">E</option>
+				<option value="F">F</option>
+				<option value="G">G</option>
+				]]>
+				</select>
+				<required>true</required>
+			</params>
+	</entry>
+	<entry>
+		<id>dczkylb1Table</id>
+		<title>堆场状况一览表(ABX)</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/堆场/堆场状况一览（A,B,X）.xls]]></excel>
+		<sheet-index>0,1,2</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select CAST('#a.DUIC_#' AS VARCHAR(1)) AS DUIC,CONVERT(VARCHAR(12), GETDATE(), 111) AS cldm		
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				SELECT * FROM (select a.kw_ KW,a.deng_ DENG,a.zzsd_,a.zzsd_+'-'+a.jbno_ JBNO ,cast(a.XPHO_ as varchar(8)) XPHO,cast(a.XPKN_ as varchar(8)) XPKN,
+				a.FACE_ FACE ,a.CHAN_ CHAN ,a.ZPZL_ ZPZL,a.YCBR_ YCBR,a.ABBR_ ABBR,a.YUNY_ YUNY ,a.DHNO_ DHNO,b.JHQI_ JHQI,a.ZTBJ_ ZTBJ,a.ZSNO_ ZSNO ,
+				convert(varchar(10), a.DUIB_, 111) DUIB ,a.ZZNY_ ZZNY from sino_ycaitp A left join SINO_DHUOTP B on a.dhno_=b.DHNO_+b.line_ 
+				WHERE a.scbj_='0' and#1#
+				UNION 
+				SELECT '合计：','','' ,'','','','','',sum(zpzl_),'','','','',NULL,'','',NULL,NULL from sino_YCAItp A  LEFT JOIN SINO_DHUOTP B ON A.DHNO_=B.DHNO_+B.LINE_   WHERE scbj_='0' and#1#
+				)TT ORDER BY TT.KW
+				]]></sql>
+			</module>				
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+				SELECT A.PZNO_,CHAN_,ZZSD_,sum(zpzl_) from sino_ycaitp A LEFT JOIN SINO_DHUOTP B ON A.DHNO_=B.DHNO_+B.LINE_ where scbj_='0' and#1# group by A.pzno_ ,CHAN_,ZZSD_
+				UNION 
+				SELECT '合计：','','',sum(zpzl_) from sino_ycaitp A  LEFT JOIN SINO_DHUOTP B ON A.DHNO_=B.DHNO_+B.LINE_  where scbj_='0' and #1# 
+				]]></sql>
+			</module>		
+			<module>
+				<name>C</name>
+				<sql><![CDATA[
+				SELECT A.PZNO_,CHAN_,ZZSD_,(case when spbh_='1' then 'h < 0.3' when spbh_='2' then '0.30 <= h < 0.5' when spbh_='3' then '0.5 <= h < 1.0' end ),sum(zpzl_) 
+				from sino_ycaitp A LEFT JOIN SINO_DHUOTP B ON A.DHNO_=B.DHNO_+B.LINE_ where scbj_='0' and#1# group by A.pzno_,CHAN_,spbh_,ZZSD_
+				UNION
+				SELECT '合计：','','','',sum(zpzl_) from  sino_ycaitp A  LEFT JOIN SINO_DHUOTP B ON A.DHNO_=B.DHNO_+B.LINE_  where scbj_='0' and#1#
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>堆场</name>
+				<column>a.DUIC_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<select>
+				<![CDATA[
+				<option value="A">A</option>
+				<option value="B">B</option>
+				<option value="X">X</option>
+				]]>
+				</select>
+				<required>true</required>
+			</param>
+			<param>
+				<name>原材用户略称</name>
+				<column>A.YCBR_</column>
+				<type>string</type>
+				<opt>like%</opt>
+				<required>false</required>
+				<length>20</length>
+			</param>
+			<param>
+       			<name>订货NO</name>
+				<column>B.DHNO_</column>
+				<type>String</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>7</length>
+				<jointChar>-</jointChar>
+				<jointColumn>B.LINE_</jointColumn>
+				<jointLength>2</jointLength>
+			</param>
+			<param>
+				<name>尺寸厚</name>
+				<column>a.XPHO_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>5</length>
+			</param>
+			<param>
+				<name>运用规格</name>
+				<column>a.YUNY_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>8</length>
+			</param>
+			<param>
+				<name>表面</name>
+				<column>a.FACE_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>dczkylb1Table_ls</id>
+		<title>堆场历史状况一览表(ABX)</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/堆场/堆场状况一览（A,B,X）.xls]]></excel>
+		<sheet-index>0,1,2</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select CAST('#DUIC#' AS VARCHAR(1)) AS DUIC,CONVERT(VARCHAR(12), GETDATE(), 111) AS SYSDATE,SUBSTRING(CAST('#NY#' AS VARCHAR),1,4)+'年'+SUBSTRING(CAST('#NY#' AS VARCHAR),5,2)+'月' as cldm	
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				SELECT * FROM (select  KW, DENG,ZZSD, ZZSD+'-'+JBNO JBNO , XPHO, XPKN,
+			  	FACE ,CHAN ,ZPZL,YCBR,ABBR,YUNY ,DHNO,JHQI,ZTBJ, ZSNO ,
+			  	convert(varchar(10), DUIB, 111) as DUIB ,ZZNY 
+				from SINO_RPT_DC    
+				WHERE #1# 
+				UNION 
+				SELECT '合计：','','' ,'',NULL,NULL,'','',sum(zpzl),'','','','',NULL,'','',NULL,NULL from SINO_RPT_DC  
+			 	WHERE #1#
+				)TT ORDER BY TT.KW
+				]]></sql>
+			</module>				
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+				SELECT PZNO,CHAN,ZZSD,sum(zpzl) 
+				from SINO_RPT_DC 
+				where #1# group by pzno ,CHAN,ZZSD
+				UNION 
+				SELECT '合计：','','',sum(zpzl) from SINO_RPT_DC where #1# 
+				]]></sql>
+			</module>		
+			<module>
+				<name>C</name>
+				<sql><![CDATA[
+				SELECT PZNO,CHAN,ZZSD,(case when spbh='1' then 'h < 0.3' when spbh='2' then '0.30 <= h < 0.5' when spbh='3' then '0.5 <= h < 1.0' end ),sum(zpzl) 
+				from SINO_RPT_DC where #1# group by pzno,CHAN,spbh,ZZSD
+				UNION
+				SELECT '合计：','','','',sum(zpzl) from  SINO_RPT_DC where #1#
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>年月(YYYYMM)</name>
+				<column>NY</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>TRUE</required>
+				<length>6</length>
+			</param>
+			<param>
+				<name>堆场</name>
+				<column>DUIC</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<select>
+				<![CDATA[
+				<option value="A">A</option>
+				<option value="B">B</option>
+				<option value="X">X</option>
+
+				]]>
+				</select>
+				<required>true</required>
+			</param>
+			<param>
+				<name>原材用户略称</name>
+				<column>YCBR</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>15</length>
+			</param>
+			<param>
+       			<name>订货NO</name>
+				<column>DHNO</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>7</length>
+		
+			</param>
+			<param>
+				<name>尺寸厚</name>
+				<column>XPHO</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>5</length>
+			</param>
+			<param>
+				<name>运用规格</name>
+				<column>YUNY</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>8</length>
+			</param>
+			<param>
+				<name>表面</name>
+				<column>FACE</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>dczkylb2Table</id>
+		<title>堆场状况一览表(CDEFG)</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/堆场/堆场状况一览（C,D,E,F,G）.xls]]></excel>
+		<sheet-index>0,1,2,3</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select CAST('#a.DUIC_#' AS VARCHAR(1)) AS DUIC,CONVERT(VARCHAR(12), GETDATE(), 111) AS cldm	
+		]]></variable>
+		<modules>
+		<module>
+				<name>A</name>
+				<sql><![CDATA[
+				SELECT * FROM (select a.kw_,a.deng_,A.ZZSD_,(CASE WHEN a.PLQF_ IS NULL then ' ' else A.PLQF_ END) +A.ZZSD_+'-'+a.jbno_ JBNO ,
+				cast(a.XPHO_ as varchar(8)) XPHO,cast(a.XPKN_ as varchar(8)) XPKN,(CASE WHEN  a.XPCN_ IS NULL then 'C' else CAST(a.XPCN_ as varchar(8)) END) XPCN,
+				A.DMFX_,a.FACE_,a.CHAN_,A.PLQF_,a.ZPZL_,a.ABBR_,a.YUNY_,
+				a.DHNO_,b.JHQI_,a.ZTBJ_,a.BLBJ_,a.ZSNO_ ,a.DUIB_,a.ZZNY_ 
+				from SINO_ZPNGTP A LEFT JOIN SINO_DHUOTP B ON a.dhno_=b.DHNO_+b.line_  
+				WHERE a.scbj_='0' and #1#
+				UNION
+				SELECT '合计：','','' ,'',NULL,NULL,'','','','','',sum(zpzl_),'','','',NULL,'','','',NULL,NULL from SINO_ZPNGTP A LEFT JOIN SINO_DHUOTP B ON a.dhno_=b.DHNO_+b.line_ WHERE A.SCBJ_='0' AND #1#
+			    )TT ORDER BY KW_
+				]]></sql>
+		</module>
+		<module>
+				<name>B</name>
+				<sql><![CDATA[
+				SELECT a.PZNO_,A.CHAN_,ZZSD_,sum(zpzl_) from sino_zpngtp A left join SINO_DHUOTP b on A.DHNO_ = b.DHNO_+b.LINE_ where scbj_='0' AND #1#  group by A.pzno_ ,CHAN_,ZZSD_
+				UNION
+				SELECT '合计：','','',SUM(zpzl_) from SINO_ZPNGTP A LEFT JOIN SINO_DHUOTP B ON a.dhno_=b.DHNO_+b.line_ where scbj_='0' and #1#			
+			]]></sql>
+		</module>		
+		<module>
+				<name>C</name>
+				<sql><![CDATA[
+				SELECT A.PZNO_,CHAN_,ZZSD_,(case when spbh_='1' then 'h < 0.3' when spbh_='2' then '0.30 <= h < 0.5' when spbh_='3' then '0.5 <= h < 1.0' end ),sum(zpzl_) 
+				from sino_zpngtp A LEFT JOIN SINO_DHUOTP B ON A.DHNO_=B.DHNO_+B.LINE_ where a.scbj_='0' AND #1#  group by A.pzno_,CHAN_,spbh_,ZZSD_
+				UNION 
+				SELECT '合计','','','',sum(zpzl_) 
+				from sino_zpngtp A LEFT JOIN SINO_DHUOTP B ON a.dhno_=b.DHNO_+b.line_  where a.scbj_='0' AND #1#	
+			]]></sql>
+		</module>
+		<module>
+				<name>D</name>
+				<sql><![CDATA[
+				SELECT A.abbr_,A.PZNO_,CHAN_,sum(zpzl_) 
+				from sino_zpngtp A LEFT JOIN SINO_DHUOTP B ON A.DHNO_=B.DHNO_+B.LINE_ 
+				where scbj_='0' and a.DHNO_ is not null and A.CHAN_='1' and #1# group by A.abbr_ ,CHAN_,A.PZNO_
+				UNION
+				SELECT '合计：','','',sum(zpzl_) 
+				from sino_zpngtp A LEFT JOIN SINO_DHUOTP B ON A.DHNO_=B.DHNO_+B.LINE_ 
+				where scbj_='0' and a.dhno_ is not null  and A.CHAN_='1' and #1#
+				]]></sql>
+		</module>
+		</modules>
+		<params>
+			<param>
+				<name>堆场</name>
+				<column>a.DUIC_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<select>
+				<![CDATA[
+				<option value="C">C</option>
+				<option value="D">D</option>
+				<option value="E">E</option>
+				<option value="F">F</option>
+				<option value="G">G</option>
+				]]>
+				</select>
+				<required>true</required>
+			</param>
+			<param>
+				<name>用户代码</name>
+				<column>b.USER_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>
+				<param>
+				<name>交货期</name>
+				<column>b.jhqi_</column>
+				<type>date</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>10</length>
+			</param>
+			<param>
+				<name>用户略称</name>
+				<column>a.abbr_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>15</length>
+			</param>
+			<param>
+				<name>订货NO</name>
+				<column>B.DHNO_</column>
+				<type>String</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>7</length>
+				<jointChar>-</jointChar>
+				<jointColumn>B.LINE_</jointColumn>
+				<jointLength>2</jointLength>
+			</param>
+			<param>
+				<name>尺寸厚</name>
+				<column>a.XPHO_</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>5</length>
+			</param>
+			<param>
+				<name>运用规格</name>
+				<column>a.YUNY_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>7</length>
+			</param>
+			<param>
+				<name>表面</name>
+				<column>a.FACE_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>3</length>
+			</param>
+					<param>
+				<name>附着量正面</name>
+				<column>FUZM_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>
+			<param>
+				<name>附着量反面</name>
+				<column>FUFM_</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>		
+		</params>
+	</entry>
+	<entry>
+		<id>dczkylb2Table_ls</id>
+		<title>堆场状况一览表(CDEFG)</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/堆场/堆场状况一览（C,D,E,F,G）.xls]]></excel>
+		<sheet-index>0,1,2,3</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select CAST('#DUIC#' AS VARCHAR(1)) AS DUIC,CONVERT(VARCHAR(12), GETDATE(), 111) AS SYSDATE,SUBSTRING(CAST('#NY#' AS VARCHAR),1,4)+'年'+SUBSTRING(CAST('#NY#' AS VARCHAR),5,2)+'月' as cldm
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				SELECT * FROM (select kw,deng,ZZSD,(CASE WHEN PILE IS NULL then ' ' else PILE END) +ZZSD+'-'+jbno AS JBNO ,
+				XPHO,XPKN,CANG,
+				DMFX,FACE,CHAN,PILE,ZPZL,ABBR,YUNY,
+				DHNO,JHQI,ZTBJ,BLBJ,ZSNO ,DUIB,ZZNY 
+				from SINO_RPT_DC  
+				WHERE  #1#
+				UNION
+				SELECT '合计：','','' ,'',NULL,NULL,NULL,'','','','',sum(zpzl),'','','',NULL,'','','',NULL,NULL from SINO_RPT_DC WHERE #1#
+			    )TT ORDER BY KW
+				]]></sql>
+			</module>
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+				SELECT PZNO,CHAN,ZZSD,sum(zpzl) 
+				from SINO_RPT_DC
+				where  #1# 
+				 group by pzno ,CHAN,ZZSD
+				UNION
+				SELECT '合计：','','',SUM(zpzl) from SINO_RPT_DC where #1#
+				]]></sql>
+			</module>		
+			<module>
+				<name>C</name>
+				<sql><![CDATA[
+				SELECT PZNO,CHAN,ZZSD,(case when spbh='1' then 'h < 0.3' when spbh='2' then '0.30 <= h < 0.5' when spbh='3' then '0.5 <= h < 1.0' end ),
+				sum(zpzl) 
+				from SINO_RPT_DC where #1#  group by pzno,CHAN,spbh,ZZSD
+				UNION 
+				SELECT '合计','','','',sum(zpzl) 
+				from SINO_RPT_DC  where #1#
+			]]></sql>
+			</module>
+			<module>
+				<name>D</name>
+				<sql><![CDATA[
+				SELECT abbr,PZNO,CHAN,sum(zpzl) 
+				from SINO_RPT_DC 
+				where DHNO is not null and CHAN='1' and #1# group by abbr ,CHAN,PZNO
+				UNION
+				SELECT '合计：','','',sum(zpzl) 
+				from SINO_RPT_DC
+				where dhno is not null  and CHAN='1' and #1#
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>年月(YYYYMM)</name>
+				<column>NY</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>TRUE</required>
+				<length>6</length>
+			</param>
+			<param>
+				<name>堆场</name>
+				<column>DUIC</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<select>
+				<![CDATA[
+				<option value="C">C</option>
+				<option value="D">D</option>
+				<option value="E">E</option>
+				<option value="F">F</option>
+				<option value="G">G</option>
+				]]>
+				</select>
+				<required>true</required>
+			</param>
+			<param>
+				<name>用户略称</name>
+				<column>abbr</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>15</length>
+			</param>
+			<param>
+				<name>订货NO</name>
+				<column>DHNO</column>
+				<type>String</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>7</length>
+			</param>
+				<param>
+				<name>尺寸厚</name>
+				<column>XPHO</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+				<length>5</length>
+			</param>
+			<param>
+				<name>运用规格</name>
+				<column>YUNY</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>7</length>
+			</param>
+			<param>
+				<name>表面</name>
+				<column>FACE</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>3</length>
+			</param>
+			<param>
+				<name>附着量正面</name>
+				<column>FUZM</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>
+			<param>
+				<name>附着量反面</name>
+				<column>FUFM</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+				<length>4</length>
+			</param>		
+		</params>
+	</entry>	
+</root>

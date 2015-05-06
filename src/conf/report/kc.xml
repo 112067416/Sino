@@ -1,0 +1,725 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<entry>
+		<id>zpkctzTable</id>
+		<title>成品仓库台帐</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/制品库存/成品仓库台帐.xls]]></excel>
+		<sheet-index>0,1,2,3,4,5,6,7,8</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		SELECT CONVERT(VARCHAR(12), GETDATE(), 111) AS cldm,SUBSTRING(CONVERT(VARCHAR(12), GETDATE(), 111),0,5) AS YYYY
+		]]></variable>
+		<modules>
+		<module>
+				<name>A</name>
+				<sql><![CDATA[
+			SELECT DATEPART(mm,riqi),DATEPART(dd,riqi),'入库/出库',substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBCH1/1000.0,QBYBCH1/1000.0,QBBSCH1/1000.0,substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBFH1/1000.0,QBYBFH1/1000.0,QBBSFH1/1000.0,QBNZW/1000.0,QBWZN/1000.0,QBJC1/1000.0,QBYBJC1/1000.0,QBBSJC1/1000.0
+                     FROM SINO_V_CPCKTZ_JC1  
+                     
+  union
+  
+ SELECT NULL,NULL, '合计：' ,'',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,SUM(QBNZW)/1000.0,SUM(QBWZN)/1000.0,null,null,null                   
+   FROM SINO_V_CPCKTZ_JC1 
+				]]></sql>
+			</module>
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+		SELECT DATEPART(mm,riqi),DATEPART(dd,riqi),'入库/出库',substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBCH1/1000.0,QBYBCH1/1000.0,QBBSCH1/1000.0,substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBFH1/1000.0,QBYBFH1/1000.0,QBBSFH1/1000.0,QBNZW/1000.0,QBWZN/1000.0,QBJC1/1000.0,QBYBJC1/1000.0,QBBSJC1/1000.0
+                     FROM SINO_V_CPCKTZ_JC2  
+                     
+  union
+  
+ SELECT NULL,NULL, '合计：' ,'',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,SUM(QBNZW)/1000.0,SUM(QBWZN)/1000.0,null,null,null                   
+   FROM SINO_V_CPCKTZ_JC2 
+				]]></sql>
+			</module>
+			<module>
+				<name>C</name>
+				<sql><![CDATA[
+		SELECT DATEPART(mm,riqi),DATEPART(dd,riqi),'入库/出库',substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBCH1/1000.0,QBYBCH1/1000.0,QBBSCH1/1000.0,substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBFH1/1000.0,QBYBFH1/1000.0,QBBSFH1/1000.0,QBNZW/1000.0,QBWZN/1000.0,QBJC1/1000.0,QBYBJC1/1000.0,QBBSJC1/1000.0
+                     FROM SINO_V_CPCKTZ_JC3  
+                     
+  union
+  
+ SELECT NULL,NULL, '合计：' ,'',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,SUM(QBNZW)/1000.0,SUM(QBWZN)/1000.0,null,null,null                   
+   FROM SINO_V_CPCKTZ_JC3  
+				]]></sql>
+			</module>
+			<module>
+				<name>D</name>
+				<sql><![CDATA[
+SELECT DATEPART(mm,riqi),DATEPART(dd,riqi),'产出/领用',substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBCH1/1000.0,QBYBCH1/1000.0,QBBSCH1/1000.0,substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBFH1/1000.0,QBYBFH1/1000.0,QBBSFH1/1000.0,QBJC1/1000.0,QBYBJC1/1000.0,QBBSJC1/1000.0
+                     FROM SINO_V_CPCKTZ_ZJP1  
+  union
+  
+ SELECT NULL,NULL, '合计：' ,'',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,null,null,null                   
+   FROM SINO_V_CPCKTZ_ZJP1
+				]]></sql>
+			</module>
+			<module>
+				<name>E</name>
+				<sql><![CDATA[
+SELECT DATEPART(mm,riqi),DATEPART(dd,riqi),'产出/领用',substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBCH1/1000.0,QBYBCH1/1000.0,QBBSCH1/1000.0,substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBFH1/1000.0,QBYBFH1/1000.0,QBBSFH1/1000.0,QBJC1/1000.0,QBYBJC1/1000.0,QBBSJC1/1000.0
+                     FROM SINO_V_CPCKTZ_ZJP2  
+  union
+  
+ SELECT NULL,NULL, '合计：' ,'',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,null,null,null                   
+   FROM SINO_V_CPCKTZ_ZJP2
+				]]></sql>
+			</module>
+			<module>
+				<name>F</name>
+				<sql><![CDATA[
+SELECT DATEPART(mm,riqi),DATEPART(dd,riqi),'产出/领用',substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBCH1/1000.0,QBYBCH1/1000.0,QBBSCH1/1000.0,substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBFH1/1000.0,QBYBFH1/1000.0,QBBSFH1/1000.0,QBJC1/1000.0,QBYBJC1/1000.0,QBBSJC1/1000.0
+                     FROM SINO_V_CPCKTZ_ZJP3  
+  union
+  
+ SELECT NULL,NULL, '合计：' ,'',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,null,null,null                   
+   FROM SINO_V_CPCKTZ_ZJP3
+				]]></sql>
+			</module>
+			<module>
+				<name>G</name>
+				<sql><![CDATA[
+  SELECT DATEPART(mm,riqi),DATEPART(dd,riqi),'入库/出库',substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBCH1/1000.0,QBYBCH1/1000.0,QBBSCH1/1000.0,CHE/1000.0,QBYBCHE/1000.0,QBBSCHE/1000.0,substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBFH1/1000.0,QBYBFH1/1000.0,QBBSFH1/1000.0,QBNZW/1000.0,QBWZN/1000.0,FHE/1000.0,QBYBFHE/1000.0,QBBSFHE/1000.0,QBJC1/1000.0,QBYBJC1/1000.0,QBBSJC1/1000.0
+                     FROM SINO_V_CPCKTZ_QB1  
+ UNION
+    SELECT NULL,NULL, '合计：' ,'',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,SUM(CHE)/1000.0,SUM(QBYBCHE)/1000.0,SUM(QBBSCHE)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,SUM(QBNZW)/1000.0,SUM(QBWZN)/1000.0,SUM(FHE)/1000.0,SUM(QBYBFHE)/1000.0,SUM(QBBSFHE)/1000.0,null,null,null                   
+   FROM SINO_V_CPCKTZ_QB1
+
+				]]></sql>
+				</module>
+				<module>
+				<name>H</name>
+				<sql><![CDATA[
+  SELECT DATEPART(mm,riqi),DATEPART(dd,riqi),'入库/出库',substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBCH1/1000.0,QBYBCH1/1000.0,QBBSCH1/1000.0,CHE/1000.0,QBYBCHE/1000.0,QBBSCHE/1000.0,substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBFH1/1000.0,QBYBFH1/1000.0,QBBSFH1/1000.0,QBNZW/1000.0,QBWZN/1000.0,FHE/1000.0,QBYBFHE/1000.0,QBBSFHE/1000.0,QBJC1/1000.0,QBYBJC1/1000.0,QBBSJC1/1000.0
+                     FROM SINO_V_CPCKTZ_QB2  
+ UNION
+    SELECT NULL,NULL, '合计：' ,'',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,SUM(CHE)/1000.0,SUM(QBYBCHE)/1000.0,SUM(QBBSCHE)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,SUM(QBNZW)/1000.0,SUM(QBWZN)/1000.0,SUM(FHE)/1000.0,SUM(QBYBFHE)/1000.0,SUM(QBBSFHE)/1000.0,null,null,null                   
+   FROM SINO_V_CPCKTZ_QB2
+
+				]]></sql>
+			</module>
+			<module>
+				<name>I</name>
+				<sql><![CDATA[
+  SELECT DATEPART(mm,riqi),DATEPART(dd,riqi),'入库/出库',substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBCH1/1000.0,QBYBCH1/1000.0,QBBSCH1/1000.0,CHE/1000.0,QBYBCHE/1000.0,QBBSCHE/1000.0,substring(CONVERT(varchar(8),riqi,112),3,9),
+  QBFH1/1000.0,QBYBFH1/1000.0,QBBSFH1/1000.0,QBNZW/1000.0,QBWZN/1000.0,FHE/1000.0,QBYBFHE/1000.0,QBBSFHE/1000.0,QBJC1/1000.0,QBYBJC1/1000.0,QBBSJC1/1000.0
+                     FROM SINO_V_CPCKTZ_QB3  
+ UNION
+    SELECT NULL,NULL, '合计：' ,'',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,SUM(CHE)/1000.0,SUM(QBYBCHE)/1000.0,SUM(QBBSCHE)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,SUM(QBNZW)/1000.0,SUM(QBWZN)/1000.0,SUM(FHE)/1000.0,SUM(QBYBFHE)/1000.0,SUM(QBBSFHE)/1000.0,null,null,null                   
+   FROM SINO_V_CPCKTZ_QB3
+  
+				]]></sql>
+			</module>
+			
+		</modules>
+		<params>
+		
+		</params>
+	</entry>
+	<entry>
+		<id>zpkctzTable_ls</id>
+		<title>成品仓库台帐(历史)</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/制品库存/成品仓库台帐.xls]]></excel>
+		<sheet-index>0,1,2,3,4,5,6,7,8</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		SELECT CONVERT(VARCHAR(12), GETDATE(), 111) AS SYSDATE,SUBSTRING(CAST('#NY#' AS VARCHAR),1,4)+'年'+SUBSTRING(CAST('#NY#' AS VARCHAR),5,2)+'月' as cldm,SUBSTRING(CAST('#NY#' AS VARCHAR),1,4) AS YYYY
+		]]></variable>
+		<modules>
+		<module>
+				<name>A</name>
+				<sql><![CDATA[
+  SELECT * FROM ( SELECT DATEPART(mm,riqi) C1,DATEPART(dd,riqi) C2,'入库/出库' C3,substring(CONVERT(varchar(8),riqi,112),3,9) C4,
+  QBCH1/1000.0 C5,QBYBCH1/1000.0 C6,QBBSCH1/1000.0 C7,substring(CONVERT(varchar(8),riqi,112),3,9) C8,
+  QBFH1/1000.0 C9,QBYBFH1/1000.0 C10,QBBSFH1/1000.0 C11,QBNZW/1000.0 C12,QBWZN/1000.0 C13,QBJC1/1000.0 C14,QBYBJC1/1000.0 C15,QBBSJC1/1000.0 C16
+    FROM SINO_RPT_CPCKTZ  
+   WHERE CPLB='C' AND CHOU='1' AND #1# 
+                     
+  union
+  
+ SELECT NULL,NULL, '合计：' ,'',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,SUM(QBNZW)/1000.0,SUM(QBWZN)/1000.0,null,null,null                   
+   FROM SINO_RPT_CPCKTZ 
+   WHERE CPLB='C' AND CHOU='1' AND #1#
+ ) A ORDER BY A.C3 DESC
+   
+				]]></sql>
+			</module>
+		<module>
+				<name>AA</name>
+				<sql><![CDATA[
+ 
+ SELECT BZ_   FROM SINO_TZBZ WHERE BBM_='CPCKTZ' AND SPBH_='1' AND XPZK_='C' AND #1# 
+   
+				]]></sql>
+			</module>
+			<module>
+				<name>B</name>
+				<sql><![CDATA[
+  SELECT * FROM ( SELECT DATEPART(mm,riqi) C1,DATEPART(dd,riqi) C2,'入库/出库' C3,substring(CONVERT(varchar(8),riqi,112),3,9) C4,
+  QBCH1/1000.0 C5,QBYBCH1/1000.0 C6,QBBSCH1/1000.0 C7,substring(CONVERT(varchar(8),riqi,112),3,9) C8,
+  QBFH1/1000.0 C9,QBYBFH1/1000.0 C10,QBBSFH1/1000.0 C11,QBNZW/1000.0 C12,QBWZN/1000.0 C13,QBJC1/1000.0 C14,QBYBJC1/1000.0 C15,QBBSJC1/1000.0 C16
+    FROM SINO_RPT_CPCKTZ  
+   WHERE CPLB='C' AND CHOU='2' AND #1# 
+                     
+  union
+  
+ SELECT NULL,NULL, '合计：' ,'',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,SUM(QBNZW)/1000.0,SUM(QBWZN)/1000.0,null,null,null                   
+   FROM SINO_RPT_CPCKTZ 
+   WHERE CPLB='C' AND CHOU='2' AND #1#
+      
+) A ORDER BY A.C3 DESC
+				]]></sql>
+			</module>
+			
+			<module>
+				<name>BB</name>
+				<sql><![CDATA[
+ 
+ SELECT BZ_   FROM SINO_TZBZ WHERE BBM_='CPCKTZ' AND SPBH_='2' AND XPZK_='C' AND #1# 
+				]]></sql>
+			</module>
+			<module>
+				<name>C</name>
+				<sql><![CDATA[
+  SELECT * FROM ( SELECT DATEPART(mm,riqi) C1,DATEPART(dd,riqi) C2,'入库/出库' C3,substring(CONVERT(varchar(8),riqi,112),3,9) C4,
+  QBCH1/1000.0 C5,QBYBCH1/1000.0 C6,QBBSCH1/1000.0 C7,substring(CONVERT(varchar(8),riqi,112),3,9) C8,
+  QBFH1/1000.0 C9,QBYBFH1/1000.0 C10,QBBSFH1/1000.0 C11,QBNZW/1000.0 C12,QBWZN/1000.0 C13,QBJC1/1000.0 C14,QBYBJC1/1000.0 C15,QBBSJC1/1000.0 C16
+    FROM SINO_RPT_CPCKTZ  
+   WHERE CPLB='C' AND CHOU='3' AND #1# 
+                     
+  union
+  
+ SELECT NULL,NULL, '合计：' ,'',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,SUM(QBNZW)/1000.0,SUM(QBWZN)/1000.0,null,null,null                   
+   FROM SINO_RPT_CPCKTZ 
+   WHERE CPLB='C' AND CHOU='3' AND #1#
+  ) A ORDER BY A.C3 DESC
+				]]></sql>
+			</module>
+		<module>
+				<name>CC</name>
+				<sql><![CDATA[
+ 
+ SELECT BZ_   FROM SINO_TZBZ WHERE BBM_='CPCKTZ' AND SPBH_='3' AND XPZK_='C' AND #1# 
+				]]></sql>
+			</module>
+			<module>
+				<name>D</name>
+				<sql><![CDATA[
+   SELECT * FROM (	SELECT DATEPART(mm,riqi) C1,DATEPART(dd,riqi) C2,'产出/领用' C3,substring(CONVERT(varchar(8),riqi,112),3,9) C4,
+  QBCH1/1000.0 C5,QBYBCH1/1000.0 C6,QBBSCH1/1000.0 C7,substring(CONVERT(varchar(8),riqi,112),3,9) C8,
+  QBFH1/1000.0 C9,QBYBFH1/1000.0 C10,QBBSFH1/1000.0 C11,QBJC1/1000.0 C12,QBYBJC1/1000.0 C13,QBBSJC1/1000.0 C14
+    FROM SINO_RPT_CPCKTZ  
+   WHERE CPLB='Z' AND CHOU='1' AND #1#
+                     
+  union
+  
+ SELECT NULL,NULL, '' ,'合计：',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,null,null,null                   
+   FROM SINO_RPT_CPCKTZ 
+   WHERE CPLB='Z' AND CHOU='1' AND #1#
+  ) A ORDER BY A.C4 
+				]]></sql>
+			</module>
+			<module>
+				<name>DD</name>
+				<sql><![CDATA[ 
+ SELECT BZ_   FROM SINO_TZBZ WHERE BBM_='CPCKTZ' AND SPBH_='1' AND XPZK_='B' AND #1# 
+				]]></sql>
+			</module>
+			<module>
+				<name>E</name>
+				<sql><![CDATA[
+     SELECT * FROM (	SELECT DATEPART(mm,riqi) C1,DATEPART(dd,riqi) C2,'产出/领用' C3,substring(CONVERT(varchar(8),riqi,112),3,9) C4,
+  QBCH1/1000.0 C5,QBYBCH1/1000.0 C6,QBBSCH1/1000.0 C7,substring(CONVERT(varchar(8),riqi,112),3,9) C8,
+  QBFH1/1000.0 C9,QBYBFH1/1000.0 C10,QBBSFH1/1000.0 C11,QBJC1/1000.0 C12,QBYBJC1/1000.0 C13,QBBSJC1/1000.0 C14
+    FROM SINO_RPT_CPCKTZ  
+   WHERE CPLB='Z' AND CHOU='2' AND #1#
+                     
+  union
+  
+ SELECT NULL,NULL, '' ,'合计：',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,null,null,null                   
+   FROM SINO_RPT_CPCKTZ 
+   WHERE CPLB='Z' AND CHOU='2' AND #1#
+ ) A ORDER BY A.C4 
+				]]></sql>
+			</module>
+		<module>
+				<name>EE</name>
+				<sql><![CDATA[ 
+ SELECT BZ_   FROM SINO_TZBZ WHERE BBM_='CPCKTZ' AND SPBH_='2' AND XPZK_='B' AND #1# 
+				]]></sql>
+			</module>
+			<module>
+				<name>F</name>
+				<sql><![CDATA[
+     SELECT * FROM (	SELECT DATEPART(mm,riqi) C1,DATEPART(dd,riqi) C2,'产出/领用' C3,substring(CONVERT(varchar(8),riqi,112),3,9) C4,
+  QBCH1/1000.0 C5,QBYBCH1/1000.0 C6,QBBSCH1/1000.0 C7,substring(CONVERT(varchar(8),riqi,112),3,9) C8,
+  QBFH1/1000.0 C9,QBYBFH1/1000.0 C10,QBBSFH1/1000.0 C11,QBJC1/1000.0 C12,QBYBJC1/1000.0 C13,QBBSJC1/1000.0 C14
+    FROM SINO_RPT_CPCKTZ  
+   WHERE CPLB='Z' AND CHOU='3' AND #1#
+                     
+  union
+  
+ SELECT NULL,NULL, '' ,'合计：',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,null,null,null                   
+   FROM SINO_RPT_CPCKTZ 
+   WHERE CPLB='Z' AND CHOU='3' AND #1#
+) A ORDER BY A.C4 
+				]]></sql>
+			</module>
+		<module>
+				<name>FF</name>
+				<sql><![CDATA[ 
+ SELECT BZ_   FROM SINO_TZBZ WHERE BBM_='CPCKTZ' AND SPBH_='3' AND XPZK_='B' AND #1# 
+				]]></sql>
+			</module>
+			<module>
+				<name>G</name>
+				<sql><![CDATA[
+    SELECT * FROM(SELECT DATEPART(mm,riqi) C1,DATEPART(dd,riqi) C2,'入库/出库' C3,substring(CONVERT(varchar(8),riqi,112),3,9) C4,
+  QBCH1/1000.0 C5,QBYBCH1/1000.0 C6,QBBSCH1/1000.0 C7,CHE/1000.0 C8,QBYBCHE/1000.0 C9,QBBSCHE/1000.0 C10,substring(CONVERT(varchar(8),riqi,112),3,9) C11,
+  QBFH1/1000.0 C12,QBYBFH1/1000.0 C13,QBBSFH1/1000.0 C14,QBNZW/1000.0 C15,QBWZN/1000.0 C16,FHE/1000.0 C17,QBYBFHE/1000.0 C18,QBBSFHE/1000.0 C19,QBJC1/1000.0 C20,QBYBJC1/1000.0 C21,QBBSJC1/1000.0 C22
+    FROM SINO_RPT_CPCKTZ  
+   WHERE CPLB='S' AND CHOU='1' AND #1# 
+                     
+  union
+  
+ SELECT NULL,NULL, '' ,'合计：',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,SUM(CHE)/1000.0,SUM(QBYBCHE)/1000.0,SUM(QBBSCHE)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,SUM(QBNZW)/1000.0,SUM(QBWZN)/1000.0,SUM(FHE)/1000.0,SUM(QBYBFHE)/1000.0,SUM(QBBSFHE)/1000.0,null,null,null                  
+   FROM SINO_RPT_CPCKTZ 
+   WHERE CPLB='S' AND CHOU='1' AND #1# 
+ ) A ORDER BY A.C4
+				]]></sql>
+				</module>
+		<module>
+				<name>GG</name>
+				<sql><![CDATA[ 
+ SELECT BZ_   FROM SINO_TZBZ WHERE BBM_='CPCKTZ' AND SPBH_='1' AND XPZK_='D' AND #1# 
+				]]></sql>
+			</module>
+				<module>
+				<name>H</name>
+				<sql><![CDATA[
+    SELECT * FROM(SELECT DATEPART(mm,riqi) C1,DATEPART(dd,riqi) C2,'入库/出库' C3,substring(CONVERT(varchar(8),riqi,112),3,9) C4,
+  QBCH1/1000.0 C5,QBYBCH1/1000.0 C6,QBBSCH1/1000.0 C7,CHE/1000.0 C8,QBYBCHE/1000.0 C9,QBBSCHE/1000.0 C10,substring(CONVERT(varchar(8),riqi,112),3,9) C11,
+  QBFH1/1000.0 C12,QBYBFH1/1000.0 C13,QBBSFH1/1000.0 C14,QBNZW/1000.0 C15,QBWZN/1000.0 C16,FHE/1000.0 C17,QBYBFHE/1000.0 C18,QBBSFHE/1000.0 C19,QBJC1/1000.0 C20,QBYBJC1/1000.0 C21,QBBSJC1/1000.0 C22
+    FROM SINO_RPT_CPCKTZ  
+   WHERE CPLB='S' AND CHOU='2' AND #1# 
+                     
+  union
+  
+ SELECT NULL,NULL, '' ,'合计：',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,SUM(CHE)/1000.0,SUM(QBYBCHE)/1000.0,SUM(QBBSCHE)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,SUM(QBNZW)/1000.0,SUM(QBWZN)/1000.0,SUM(FHE)/1000.0,SUM(QBYBFHE)/1000.0,SUM(QBBSFHE)/1000.0,null,null,null                  
+   FROM SINO_RPT_CPCKTZ 
+   WHERE CPLB='S' AND CHOU='2' AND #1# 
+  ) A ORDER BY A.C4
+				]]></sql>
+			</module>
+		<module>
+				<name>HH</name>
+				<sql><![CDATA[ 
+ SELECT BZ_   FROM SINO_TZBZ WHERE BBM_='CPCKTZ' AND SPBH_='2' AND XPZK_='D' AND #1# 
+				]]></sql>
+			</module>
+			<module>
+				<name>I</name>
+				<sql><![CDATA[
+   SELECT * FROM(SELECT DATEPART(mm,riqi) C1,DATEPART(dd,riqi) C2,'入库/出库' C3,substring(CONVERT(varchar(8),riqi,112),3,9) C4,
+  QBCH1/1000.0 C5,QBYBCH1/1000.0 C6,QBBSCH1/1000.0 C7,CHE/1000.0 C8,QBYBCHE/1000.0 C9,QBBSCHE/1000.0 C10,substring(CONVERT(varchar(8),riqi,112),3,9) C11,
+  QBFH1/1000.0 C12,QBYBFH1/1000.0 C13,QBBSFH1/1000.0 C14,QBNZW/1000.0 C15,QBWZN/1000.0 C16,FHE/1000.0 C17,QBYBFHE/1000.0 C18,QBBSFHE/1000.0 C19,QBJC1/1000.0 C20,QBYBJC1/1000.0 C21,QBBSJC1/1000.0 C22
+    FROM SINO_RPT_CPCKTZ  
+   WHERE CPLB='S' AND CHOU='3' AND #1# 
+                     
+  union
+  
+ SELECT NULL,NULL, '' ,'合计：',
+  sum(QBCH1)/1000.0,sum(QBYBCH1)/1000.0,sum(QBBSCH1)/1000.0,SUM(CHE)/1000.0,SUM(QBYBCHE)/1000.0,SUM(QBBSCHE)/1000.0,'',                
+  sum(QBFH1)/1000.0,sum(QBYBFH1)/1000.0,sum(QBBSFH1)/1000.0,SUM(QBNZW)/1000.0,SUM(QBWZN)/1000.0,SUM(FHE)/1000.0,SUM(QBYBFHE)/1000.0,SUM(QBBSFHE)/1000.0,null,null,null                  
+   FROM SINO_RPT_CPCKTZ 
+   WHERE CPLB='S' AND CHOU='3' AND #1# 
+ ) A ORDER BY A.C4
+				]]></sql>
+			</module>
+			<module>
+				<name>II</name>
+				<sql><![CDATA[ 
+ SELECT BZ_   FROM SINO_TZBZ WHERE BBM_='CPCKTZ' AND SPBH_='3' AND XPZK_='D' AND #1# 
+				]]></sql>
+			</module>		
+		</modules>
+		<params>
+				<param>
+				<name>年月(YYYYMM)</name>
+				<column>NY</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>TRUE</required>
+				<length>6</length>
+			</param>
+		</params>
+	</entry>
+	
+		<entry>
+		<id>yckctzTable</id>
+		<title>原材料仓库台帐</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/制品库存/原材料仓库台帐.xls]]></excel>
+		<sheet-index>0,1,2</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		SELECT CONVERT(VARCHAR(12), GETDATE(), 111) AS cldm,SUBSTRING(CONVERT(VARCHAR(12), GETDATE(), 111),0,5) AS YYYY,DATEPART(mm, GETDATE()) AS MM
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				
+
+
+  select * from (SELECT DATEPART(mm,riqi)月,DATEPART(dd,riqi) 日,
+         '' zy,substring(CONVERT(varchar(8),riqi,112),3,9) riqi,
+         购进总量/1000.0 购进总量,购进一般贸易/1000.0 购进一般贸易,购进保税/1000.0 购进保税,
+         substring(CONVERT(varchar(8),riqi,112),3,9) riqi2,
+         领用总量/1000.0 领用总量,领用一般贸易/1000.0 领用一般贸易,领用保税/1000.0 领用保税,结存重量/1000.0 结存重量,一般贸易结存/1000.0 一般贸易结存,保税品结存/1000.0 保税品结存
+                     FROM SINO_V_YCCKTZ1
+  union                   
+                     
+  select 
+  null,null,
+  '','合计：',
+  SUM(购进总量)/1000.0,SUM(购进一般贸易)/1000.0,SUM(购进保税)/1000.0,
+  '',sum(领用总量)/1000.0,sum(领用一般贸易)/1000.0,sum(领用保税)/1000.0,null,null,null
+  from
+  SINO_V_YCCKTZ1) tt ORDER BY tt.RIQI
+				]]></sql>
+			</module>
+					<module>
+				<name>B</name>
+				<sql><![CDATA[
+
+  select * from (SELECT DATEPART(mm,riqi)月,DATEPART(dd,riqi) 日,
+         '' zy,substring(CONVERT(varchar(8),riqi,112),3,9) riqi,
+         购进总量/1000.0 购进总量,购进一般贸易/1000.0 购进一般贸易,购进保税/1000.0 购进保税,
+         substring(CONVERT(varchar(8),riqi,112),3,9) riqi2,
+         领用总量/1000.0 领用总量,领用一般贸易/1000.0 领用一般贸易,领用保税/1000.0 领用保税,结存重量/1000.0 结存重量,一般贸易结存/1000.0 一般贸易结存,保税品结存/1000.0 保税品结存
+                     FROM SINO_V_YCCKTZ2
+  union                   
+                     
+  select 
+  null,null,
+  '','合计：',
+  SUM(购进总量)/1000.0,SUM(购进一般贸易)/1000.0,SUM(购进保税)/1000.0,
+  '',sum(领用总量)/1000.0,sum(领用一般贸易)/1000.0,sum(领用保税)/1000.0,null,null,null
+  from
+  SINO_V_YCCKTZ2) tt ORDER BY tt.RIQI
+   			]]></sql>
+			
+			</module>		
+				
+			<module>
+				<name>C</name>
+				<sql><![CDATA[
+   select * from (SELECT DATEPART(mm,riqi)月,DATEPART(dd,riqi) 日,
+         '' zy,substring(CONVERT(varchar(8),riqi,112),3,9) riqi,
+         购进总量/1000.0 购进总量,购进一般贸易/1000.0 购进一般贸易,购进保税/1000.0 购进保税,
+         substring(CONVERT(varchar(8),riqi,112),3,9) riqi2,
+         领用总量/1000.0 领用总量,领用一般贸易/1000.0 领用一般贸易,领用保税/1000.0 领用保税,结存重量/1000.0 结存重量,一般贸易结存/1000.0 一般贸易结存,保税品结存/1000.0 保税品结存
+                     FROM SINO_V_YCCKTZ3
+  union                   
+                     
+  select 
+  null,null,
+  '','合计：',
+  SUM(购进总量)/1000.0,SUM(购进一般贸易)/1000.0,SUM(购进保税)/1000.0,
+  '',sum(领用总量)/1000.0,sum(领用一般贸易)/1000.0,sum(领用保税)/1000.0,null,null,null
+  from
+  SINO_V_YCCKTZ3) tt ORDER BY tt.RIQI      
+        ]]></sql>
+		
+			</module>
+		</modules>
+		<params>
+	
+		</params>
+	</entry>
+		<entry>
+		<id>yckctzTable_ls</id>
+		<title>原材料仓库台帐(历史)</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/制品库存/原材料仓库台帐.xls]]></excel>
+		<sheet-index>0,1,2</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		SELECT CONVERT(VARCHAR(12), GETDATE(), 111) AS SYSDATE,SUBSTRING(CAST('#NY#' AS VARCHAR),1,4)+'年'+SUBSTRING(CAST('#NY#' AS VARCHAR),5,2)+'月' as cldm,SUBSTRING(CAST('#NY#' AS VARCHAR),1,4) as YYYY 
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+     select * from (
+       SELECT DATEPART(mm,riqi_)月,DATEPART(dd,riqi_) 日,
+         '' zy,substring(CONVERT(varchar(8),riqi_,112),3,9) riqi,
+         GJZL_/1000.0  GJZL_,GJYBMY_/1000.0 GJYBMY_,GJBS_/1000.0 GJBS_,
+         substring(CONVERT(varchar(8),riqi_,112),3,9) riqi2,
+         LYZL_/1000.0 LYZL_,LYYBMY_/1000.0 LYYBMY_,LYBS_/1000.0 LYBS_,JCZL_/1000.0 JCZL_,YBMYJC_/1000.0 YBMYJC_,BSPJC_/1000.0 BSPJC_
+                     FROM SINO_RPT_YCCKTZ
+                     where SPBH_='1' and #1#
+  union                       
+  select 
+  null,null,
+  '','合计：',
+  SUM(GJZL_)/1000.0,SUM(GJYBMY_)/1000.0,SUM(GJBS_)/1000.0,
+  '',sum(LYZL_)/1000.0,sum(LYYBMY_)/1000.0,sum(LYBS_)/1000.0,null,null,null
+  from
+  SINO_RPT_YCCKTZ where SPBH_='1' and #1#
+ ) tt ORDER BY tt.RIQI    
+				]]></sql>
+			</module>
+			
+			<module>
+				<name>AA</name>
+				<sql><![CDATA[ 
+ SELECT BZ_   FROM SINO_TZBZ WHERE BBM_='YCCKTZ' AND SPBH_='1' AND #1# 
+				]]></sql>
+			</module>
+					<module>
+				<name>B</name>
+				<sql><![CDATA[
+     select * from (
+       SELECT DATEPART(mm,riqi_)月,DATEPART(dd,riqi_) 日,
+         '' zy,substring(CONVERT(varchar(8),riqi_,112),3,9) riqi,
+         GJZL_/1000.0  GJZL_,GJYBMY_/1000.0 GJYBMY_,GJBS_/1000.0 GJBS_,
+         substring(CONVERT(varchar(8),riqi_,112),3,9) riqi2,
+         LYZL_/1000.0 LYZL_,LYYBMY_/1000.0 LYYBMY_,LYBS_/1000.0 LYBS_,JCZL_/1000.0 JCZL_,YBMYJC_/1000.0 YBMYJC_,BSPJC_/1000.0 BSPJC_
+                     FROM SINO_RPT_YCCKTZ
+                     where SPBH_='2' and #1#
+  union                       
+  select 
+  null,null,
+  '','合计：',
+  SUM(GJZL_)/1000.0,SUM(GJYBMY_)/1000.0,SUM(GJBS_)/1000.0,
+  '',sum(LYZL_)/1000.0,sum(LYYBMY_)/1000.0,sum(LYBS_)/1000.0,null,null,null
+  from
+  SINO_RPT_YCCKTZ where SPBH_='2' and #1#
+ ) tt ORDER BY tt.RIQI    	
+   			]]></sql>
+			
+			</module>		
+			<module>
+				<name>BB</name>
+				<sql><![CDATA[ 
+ SELECT BZ_   FROM SINO_TZBZ WHERE BBM_='YCCKTZ' AND SPBH_='2' AND #1# 
+				]]></sql>
+			</module>				
+			<module>
+				<name>C</name>
+				<sql><![CDATA[
+     select * from (
+       SELECT DATEPART(mm,riqi_)月,DATEPART(dd,riqi_) 日,
+         '' zy,substring(CONVERT(varchar(8),riqi_,112),3,9) riqi,
+         GJZL_/1000.0  GJZL_,GJYBMY_/1000.0 GJYBMY_,GJBS_/1000.0 GJBS_,
+         substring(CONVERT(varchar(8),riqi_,112),3,9) riqi2,
+         LYZL_/1000.0 LYZL_,LYYBMY_/1000.0 LYYBMY_,LYBS_/1000.0 LYBS_,JCZL_/1000.0 JCZL_,YBMYJC_/1000.0 YBMYJC_,BSPJC_/1000.0 BSPJC_
+                     FROM SINO_RPT_YCCKTZ
+                     where SPBH_='3' and #1#
+  union                       
+  select 
+  null,null,
+  '','合计：',
+  SUM(GJZL_)/1000.0,SUM(GJYBMY_)/1000.0,SUM(GJBS_)/1000.0,
+  '',sum(LYZL_)/1000.0,sum(LYYBMY_)/1000.0,sum(LYBS_)/1000.0,null,null,null
+  from
+  SINO_RPT_YCCKTZ where SPBH_='3' and #1#
+  ) tt ORDER BY tt.RIQI   
+                      
+                      
+        ]]></sql>
+		
+			</module>
+						<module>
+				<name>CC</name>
+				<sql><![CDATA[ 
+ SELECT BZ_   FROM SINO_TZBZ WHERE BBM_='YCCKTZ' AND SPBH_='3' AND #1# 
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+				<param>
+				<name>年月(YYYYMM)</name>
+				<column>NY</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>TRUE</required>
+				<length>6</length>
+			</param>
+		</params>
+	</entry>
+	<entry>
+		<id>bspzkqdTable</id>
+		<title>保税品在库清单</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/制品库存/保税品在库清单.xls]]></excel>
+		<sheet-index>0,1,2</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+SELECT CONVERT(VARCHAR(12), GETDATE(), 111) AS cldm
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+			select jbno_,zpzl_/1000.0 as zpzl,chan_,spbh_,XPHO_,XPKN_,
+CASE WHEN CHSD_ IS NULL THEN '在库' ELSE CONVERT(VARCHAR(10),CHSD_,111) END  ,
+case when b.NWAI_='1' and b.DHNO_ not like 'E%' then '内销' else '' end as bz,a.DHNO_
+from sino_zpngtp a left join SINO_DHUOTP b on a.DHNO_ = b.DHNO_+b.LINE_
+where a.sfbs_='2' and a.pzno_ like '2%' and 
+(scbj_='0' OR ( CHSD_>=convert(varchar(10), DATEADD(mm, DATEDIFF(mm,0,getdate()-1), 0) ,120 )+' 08:00:00' AND 
+                CHSD_<convert(varchar(10),DATEADD(mm, DATEDIFF(mm,0,getdate()-1)+1, 0),120)+' 08:00:00'))
+                AND LEN(RCZPNO_)<=7
+				]]></sql>
+			</module>
+				<module>
+				<name>B</name>
+				<sql><![CDATA[
+				select jbno_,zpzl_/1000.0 as zpzl,chan_,spbh_,XPHO_,XPKN_,XPCN_,
+  CASE WHEN CHSD_ IS NULL THEN '在库' ELSE CONVERT(VARCHAR(10),CHSD_,111) END ,
+case when b.NWAI_='1' and b.DHNO_ not like 'E%' then '内销' else '' end as bz,a.DHNO_  
+  from sino_zpngtp a left join SINO_DHUOTP b on a.DHNO_ = b.DHNO_+b.LINE_
+  where 
+  sfbs_='2' and a.pzno_ like '1%' and 
+  (scbj_='0' OR ( CHSD_>=convert(varchar(10), DATEADD(mm, DATEDIFF(mm,0,getdate()-1), 0) ,120 )+' 08:00:00' AND 
+                 CHSD_<convert(varchar(10),DATEADD(mm, DATEDIFF(mm,0,getdate()-1)+1, 0),120)+' 08:00:00')) 
+                 AND LEN(RCZPNO_)>7
+				]]></sql>
+			</module>
+				<module>
+				<name>C</name>
+				<sql><![CDATA[
+SELECT * FROM SINO_V_DIS_YCBSQD ORDER BY ETSD,SLSD_
+
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+
+		</params>
+	</entry>
+	
+		<entry>
+		<id>bspzkqdTable_ls</id>
+		<title>保税品在库清单(历史)</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/制品库存/保税品在库清单.xls]]></excel>
+		<sheet-index>0,1,2</sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+	SELECT CONVERT(VARCHAR(12), GETDATE(), 111) AS SYSDATE,SUBSTRING(CAST('#NY#' AS VARCHAR),1,4)+'年'+SUBSTRING(CAST('#NY#' AS VARCHAR),5,2)+'月' as cldm
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+		select jbno_,zpzl,chan_,spbh_,XPHO_,XPKN_,
+SFFH,
+ bz,DHNO_
+from SINO_RPT_YCBSQD_CS
+where CPLB='C' and #1#
+				]]></sql>
+			</module>
+				<module>
+				<name>B</name>
+				<sql><![CDATA[
+	select jbno_,zpzl,chan_,spbh_,XPHO_,XPKN_,XPCN_,
+SFFH,
+ bz,DHNO_
+from SINO_RPT_YCBSQD_CS
+where CPLB='S' and #1#
+				]]></sql>
+			</module>
+				<module>
+				<name>C</name>
+				<sql><![CDATA[
+select zzsd_,jbno_,xpho_,xpkn_,zpzl_,ETSD,pzno_,SPBH_,SFBS,ETLZRZL,ETL1j,ETL2j,ETL3j,ETL4j,ETLHJ,ETLX,FUZM_,FUFM_,
+	                                         SLSD_,SLZRZL_,SL1J,SL2J,SL3J,SL4J,SLHJ,SLX
+from SINO_RPT_YCBSQD_YC
+where #1# order by etsd,slsd_
+
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+		    <param>
+				<name>年月(YYYYMM)</name>
+				<column>NY</column>
+				<type>String</type>
+				<opt>eq</opt>
+				<required>TRUE</required>
+				<length>6</length>
+			</param>
+		</params>
+	</entry>
+</root>

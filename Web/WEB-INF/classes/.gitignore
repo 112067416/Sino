@@ -1,0 +1,15 @@
+/MANIFEST.MF
+/META-INF/
+/applicationContext.xml
+/coco-config.properties
+/coco-exception.properties
+/coco-s2o.properties
+/com/
+/database.properties
+/init/
+/query/
+/query.xml
+/report/
+/report.dtd
+/report.xml
+/spring/

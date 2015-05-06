@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+	<bean id="com.coco.query.api.QueryConfig" class="com.coco.query.impl.DefaultQueryConfig">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="com.coco.query.api.QueryEngine" class="com.coco.query.impl.DefaultQueryEngine">
+		<constructor-arg ref="com.coco.query.api.QueryConfig" />
+	</bean>
+	<bean id="com.coco.query.api.QueryParser" class="com.coco.query.impl.DefaultQueryParser" />
+	<bean id="com.coco.query.api.QueryRepository" class="com.coco.query.impl.DefaultQueryRepository">
+		<constructor-arg ref="com.coco.query.api.QueryConfig" />
+		<property name="parser" ref="com.coco.query.api.QueryParser" />
+	</bean>
+
+	<bean id="com.coco.query.quartz.DeleteTempFile" class="com.coco.query.quartz.DeleteTempFile">
+		<property name="path" value="/WEB-INF/temp/report" />
+	</bean>
+	<bean id="com.coco.query.quartz.DeleteTempFileJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="com.coco.query.quartz.DeleteTempFile" />
+		<property name="targetMethod" value="doJob" />
+		<property name="concurrent" value="false" />
+	</bean>
+	<bean id="com.coco.query.quartz.DeleteTempFileTrigger" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail"
+			ref="com.coco.query.quartz.DeleteTempFileJobDetail" />
+		<property name="startDelay" value="10000" />
+		<property name="repeatInterval" value="3600000" />
+	</bean>
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="com.coco.query.quartz.DeleteTempFileTrigger" />
+			</list>
+		</property>
+	</bean>
+</beans>

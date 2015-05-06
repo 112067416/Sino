@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+	<!-- 次日出货联络单数据层访问接口 -->
+	<bean id="com.quanta.sino.yygl.dao.api.IChlldDAO" class="com.quanta.sino.yygl.dao.ChlldDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="com.quanta.sino.yygl.bo.api.IChlldBO" class="com.quanta.sino.yygl.bo.ChlldBO">
+		<property name="dao" ref="com.quanta.sino.yygl.dao.api.IChlldDAO" />
+		<property name="bo"  ref="com.quanta.sino.dh.bo.api.IDhBO" />
+		<property name="yongBo"  ref="com.quanta.sino.cmn.bo.api.IYongBO" />
+		<property name="fkfpBO"  ref="com.quanta.sino.yszk.bo.api.IFkfpBO" />
+		<property name="khfkBo"  ref="com.quanta.sino.yszk.bo.api.IKhfkBO" />
+	</bean>
+	<!-- 基板订单 -->
+	<bean id="com.quanta.sino.yygl.dao.api.IJbddDAO" class="com.quanta.sino.yygl.dao.JbddDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="com.quanta.sino.yygl.bo.api.IJbddBO" class="com.quanta.sino.yygl.bo.JbddBO">
+		<property name="dao" ref="com.quanta.sino.yygl.dao.api.IJbddDAO" />
+		<property name="sqBo" ref="com.coco.sys.bo.api.ISeqBO" />
+		<property name="jbddListPath" value="classpath:com/quanta/sino/yygl/assist/jbddList.xls" />
+		<property name="jbddListExec">
+			<bean class="com.quanta.sino.yygl.assist.JbddExcelDataExecuter" />
+		</property>
+	</bean>
+	<!-- 客户运费 -->
+	<bean id="com.quanta.sino.yygl.dao.api.IKhyfDAO" class="com.quanta.sino.yygl.dao.KhyfDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="com.quanta.sino.yygl.bo.api.IKhyfBO" class="com.quanta.sino.yygl.bo.KhyfBO">
+		<property name="khyfDAO" ref="com.quanta.sino.yygl.dao.api.IKhyfDAO" />
+		<property name="khyfdjBO" ref="com.quanta.sino.yygl.bo.api.IKhyfdjBO" />
+		<property name="zxzsBO" ref="com.quanta.sino.ch.bo.api.IZxzsBO" />
+		<property name="sqlDAO" ref="sqlDao" />
+		<property name="rchtjListPath" value="classpath:com/quanta/sino/yygl/assist/rchtjList.xls" />
+		<property name="rchtjListExec">
+			<bean class="com.quanta.sino.yygl.assist.RChtjExcelDataExecuter" />
+		</property>
+		<property name="cpckdListExec" >
+         <bean class="com.quanta.sino.yygl.assist.CpckdExcelDataExecuter" />
+         </property>
+         <property name="cpckdListPath" value="classpath:com/quanta/sino/yygl/assist/cpckdList.xls"  />
+	</bean>
+	<!-- 客户运费单价 -->
+	<bean id="com.quanta.sino.yygl.dao.api.IKhyfdjDAO" class="com.quanta.sino.yygl.dao.KhyfdjDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="com.quanta.sino.yygl.bo.api.IKhyfdjBO" class="com.quanta.sino.yygl.bo.KhyfdjBO">
+		<property name="khyfdjDAO" ref="com.quanta.sino.yygl.dao.api.IKhyfdjDAO" />
+	</bean>
+	
+	<!-- 生产指示数据层访问接口 -->
+	<bean id="com.quanta.sino.yygl.dao.api.ISczsDAO" class="com.quanta.sino.yygl.dao.SczsDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="com.quanta.sino.yygl.bo.api.ISczsBO" class="com.quanta.sino.yygl.bo.SczsBO">
+		<property name="dao" ref="com.quanta.sino.yygl.dao.api.ISczsDAO" />
+		<property name="dhBO" ref="com.quanta.sino.dh.bo.api.IDhBO" />
+		<property name="ycaitpBO" ref="com.quanta.sino.ycai.bo.api.IYcaitpBO" />
+	</bean>
+</beans>

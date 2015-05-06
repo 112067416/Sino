@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+
+     <bean id="com.quanta.sino.etl.dao.api.IEtlDAO" class="com.quanta.sino.etl.dao.EtlDAO">
+		<property name="dao" ref="dao" />
+		<property name="jt" ref="jdbcTemplate" />
+	</bean>
+	 <bean id="com.quanta.sino.etl.dao.api.IRcrzDAO" class="com.quanta.sino.etl.dao.RcrzDAO">
+		<property name="dao" ref="dao" />
+		<property name="pc6000Jt" ref="pc6000JdbcTemplate" />
+		<property name="codeBO" ref="com.coco.sys.bo.api.ICodeBO" />
+		
+	</bean>
+	 <bean id="com.quanta.sino.etl.bo.api.IRcBO" class="com.quanta.sino.etl.bo.RcBO">
+		<property name="dao" ref="com.quanta.sino.etl.dao.api.IRcrzDAO" />
+		<property name="yaiBo" ref="com.quanta.sino.ycai.bo.api.IYcaitpBO" />
+		<property name="zsBO" ref="com.quanta.sino.zs.bo.api.IZsBO" />
+		<property name="etlpzglBO" ref="com.quanta.sino.zk.bo.api.IEtlpzglBO" />
+		<property name="dhBO" ref="com.quanta.sino.dh.bo.api.IDhBO" />
+		<property name="banBO" ref="com.quanta.sino.cmn.bo.api.IBanBO" />
+	</bean>
+	<bean id="com.quanta.sino.etl.dao.api.IMgDAO" class="com.quanta.sino.etl.dao.MgDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	 <bean id="com.quanta.sino.etl.bo.api.IMgBO" class="com.quanta.sino.etl.bo.MgBO">
+		<property name="dao" ref="com.quanta.sino.etl.dao.api.IMgDAO" />
+		
+	</bean>
+	<bean id="com.quanta.sino.etl.bo.api.IEtlBO" class="com.quanta.sino.etl.bo.EtlBO">
+		<property name="dao" ref="com.quanta.sino.etl.dao.api.IEtlDAO" />
+		<property name="zsBO" ref="com.quanta.sino.zs.bo.api.IZsBO" />
+		<property name="dhBO" ref="com.quanta.sino.dh.bo.api.IDhBO" />
+		<property name="cmnBO" ref="com.quanta.sino.cmn.bo.api.ICmnBO" />
+		<property name="banBO" ref="com.quanta.sino.cmn.bo.api.IBanBO" />
+		<property name="ycaitpBO" ref="com.quanta.sino.ycai.bo.api.IYcaitpBO" />
+		<property name="zpBO" ref="com.quanta.sino.etl.bo.api.IZpBO" />
+		<property name="codeBO" ref="com.coco.sys.bo.api.ICodeBO" />
+		<property name="czjlBO" ref="com.quanta.sino.cmn.bo.api.ICzjlBO" />
+		<property name="sjBO" ref="com.quanta.sino.sj.bo.api.ISjBO" />
+		<property name="ychBO" ref="com.quanta.sino.cmn.bo.api.IYchBO" />
+		<property name="rcrzDAO" ref="com.quanta.sino.etl.dao.api.IRcrzDAO" />
+		<property name="etlpzglBO" ref="com.quanta.sino.zk.bo.api.IEtlpzglBO" />
+		<property name="jdbc" ref="jdbcTemplate" />
+		 <!-- etl锡原统计模板 -->
+        <property name="sydjPath" value="classpath:com/quanta/sino/etl/assist/etlSydj.xls" />
+         <!-- etl速报模板 -->
+        <property name="sbdjPath" value="classpath:com/quanta/sino/etl/assist/etlsb.xls" />
+        <!-- etl锡原统计填充执行器  -->
+        <property name="sydjExec">
+        	<bean class="com.quanta.sino.etl.assist.SydjExcelDataExecuter" />
+        </property>
+         <!-- etl速报填充执行器  -->
+        <property name="sbdjExec">
+        	<bean class="com.quanta.sino.etl.assist.SbdjExcelDataExecuter" />
+        </property>
+	</bean>
+	
+	<bean id="com.quanta.sino.etl.dao.api.IZpDAO" class="com.quanta.sino.etl.dao.ZpDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<bean id="com.quanta.sino.etl.bo.api.IZpBO" class="com.quanta.sino.etl.bo.ZpBO">
+		<property name="dao" ref="com.quanta.sino.etl.dao.api.IZpDAO" />
+	</bean>
+	
+</beans>

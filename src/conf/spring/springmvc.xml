@@ -1,0 +1,83 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+        http://www.springframework.org/schema/mvc 
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+	<context:component-scan base-package="com.coco..*.web" />
+	<context:component-scan base-package="com.quanta.sino.*.web" />
+	
+	<mvc:view-controller path="/" view-name="index" />
+	
+	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" />
+
+	<!-- 对模型视图名称的解析，在请求时模型视图名称添加前后缀 -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
+		p:prefix="/WEB-INF/jsp/" p:suffix=".jsp">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+
+	<bean
+		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="messageConverters">
+			<list>
+				<bean
+					class="org.springframework.http.converter.StringHttpMessageConverter">
+					<property name="supportedMediaTypes">
+						<list>
+							<value>text/plain;charset=UTF-8</value>
+						</list>
+					</property>
+				</bean>
+				<bean class="com.coco.core.mvc.DocumentHttpMessageConverter" />
+			</list>
+		</property>
+		<property name="webBindingInitializer"> 
+			<bean class="com.coco.core.mvc.CocoWebBingdingInitializer"/>   
+		</property>  
+	</bean>
+
+	<bean id="exceptionResolver"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<prop key="java.sql.SQLException">/global/exception</prop>
+				<prop key="java.lang.RuntimeException">/global/exception</prop>
+				<prop key="java.lang.NullPointerException">/global/exception</prop>
+				<prop key="java.lang.Exception">/global/exception</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="2000000000" />
+	</bean>
+	
+
+	<bean id="com.coco.sys.auth.AuthAspectManager" class="com.coco.sys.auth.AuthAspectManager" >
+		<property name="bo" ref="com.coco.sys.bo.api.ISourceBO" />
+	</bean>
+	<aop:config>
+		<aop:pointcut id="authPointcut" expression="execution(* com..*.web.*Controller.*(..))" />
+		<aop:aspect id="authAspect" ref="com.coco.sys.auth.AuthAspectManager">
+			<aop:before pointcut-ref="authPointcut" method="before" />
+			<aop:after-returning pointcut-ref="authPointcut" method="afterReturning" />
+		</aop:aspect>
+	</aop:config>
+</beans>

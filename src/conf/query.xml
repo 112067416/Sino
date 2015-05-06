@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 
+entries
+   |- entry* (id, name)
+   |    |- sql (#PCDATA)
+   |    |- description (#PCDATA)
+   |    |- valid (true|false)
+   |    |- excel (true|false)
+   |    |- metas
+   |    |   `- meta* (id, expr, label, orderable)
+   |    `- params
+   |        `- param (id, column, label, area, type, options, sqlOption )
+   `- include* (resource)
+   
+   entry@id 查询条目的唯一标识
+   entry@name 查询条目显示名称
+   
+   entry.sql SQL语句 (如 select * from TEST where#1)
+   entry.valid 表示该条目是否有效，值为true或者false
+   entry.excel 表示该条目是否可以生成excel查询，值为true或者false
+   
+   entry.metas 条目查询显示元字段列表
+   meta 元字段，表示方式如1. <meta id="abc" ... /> ; 2. <meta><id>abc</id>...</meta> 3. <meta><id value="abc" />...</meta>
+   meta@id 字段唯一标识
+   meta@expr 字段表达式
+   meta@label 字段显示文本
+   meta@orderable 字段是否可以排序
+   
+   entry.params 条目查询条件列表
+   param 查询字段，表示方式如1. <param id="abc" ... /> ; 2. <param><id>abc</id>...</param> 3. <param><id value="abc" />...</param>
+   param@id 字段唯一标识
+   param@column 字段名称
+   param@label 字段显示文本
+   param@type 字段类型,java类型，如java.lang.String,java.lang.Integer等
+   param@area 查询条件域，对应SQL中的#1、#2等
+   param@options 条件选项，值的格式为 'key1' : 'value1', 'key2' : 'value2', ...
+   param@sqlOption 条件选项SQL执行的结果,如 select key, value from table
+   
+   include 包含子文件
+   include@resource 子文件相对目录 
+   
+ -->
+<entries>
+	<entry id="menu" name="菜单查询">
+		<sql><![CDATA[
+	select * from COCO_MENU where#1
+	]]>
+		</sql>
+		<description>查询框架测试
+		</description>
+		<valid>true</valid>
+		<excel>true</excel>
+		<size>10</size>
+		<metas>
+			<meta id="id" expr="ID_" label="菜单编号" orderable="true" />
+			<meta id="name" expr="NAME_" label="菜单名称" orderable="true" />
+			<meta id="url" expr="URL_" label="菜单地址" orderable="true" />
+		</metas>
+		<params>
+			<param id="name">
+				<column>NAME_</column>
+				<label>菜单名称</label>
+				<area value="1" />
+				<type>java.lang.String</type>
+			</param>
+		</params>
+	</entry>
+	<entry id="zytz" name="作业停止">
+		<sql><![CDATA[
+	select * from (select JBNO_,DHNO_ from SINO_YCAITP where#1 union select JBNO_,DHNO_ from SINO_ZPNGTP where#1) t_
+	]]>
+		</sql>
+		<description>作业停止
+		</description>
+		<valid>true</valid>
+		<excel>true</excel>
+		<size>10</size>
+		<metas>
+			<meta id="jbno" expr="JBNO_" label="卷板No." orderable="true" />
+			<meta id="dhno" expr="DHNO_" label="订货No." orderable="true" />
+		</metas>
+		<params>
+			<param id="dhno">
+				<column>DHNO_</column>
+				<label>订货No.</label>
+				<area value="1" />
+				<type>java.lang.String</type>
+			</param>
+		</params>
+	</entry>
+	<include resource="query/sl.xml" />
+</entries>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<entry>
+		<id>fpyck_</id>
+		<title>分配用参考列表</title>
+		<type>2</type>
+		<excel><![CDATA[/WEB-INF/report/template/cmn/分配用参考列表.xls]]></excel>
+		<sheet-index></sheet-index>
+		<row-index></row-index>
+		<cell-index></cell-index>
+		<seq-index></seq-index>
+		<variable><![CDATA[
+		select '#cldm#' as cldm
+		]]></variable>
+		<modules>
+			<module>
+				<name>A</name>
+				<sql><![CDATA[
+				select 1 as COUNT
+				]]></sql>
+			</module>
+		</modules>
+		<params>
+			<param>
+				<name>现品No.</name>
+				<column>field1</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>产量代码</name>
+				<column>cldm</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<select>
+				<![CDATA[
+				<option value="合格材">合格材</option>
+				<option value="发生">发生</option>
+				<option value="OR1">OR1</option>
+				<option value="OR2">OR2</option>
+				<option value="端板">端板</option>
+				<option value="SCRAP">SCRAP</option>
+				]]>
+				</select>
+				<required>true</required>
+			</param>
+			<param>
+				<name>现品状况</name>
+				<column>field3</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<select>
+				<![CDATA[
+				<option value="">全部</option>
+				<option value="">原材料</option>
+				<option value="">中间产品</option>
+				<option value="">制品</option>
+				]]>
+				</select>
+				<required>false</required>
+			</param>
+			<param>
+				<name>运用规格</name>
+				<column>field4</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>表面加工</name>
+				<column>field5</column>
+				<type>string</type>
+				<opt>eq</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>尺寸·厚</name>
+				<column>field6</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>尺寸·宽</name>
+				<column>field7</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+			<param>
+				<name>尺寸·长</name>
+				<column>field8</column>
+				<type>string</type>
+				<opt>between</opt>
+				<required>false</required>
+			</param>
+		</params>
+	</entry>
+</root>

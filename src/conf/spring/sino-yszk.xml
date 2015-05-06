@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+     http://www.springframework.org/schema/tx
+     http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+     http://www.springframework.org/schema/aop 
+     http://www.springframework.org/schema/aop/spring-aop-3.0.xsd">
+     <!-- 付款发票冲帐管理数据访问接口 -->
+	<bean id="com.quanta.sino.yszk.dao.api.ICzglDAO" class="com.quanta.sino.yszk.dao.CzglDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<!-- 应收账款数据访问接口 -->
+	<bean id="com.quanta.sino.yszk.dao.api.IFkfpDAO" class="com.quanta.sino.yszk.dao.FkfpDAO">
+		<property name="dao" ref="dao" />
+		<property name="jt" ref="jdbcTemplate" />
+	</bean>
+	<!-- 应收账款业务接口 -->
+	<bean id="com.quanta.sino.yszk.bo.api.IFkfpBO" class="com.quanta.sino.yszk.bo.FkfpBO">
+		<property name="dao" ref="com.quanta.sino.yszk.dao.api.IFkfpDAO" />
+		<property name="codeBo" ref="com.coco.sys.bo.api.ICodeBO" />
+		<property name="dhBo" ref="com.quanta.sino.dh.bo.api.IDhBO" />
+		<property name="yongBo" ref="com.quanta.sino.cmn.bo.api.IYongBO" />
+		<property name="khBo" ref="com.quanta.sino.yszk.bo.api.IKhfkBO" />
+		<property name="czglDAO" ref="com.quanta.sino.yszk.dao.api.ICzglDAO" />
+		<property name="fkfpExec">
+			<bean class="com.quanta.sino.yszk.assist.FkfpListExcelDataExecuter" />
+		</property>
+		<property name="fkfpPath" value="classpath:com/quanta/sino/yszk/assist/fkfpList.xls" />
+	</bean>
+	<!-- 客户付款数据访问接口 -->
+	<bean id="com.quanta.sino.yszk.dao.api.IKhfkDAO" class="com.quanta.sino.yszk.dao.KhfkDAO">
+		<property name="dao" ref="dao" />
+	</bean>
+	<!-- 客户付款业务接口 -->
+	<bean id="com.quanta.sino.yszk.bo.api.IKhfkBO" class="com.quanta.sino.yszk.bo.KhfkBO">
+		<property name="dao" ref="com.quanta.sino.yszk.dao.api.IKhfkDAO" />
+		<property name="fpBo" ref="com.quanta.sino.yszk.bo.api.IFkfpBO" />
+		<property name="codeBo" ref="com.coco.sys.bo.api.ICodeBO" />
+		<property name="czglDAO" ref="com.quanta.sino.yszk.dao.api.ICzglDAO" />
+	</bean>
+
+</beans>
